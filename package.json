@@ -1,0 +1,21 @@
+{
+  "name": "botforthebotgod",
+  "version": "0.1.0",
+  "description": "Bot that praises gods appropriately.",
+  "main": "botgod.js",
+  "scripts": {
+    "test": "mocha --ui tdd -R spec tests/bottest.js"
+  },
+  "keywords": [
+    "bot",
+    "god",
+    "twitter",
+    "words"
+  ],
+  "author": "Jim Kang",
+  "license": "ISC",
+  "dependencies": {
+    "twit": "~1.1.14",
+    "natural": "~0.1.27"
+  }
+}
