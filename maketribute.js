@@ -1,10 +1,10 @@
 var Bot = require('./node_modules/twit/examples/bot');
-var config1 = require('./config');
+var config = require('./config');
 var createWordnikSource = require('./wordniksource');
 var tributeDemander = require('./tributedemander');
 
 var wordnikSource = createWordnikSource();
-var bot = new Bot(config1);
+var bot = new Bot(config.twitter);
 
 console.log('Tribute maker is running.');
 
@@ -24,8 +24,6 @@ function postTribute() {
 }
 
 postTribute();
-
-setInterval(postTribute, 3 * 60 * 60 * 1000);
 
 function handleError(error) {
   console.error('Response status:', error.statusCode);
