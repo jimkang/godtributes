@@ -54,7 +54,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'blood', 
         'sweatpants',
         'growth',
-        'sourness'
+        'sourness',
+        'counseling'
       ];
 
       var expectedDemands = [
@@ -65,7 +66,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'BLOOD FOR THE BLOOD GOD',
         'SWEATPANTS FOR THE SWEATPANT GOD',
         'GROWTH FOR THE GROWTH GOD',
-        'SOURNESS FOR THE SOURNESS GOD'
+        'SOURNESS FOR THE SOURNESS GOD',
+        'COUNSELING FOR THE COUNSELING GOD'
       ];
 
       var demands = weirdPluralizationTopics

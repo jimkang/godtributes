@@ -7,7 +7,10 @@ function makeDemandForTopic(topic) {
   function endsWithUncountableNoun(uncountable) {
     return endsWith(topic, uncountable);
   }
-  var isUncountable = _.find(uncountableNouns, endsWithUncountableNoun);
+
+  var isUncountable = 
+    isAGerund(topic) || _.find(uncountableNouns, endsWithUncountableNoun);
+  
   if (isUncountable) {
     var singularTopic = topic;
     var pluralTopic = topic;
@@ -26,6 +29,10 @@ function makeDemandForTopic(topic) {
 // http://stackoverflow.com/questions/280634/endswith-in-javascript
 function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+function isAGerund(word) {
+  return endsWith(word, 'ing');
 }
 
 module.exports = {
