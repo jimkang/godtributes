@@ -1,7 +1,7 @@
 {
   "name": "botforthebotgod",
   "version": "0.1.0",
-  "description": "Bot that praises gods appropriately.",
+  "description": "Bot that makes demands for gods appropriately.",
   "main": "botgod.js",
   "scripts": {
     "test": "mocha --ui tdd -R spec tests/bottest.js"
@@ -17,6 +17,7 @@
   "dependencies": {
     "twit": "~1.1.14",
     "inflection": "~1.3.6",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "request": "~2.36.0"
   }
 }
