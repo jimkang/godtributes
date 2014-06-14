@@ -10,6 +10,23 @@ var randomWordURL = 'http://api.wordnik.com:80/v4/words.json/randomWord?' +
   'minLength=2&maxLength=120&' +
   'api_key=' + apiKey;
 
+var buzzkillBlacklist = [
+  'Negro',
+  'Negroes',
+  'chink',
+  'chinks',
+  'gook',
+  'gooks',
+  'nigger',
+  'niggers',
+  'spic',
+  'spics',
+  'rape',
+  'rapes',
+  'rapist',
+  'rapists'
+];
+
 function createSource() {
   function getTopic(done) {
     request(randomWordURL, function parseWordnikReply(error, response, body) {
@@ -19,7 +36,13 @@ function createSource() {
       }
       else {
         var parsed = JSON.parse(body);
-        done(error, parsed.word);
+        if (buzzkillBlacklist.indexOf(parsed.word) === -1) {
+          done(error, parsed.word);
+        }
+        else {
+          // Try again.
+          getTopic(done);
+        }
       }
     });
   }

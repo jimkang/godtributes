@@ -2,7 +2,7 @@
   "name": "botforthebotgod",
   "version": "0.1.0",
   "description": "Bot that makes demands for gods appropriately.",
-  "main": "botgod.js",
+  "main": "maketribute.js",
   "scripts": {
     "test": "mocha --ui tdd -R spec tests/bottest.js"
   },
