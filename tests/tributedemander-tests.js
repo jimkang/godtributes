@@ -53,7 +53,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'mayonnaise',
         'blood', 
         'sweatpants',
-        'growth'
+        'growth',
+        'sourness'
       ];
 
       var expectedDemands = [
@@ -63,7 +64,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'MAYONNAISE FOR THE MAYONNAISE GOD',
         'BLOOD FOR THE BLOOD GOD',
         'SWEATPANTS FOR THE SWEATPANT GOD',
-        'GROWTH FOR THE GROWTH GOD'
+        'GROWTH FOR THE GROWTH GOD',
+        'SOURNESS FOR THE SOURNESS GOD'
       ];
 
       var demands = weirdPluralizationTopics

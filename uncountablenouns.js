@@ -171,6 +171,7 @@ var uncountableNouns = [
   'mud',
   'music',
   'nature',
+  'ness',
   'news',
   'nitrogen',
   'nonsense',
