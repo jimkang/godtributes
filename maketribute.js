@@ -16,7 +16,7 @@ function postTribute() {
     else {
       bot.tweet(tributeDemander.makeDemandForTopic(topic), 
         function reportTweetResult(error, reply) {
-          console.log('Tweet posted:', reply.text);
+          console.log((new Date()).toString(), 'Tweet posted:', reply.text);
         }
       );
     }
@@ -28,6 +28,6 @@ postTribute();
 setInterval(postTribute, 3 * 60 * 60 * 1000);
 
 function handleError(error) {
-  console.error('response status:', error.statusCode);
-  console.error('data:', error.data);
+  console.error('Response status:', error.statusCode);
+  console.error('Data:', error.data);
 }
