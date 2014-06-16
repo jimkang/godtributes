@@ -8,9 +8,13 @@ function makeDemandForTopic(topic) {
     return endsWith(topic, uncountable);
   }
 
+  if (isSingularPossessive(topic)) {
+    topic = depossess(topic);
+  }
+
   var isUncountable = 
     isAGerund(topic) || _.find(uncountableNouns, endsWithUncountableNoun);
-  
+
   if (isUncountable) {
     var singularTopic = topic;
     var pluralTopic = topic;
@@ -33,6 +37,15 @@ function endsWith(str, suffix) {
 
 function isAGerund(word) {
   return endsWith(word, 'ing');
+}
+
+function isSingularPossessive(word) {
+  return endsWith(word, '\'s');
+}
+
+// Assumed word ends in 's.
+function depossess(word) {
+  return word.substr(0, word.length - 2);
 }
 
 module.exports = {

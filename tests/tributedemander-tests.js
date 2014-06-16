@@ -79,5 +79,21 @@ suite('Praise generator', function tributeDemanderSuite() {
     }
   );
 
+    test('Make demands for possessive topics', function pluralTopicsTest() {
+      var pluralTopics = [
+        'butcher\'s'
+      ];
+
+      var expectedDemands = [
+        'BUTCHERS FOR THE BUTCHER GOD'
+      ];
+
+      var demands = pluralTopics.map(tributeDemander.makeDemandForTopic);
+      demands.forEach(function checkDemand(demand, i) {
+        assert.equal(demand, expectedDemands[i]);
+      });
+    });
+
+
 });
 
