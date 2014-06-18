@@ -15,13 +15,18 @@ function makeDemandForTopic(topic) {
   var isUncountable = 
     isAGerund(topic) || _.find(uncountableNouns, endsWithUncountableNoun);
 
-  if (isUncountable) {
-    var singularTopic = topic;
-    var pluralTopic = topic;
-  }
-  else {
-    var singularTopic = inflection.singularize(topic);
-    var pluralTopic = inflection.pluralize(topic);
+  var pluralTopic = topic;
+  var singularTopic = topic;  
+
+  if (!isUncountable) {
+    // TODO: Move this into inflection?
+    if (endsWith(topic, 'is')) {
+      pluralTopic = pluralTopic + 'es';
+    }
+    else {
+      singularTopic = inflection.singularize(topic);
+      pluralTopic = inflection.pluralize(topic);
+    }
   }
 
   var demand = pluralTopic.toUpperCase() + ' FOR THE ' + 
