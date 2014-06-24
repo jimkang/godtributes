@@ -33,6 +33,7 @@ suite('Topic getting', function gettingSuite() {
       var source = createWordnikSource();
 
       source.getPartsOfSpeech([
+          'haven\'t',        
           'students',
           'realize',
           'the',
@@ -44,12 +45,13 @@ suite('Topic getting', function gettingSuite() {
           'Batman',
           'inaccessible',
           'DS_Store',
-          'morally'
+          'morally',
         ],
         function checkResult(error, parts) {
           assert.ok(!error);
           assert.deepEqual(parts, 
             [ 
+              'noun-possessive',            
               'noun',
               'verb-transitive',
               'definite-article',
@@ -61,7 +63,7 @@ suite('Topic getting', function gettingSuite() {
               'proper-noun',
               'adjective',
               null,
-              'adverb' 
+              'adverb'
             ]
           );
           testDone();

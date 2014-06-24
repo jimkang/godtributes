@@ -58,12 +58,14 @@ function createSource() {
   }
 
   function getPartOfSpeech(word, done) {
-    var url = partOfSpeechURLPrefix + word + partOfSpeechURLPostfix;
+    var url = partOfSpeechURLPrefix + encodeURIComponent(word) + 
+      partOfSpeechURLPostfix;
     request(url, function parseReply(error, response, body) {
       if (error) {
         done(error);
       }
       else {
+        // TODO: Validate JSON.
         var parsed = JSON.parse(body);
         var partOfSpeech = null;
         var partsFound = _.compact(_.pluck(parsed, 'partOfSpeech'));
