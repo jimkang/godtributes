@@ -14,5 +14,61 @@ suite('Topic getting', function gettingSuite() {
     });
   });
 
+  test('Test getting part of speech from Wordnik source', 
+    function testGetPartOfSpeech(testDone) {
+      var source = createWordnikSource();
+
+      source.getPartOfSpeech('students', 
+        function checkResult(error, part) {
+          assert.ok(!error);
+          assert.equal(part, 'noun');
+          testDone();
+        }
+      );
+    }
+  );
+
+  test('Test getting parts of speech from Wordnik source', 
+    function testGetPartsOfSpeech(testDone) {
+      var source = createWordnikSource();
+
+      source.getPartsOfSpeech([
+          'students',
+          'realize',
+          'the',
+          'importance',
+          'could',
+          'be',
+          'a',
+          'Nolan',
+          'Batman',
+          'inaccessible',
+          'DS_Store',
+          'morally'
+        ],
+        function checkResult(error, parts) {
+          assert.ok(!error);
+          assert.deepEqual(parts, 
+            [ 
+              'noun',
+              'verb-transitive',
+              'definite-article',
+              'noun',
+              'auxiliary-verb',
+              'verb-intransitive',
+              'noun',
+              'proper-noun',
+              'proper-noun',
+              'adjective',
+              null,
+              'adverb' 
+            ]
+          );
+          testDone();
+        }
+      );
+    }
+  );
+
   // TODO: Trending topics.
 });
