@@ -13,13 +13,21 @@ var randomWordURL = 'http://api.wordnik.com:80/v4/words.json/randomWord?' +
   'api_key=' + apiKey;
 
 
-var partOfSpeechURLPrefix = 'http://api.wordnik.com:80/v4/word.json/';
+var wordURLPrefix = 'http://api.wordnik.com:80/v4/word.json/';
+
 var partOfSpeechURLPostfix = '/definitions?' + 
   'limit=4&' +
   'includeRelated=false&' + 
   'useCanonical=false&' + 
   'includeTags=false&' + 
   'api_key=' + apiKey;
+
+var frequencyURLPostfix = '/frequency?' + 
+  'useCanonical=false&' +
+  'startYear=2003&' +
+  'endYear=2012&' +
+  'api_key=' + apiKey;
+
 
 var buzzkillBlacklist = [
   'Negro',
@@ -58,8 +66,7 @@ function createSource() {
   }
 
   function getPartOfSpeech(word, done) {
-    var url = partOfSpeechURLPrefix + encodeURIComponent(word) + 
-      partOfSpeechURLPostfix;
+    var url = wordURLPrefix + encodeURIComponent(word) + partOfSpeechURLPostfix;
     request(url, function parseReply(error, response, body) {
       if (error) {
         done(error);
@@ -78,18 +85,50 @@ function createSource() {
     });
   }
 
-  function getPartsOfSpeech(words, done) {
+
+  function getWordFrequency(word, done) {
+    var url = wordURLPrefix + encodeURIComponent(word) + frequencyURLPostfix;
+    request(url, function parseReply(error, response, body) {
+      if (error) {
+        done(error);
+      }
+      else {
+        // TODO: Validate JSON.
+        var parsed = JSON.parse(body);
+        var totalCount = 9999999;
+        if (typeof parsed.totalCount === 'number') {
+          totalCount = parsed.totalCount;
+        }
+        else {
+          console.log('Got word frequency body without totalCount in it.');          
+        }
+        done(error, totalCount);
+      }
+    });
+  }  
+
+  function runOperationOverWords(operation, words, done) {
     var q = queue();
     words.forEach(function addToQueue(word) {
-      q.defer(getPartOfSpeech, word);
+      q.defer(operation, word);
     });
-    q.awaitAll(done);
+    q.awaitAll(done);    
+  }
+
+  function getPartsOfSpeech(words, done) {
+    runOperationOverWords(getPartOfSpeech, words, done);
+  }
+
+  function getWordFrequencies(words, done) {
+    runOperationOverWords(getWordFrequency, words, done);
   }
 
   return {
     getTopic: getTopic,
     getPartOfSpeech: getPartOfSpeech,
-    getPartsOfSpeech: getPartsOfSpeech
+    getPartsOfSpeech: getPartsOfSpeech,
+    getWordFrequency: getWordFrequency,
+    getWordFrequencies: getWordFrequencies
   };
 }
 

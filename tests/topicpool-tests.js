@@ -72,5 +72,62 @@ suite('Topic getting', function gettingSuite() {
     }
   );
 
+  test('Test getting word frequency from Wordnik source', 
+    function testGetWordFrequency(testDone) {
+      var source = createWordnikSource();
+
+      source.getWordFrequency('students', 
+        function checkResult(error, frequency) {
+          assert.ok(!error);
+          assert.equal(frequency, 1105);
+          testDone();
+        }
+      );
+    }
+  );
+
+  test('Test getting word frequencies from Wordnik source', 
+    function testGetWordFrequencies(testDone) {
+      var source = createWordnikSource();
+
+      source.getWordFrequencies([
+          'haven\'t',        
+          'students',
+          'realize',
+          'the',
+          'importance',
+          'could',
+          'be',
+          'a',
+          'Nolan',
+          'Batman',
+          'inaccessible',
+          'DS_Store',
+          'morally',
+        ],
+        function checkResult(error, frequencies) {
+          assert.ok(!error);
+          console.log(frequencies);
+          assert.deepEqual(frequencies, [
+            599, 
+            1105, 
+            373, 
+            245997, 
+            229, 
+            7678, 
+            32461, 
+            126929, 
+            36, 
+            223, 
+            6, 
+            0, 
+            45
+          ]);
+          testDone();
+        }
+      );
+    }
+  );
+
   // TODO: Trending topics.
 });
