@@ -43,7 +43,6 @@ function exhortUser(userId) {
     user_id: userId
   },
   function readStatuses(error, response) {
-    debugger;
     var notGodTributesRTs = response.filter(isNotARetweetOfSelf);
     var nonReplies = notGodTributesRTs.filter(isNotAReply);
     // console.log(nonReplies)
@@ -60,7 +59,17 @@ function getReplyNounsFromText(text) {
       console.log(error);
     }
     else {
-      console.log('nouns', nouns);
+      // console.log('nouns', nouns);
+      if (nouns.length > 0) {
+        filterNounsForIntererstingness(nouns, function done(error, filtered) {
+          if (error) {
+            console.log(error);
+          }
+          else {
+            console.log('Filtered nouns:', filtered);
+          }
+        });
+      }
     }
   });
 }
@@ -91,7 +100,6 @@ function getNounsFromText(text, done) {
         }
         else {
           var nouns = [];
-          debugger;
           partsOfSpeech.forEach(function addIfNoun(part, i) {
             if (part === 'noun') {
               nouns.push(filteredWords[i]);
@@ -102,6 +110,26 @@ function getNounsFromText(text, done) {
       }
     );
   }
+}
+
+function filterNounsForIntererstingness(nouns, done) {
+  var maxFrequency = 34;
+  var interestingNouns = [];
+  wordniksource.getWordFrequencies(nouns, 
+    function filterByFrequency(error, frequencies) {
+      if (error) {
+        done(error, interestingNouns);
+      }
+      else {
+        frequencies.forEach(function addNounIfFreqIsUnderMax(freq, i) {
+          if (freq < maxFrequency) {
+            interestingNouns.push(nouns[i]);
+          }
+        });
+        done(null, interestingNouns);
+      }
+    }
+  );
 }
 
 function wordDoesNotStartWithAtSymbol(word) {
