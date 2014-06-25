@@ -20,7 +20,7 @@ function makeDemandForTopic(topic) {
 
   if (!isUncountable) {
     // TODO: Move this into inflection?
-    if (endsWith(topic, 'is')) {
+    if (endsWith(topic, 'is') || endsWith(topic, 'us')) {
       pluralTopic = pluralTopic + 'es';
     }
     else {

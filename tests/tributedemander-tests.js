@@ -33,11 +33,13 @@ suite('Praise generator', function tributeDemanderSuite() {
       topicsTest({
         topics: [
           'epidermis',
-          'kiss'
+          'kiss',
+          'corpus'
         ],
         expectedDemands: [
           'EPIDERMISES FOR THE EPIDERMIS GOD',
-          'KISSES FOR THE KISS GOD'
+          'KISSES FOR THE KISS GOD',
+          'CORPUSES FOR THE CORPUS GOD'
         ]
       });
     }
