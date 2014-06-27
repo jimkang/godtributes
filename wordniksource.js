@@ -90,6 +90,7 @@ function createSource() {
     var url = wordURLPrefix + encodeURIComponent(word) + frequencyURLPostfix;
     request(url, function parseReply(error, response, body) {
       if (error) {
+        console.log('getWordFrequency error!');
         done(error);
       }
       else {
