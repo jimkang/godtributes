@@ -6,9 +6,9 @@ var tributeDemander = require('./tributedemander');
 var probable = require('probable');
 var _ = require('lodash');
 var queue = require('queue-async');
+var nounfinder = require('./nounfinder');
 
 var twit = new Twit(config.twitter);
-var wordniksource = createWordnikSource();
 
 console.log('Exhort is running.');
 
@@ -84,19 +84,21 @@ function replyToStatusWithNouns(status, nouns) {
 
 function getReplyNounsFromText(text, done) {
   console.log('Looking for nouns from:', text);
-  getNounsFromText(text, function filterReplyNouns(error, nouns) {
+  nounfinder.getNounsFromText(text, function filterReplyNouns(error, nouns) {
     if (error) {
       console.log(error);
     }
     else {
       console.log('nouns', nouns);
       if (nouns.length > 0) {
-        filterNounsForIntererstingness(nouns, function filterDone(error, filtered) {
-          if (!error) {
-            console.log('Filtered nouns:', filtered);
+        nounfinder.filterNounsForInterestingness(nouns, 34,
+          function filterDone(error, filtered) {
+            if (!error) {
+              console.log('Filtered nouns:', filtered);
+            }
+            done(error, filtered);
           }
-          done(error, filtered);
-        });
+        );
       }
       else {
         done(null, []);
@@ -124,70 +126,9 @@ function isNotARetweetOfSelf(status) {
   return !isRTOfSelf;
 }
 
-function getNounsFromText(text, done) {
-  var words = worthwhileWordsFromText(text);
-  wordniksource.getPartsOfSpeech(
-    words, 
-    function filterToNouns(error, partsOfSpeech) {
-      if (error) {
-        done(error);
-      }
-      else {
-        var nouns = words.filter(function isNoun(word, i) {
-          return (partsOfSpeech[i] === 'noun');
-        });
-        done(error, nouns);
-      }
-    }
-  );
-}
-
-function worthwhileWordsFromText(text) {
-  var words = text.split(/[ ":]/);
-  var filteredWords = [];
-  words = _.compact(words);
-  if (words.length > 0) {
-    filteredWords = words.filter(isWorthCheckingForNounHood);
-  }
-  return filteredWords;
-}
-
-function filterNounsForIntererstingness(nouns, done) {
-  var maxFrequency = 34;
-  var interestingNouns = [];
-  wordniksource.getWordFrequencies(nouns, 
-    function filterByFrequency(error, frequencies) {
-      if (error) {
-        done(error, interestingNouns);
-      }
-      else {
-        frequencies.forEach(function addNounIfFreqIsUnderMax(freq, i) {
-          if (freq < maxFrequency) {
-            interestingNouns.push(nouns[i]);
-          }
-        });
-        done(null, interestingNouns);
-      }
-    }
-  );
-}
-
-function wordDoesNotStartWithAtSymbol(word) {
-  return word.indexOf('@') === -1;
-}
-
-function wordIsNotANumeral(word) {
-  return isNaN(+word);
-}
-
-function isWorthCheckingForNounHood(word) {
-  return word !== 'a' && word !== 'A' && wordDoesNotStartWithAtSymbol(word) &&
-    wordIsNotANumeral(word);
-}
-
 function shouldReplyToUser() {
-  return true;
-  // return probable.roll(5) === 0;
+  // return true;
+  return probable.roll(5) === 0;
 }
 
 function handleError(error) {

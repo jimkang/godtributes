@@ -14,25 +14,25 @@ suite('Topic getting', function gettingSuite() {
     });
   });
 
-  test('Test getting part of speech from Wordnik source', 
-    function testGetPartOfSpeech(testDone) {
+  test('Test getting parts of speech from Wordnik source', 
+    function testGetPartsOfSpeech(testDone) {
       var source = createWordnikSource();
 
-      source.getPartOfSpeech('students', 
-        function checkResult(error, part) {
+      source.getPartsOfSpeech('students', 
+        function checkResult(error, parts) {
           assert.ok(!error);
-          assert.equal(part, 'noun');
+          assert.deepEqual(parts, ['noun']);
           testDone();
         }
       );
     }
   );
 
-  test('Test getting parts of speech from Wordnik source', 
+  test('Test getting parts of speech from Wordnik source for many words', 
     function testGetPartsOfSpeech(testDone) {
       var source = createWordnikSource();
 
-      source.getPartsOfSpeech([
+      source.getPartsOfSpeechForMultipleWords([
           'haven\'t',        
           'students',
           'realize',
@@ -46,25 +46,75 @@ suite('Topic getting', function gettingSuite() {
           'inaccessible',
           'DS_Store',
           'morally',
+          'feeds'
         ],
         function checkResult(error, parts) {
           assert.ok(!error);
           assert.deepEqual(parts, 
-            [ 
-              'noun-possessive',            
-              'noun',
-              'verb-transitive',
-              'definite-article',
-              'noun',
-              'auxiliary-verb',
-              'verb-intransitive',
-              'noun',
-              'proper-noun',
-              'proper-noun',
-              'adjective',
-              null,
-              'adverb'
-            ]
+            [
+              [
+                  'noun-possessive'
+              ],
+              [
+                  'noun'
+              ],
+              [
+                'verb-transitive',
+                'verb-transitive',
+                'verb-transitive',
+                'verb-transitive'
+              ],
+              [
+                'definite-article',
+                'definite-article',
+                'definite-article',
+                'definite-article'
+              ],
+              [
+                'noun',
+                'noun',
+                'noun',
+                'noun'
+              ],
+              [
+                'auxiliary-verb',
+                'auxiliary-verb',
+                'auxiliary-verb'
+              ],
+              [
+                'verb-intransitive',
+                'verb-intransitive',
+                'verb-intransitive',
+                'verb-intransitive'
+              ],
+              [
+                'noun',
+                'noun',
+                'noun',
+                'noun'
+              ],
+              [
+                'proper-noun',
+                'proper-noun'
+              ],
+              [
+                'proper-noun',
+                'proper-noun',
+                'proper-noun'
+              ],
+              [
+                'adjective'
+              ],
+              [                  
+              ],
+              [
+                'adverb',
+                'adverb'
+              ],
+              [
+                'noun', 'verb'
+              ]
+            ]            
           );
           testDone();
         }
@@ -107,7 +157,6 @@ suite('Topic getting', function gettingSuite() {
         ],
         function checkResult(error, frequencies) {
           assert.ok(!error);
-          console.log(frequencies);
           assert.deepEqual(frequencies, [
             599, 
             1105, 

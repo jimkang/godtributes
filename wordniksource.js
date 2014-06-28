@@ -65,7 +65,7 @@ function createSource() {
     });
   }
 
-  function getPartOfSpeech(word, done) {
+  function getPartsOfSpeech(word, done) {
     var url = wordURLPrefix + encodeURIComponent(word) + partOfSpeechURLPostfix;
     request(url, function parseReply(error, response, body) {
       if (error) {
@@ -76,11 +76,7 @@ function createSource() {
         var parsed = JSON.parse(body);
         var partOfSpeech = null;
         var partsFound = _.compact(_.pluck(parsed, 'partOfSpeech'));
-        // Use the first part of speech returned, if any were returned.
-        if (partsFound.length > 0) {
-          partOfSpeech = partsFound[0];
-        }
-        done(error, partOfSpeech);
+        done(error, partsFound);
       }
     });
   }
@@ -116,8 +112,8 @@ function createSource() {
     q.awaitAll(done);    
   }
 
-  function getPartsOfSpeech(words, done) {
-    runOperationOverWords(getPartOfSpeech, words, done);
+  function getPartsOfSpeechForMultipleWords(words, done) {
+    runOperationOverWords(getPartsOfSpeech, words, done);
   }
 
   function getWordFrequencies(words, done) {
@@ -126,7 +122,7 @@ function createSource() {
 
   return {
     getTopic: getTopic,
-    getPartOfSpeech: getPartOfSpeech,
+    getPartsOfSpeechForMultipleWords: getPartsOfSpeechForMultipleWords,
     getPartsOfSpeech: getPartsOfSpeech,
     getWordFrequency: getWordFrequency,
     getWordFrequencies: getWordFrequencies
