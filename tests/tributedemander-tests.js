@@ -2,11 +2,22 @@ var assert = require('assert');
 var tributeDemander = require('../tributedemander');
 
 function topicsTest(opts) {
-  var demands = opts.topics.map(tributeDemander.makeDemandForTopic);
+  var demands = [];
+  opts.topics.forEach(function makeDemand(topic) {
+    var demandOpts = {
+      topic: topic
+    };
+    if (opts.tributeFigure) {
+      demandOpts.tributeFigure = opts.tributeFigure;
+    }
+    demands.push(tributeDemander.makeDemandForTopic(demandOpts));
+  });
+    
   demands.forEach(function checkDemand(demand, i) {
     assert.equal(demand, opts.expectedDemands[i]);
   });
 }
+
 
 suite('Praise generator', function tributeDemanderSuite() {
   test('Make demands for singular topics', function singularTopicsTest() {
@@ -93,10 +104,32 @@ suite('Praise generator', function tributeDemanderSuite() {
   test('Make demands for possessive topics', function pluralTopicsTest() {
     topicsTest({
       topics: [
+        'butcher\'s',
+        'fishes\''
+      ],
+      expectedDemands: [
+        'BUTCHERS FOR THE BUTCHER GOD',
+        'FISHES FOR THE FISH GOD'
+      ]
+    });
+  });
+
+  test('Make demands for thrones', function pluralTopicsTest() {
+    topicsTest({
+      tributeFigure: 'throne',
+      topics: [
+        'pipewrench',
+        'epidermis',
+        'grappling hooks',
+        'sweatpants',        
         'butcher\'s'
       ],
       expectedDemands: [
-        'BUTCHERS FOR THE BUTCHER GOD'
+        'PIPEWRENCHES FOR THE PIPEWRENCH THRONE',
+        'EPIDERMISES FOR THE EPIDERMIS THRONE',
+        'GRAPPLING HOOKS FOR THE GRAPPLING HOOK THRONE',
+        'SWEATPANTS FOR THE SWEATPANT THRONE',
+        'BUTCHERS FOR THE BUTCHER THRONE'
       ]
     });
   });
