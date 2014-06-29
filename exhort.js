@@ -37,7 +37,7 @@ function exhortUser(userId) {
       else {
         var hoursElapsed = 
           (Date.now() - lastReplyDate.getTime()) / (60 * 60 * 1000);
-        if (hoursElapsed < 8.0) {
+        if (hoursElapsed < 12.0) {
           replyToUserStatuses(userId);
         }
         else {
@@ -57,6 +57,11 @@ function replyToUserStatuses(userId) {
 }
 
 function tweetRepliesToStatuses(error, response) {
+  if (error) {
+    console.log(error);
+    return;
+  }
+
   var notGodTributesRTs = response.filter(isNotARetweetOfSelf);
   var nonReplies = notGodTributesRTs.filter(isNotAReply);
   nonReplies = _.sample(nonReplies, ~~(nonReplies.length/3));
