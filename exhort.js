@@ -25,32 +25,20 @@ function exhort() {
       usersToExhort.forEach(exhortUser);
     }
   });
-
-  // wordnikSource.getTopic(function postOnTopic(error, topic) {
-  //   if (error) {
-  //     handleError(error);
-  //   }
-  //   else {
-  //     bot.tweet(tributeDemander.makeDemandForTopic(topic), 
-  //       function reportTweetResult(error, reply) {
-  //         console.log((new Date()).toString(), 'Tweet posted:', reply.text);
-  //       }
-  //     );
-  //   }
-  // });  
 }
 
 function exhortUser(userId) {
   recordkeeper.whenWasUserLastRepliedTo(userId.toString(),
     function exhortIfNotTooSoon(error, lastReplyDate) {
-      if (!error) {
+      if (error) {
+        // Never replied to, we assume.
+        replyToUserStatuses(userId);
+      }
+      else {
         var hoursElapsed = 
           (Date.now() - lastReplyDate.getTime()) / (60 * 60 * 1000);
         if (hoursElapsed < 8.0) {
-          twit.get('statuses/user_timeline/:user_id', {
-            user_id: userId
-          },
-          tweetRepliesToStatuses);          
+          replyToUserStatuses(userId);
         }
         else {
           console.log('Not replying to ', userId, '; last replied', 
@@ -59,6 +47,13 @@ function exhortUser(userId) {
       }
     }
   );
+}
+
+function replyToUserStatuses(userId) {
+  twit.get('statuses/user_timeline/:user_id', {
+    user_id: userId
+  },
+  tweetRepliesToStatuses);  
 }
 
 function tweetRepliesToStatuses(error, response) {
@@ -122,9 +117,19 @@ function replyToStatusWithNouns(status, nouns) {
   if (secondaryTribute) {
     replyText += ('! ' + secondaryTribute);
   }
-  console.log('Replying to status', status.text, 'with :', replyText);  
-  recordkeeper.recordThatTweetWasRepliedTo(status.id_str);
-  recordkeeper.recordThatUserWasRepliedTo(status.user.id_str)
+  // console.log('Replying to status', status.text, 'with :', replyText);
+
+  twit.post('statuses/update', {
+      status: replyText, 
+      in_reply_to_status_id: status.id
+    },
+    function recordTweetResult(error, reply) {
+      console.log('Replied to status', status.text, 'with :', replyText);
+      recordkeeper.recordThatTweetWasRepliedTo(status.id_str);
+      recordkeeper.recordThatUserWasRepliedTo(status.user.id_str)
+    }
+  );
+
 }
 
 function getReplyNounsFromText(text, done) {
