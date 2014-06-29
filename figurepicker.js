@@ -9,7 +9,6 @@ var alternateFigureTable = probable.createRangeTableFromDict({
   friend: 2,
   cat: 1,
   president: 5,
-  ceo: 1,
   blob: 5,
   tree: 1,
   monster: 5,
