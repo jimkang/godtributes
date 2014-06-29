@@ -97,7 +97,8 @@ function createSource() {
           totalCount = parsed.totalCount;
         }
         else {
-          console.log('Got word frequency body without totalCount in it.');          
+          console.log('Got word frequency body without totalCount in it for:',
+            word);
         }
         done(error, totalCount);
       }

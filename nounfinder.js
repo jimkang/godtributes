@@ -66,7 +66,6 @@ function filterNounsForInterestingness(nouns, maxFrequency, done) {
       else {
         var indexesOfFreqsUnderMax = frequencies.reduce(addIndexIfUnder, []);
         var foundNouns = indexesOfFreqsUnderMax.map(nounAtIndex);
-        debugger;
         interestingNouns = interestingNouns.concat(foundNouns);
 
         frequencies.forEach(function saveFreqForNoun(freq, i) {
@@ -96,7 +95,7 @@ function worthwhileWordsFromText(text) {
 }
 
 function isWorthCheckingForNounHood(word) {
-  return word !== 'a' && word !== 'A' && wordDoesNotStartWithAtSymbol(word) &&
+  return word.length > 1 && wordDoesNotStartWithAtSymbol(word) &&
     wordIsNotANumeral(word);
 }
 
