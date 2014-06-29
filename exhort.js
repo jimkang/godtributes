@@ -8,6 +8,7 @@ var _ = require('lodash');
 var queue = require('queue-async');
 var nounfinder = require('./nounfinder');
 var figurepicker = require('./figurepicker');
+var recordkeeper = require('./recordkeeper');
 
 var twit = new Twit(config.twitter);
 
@@ -40,10 +41,24 @@ function exhort() {
 }
 
 function exhortUser(userId) {
-  twit.get('statuses/user_timeline/:user_id', {
-    user_id: userId
-  },
-  tweetRepliesToStatuses);
+  recordkeeper.whenWasUserLastRepliedTo(userId.toString(),
+    function exhortIfNotTooSoon(error, lastReplyDate) {
+      if (!error) {
+        var hoursElapsed = 
+          (Date.now() - lastReplyDate.getTime()) / (60 * 60 * 1000);
+        if (hoursElapsed < 8.0) {
+          twit.get('statuses/user_timeline/:user_id', {
+            user_id: userId
+          },
+          tweetRepliesToStatuses);          
+        }
+        else {
+          console.log('Not replying to ', userId, '; last replied', 
+            hoursElapsed, 'hours ago.');
+        }
+      }
+    }
+  );
 }
 
 function tweetRepliesToStatuses(error, response) {
@@ -61,7 +76,16 @@ function tweetRepliesToStatuses(error, response) {
           // If there's two nouns, definitely do it. If there's one, it's a 
           // coin flip.
           if (nounGroup.length > 0 && probable.roll(2) < nounGroup.length) {
-            replyToStatusWithNouns(nonReplies[i], nounGroup);
+            recordkeeper.tweetWasRepliedTo(nonReplies[i].id_str, 
+              function replyIfFirstTime(error, didReply) {
+                if (!didReply) {
+                  replyToStatusWithNouns(nonReplies[i], nounGroup);
+                }
+                else {
+                  console.log('Already replied to ', nonReplies[i].text);
+                }
+              }
+            );
           }
         });
       }
@@ -99,6 +123,8 @@ function replyToStatusWithNouns(status, nouns) {
     replyText += ('! ' + secondaryTribute);
   }
   console.log('Replying to status', status.text, 'with :', replyText);  
+  recordkeeper.recordThatTweetWasRepliedTo(status.id_str);
+  recordkeeper.recordThatUserWasRepliedTo(status.user.id_str)
 }
 
 function getReplyNounsFromText(text, done) {
