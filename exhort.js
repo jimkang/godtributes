@@ -141,7 +141,7 @@ function replyToStatusWithNouns(status, nouns) {
   }
   twit.post('statuses/update', {
       status: replyText, 
-      in_reply_to_status_id: status.id
+      in_reply_to_status_id: status.id_str
     },
     function recordTweetResult(error, reply) {
       console.log('Replied to status', status.text, 'with :', replyText);
