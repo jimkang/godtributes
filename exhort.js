@@ -45,7 +45,7 @@ function exhortUser(userId) {
       else {
         var hoursElapsed = 
           (Date.now() - lastReplyDate.getTime()) / (60 * 60 * 1000);
-        if (hoursElapsed < 12.0) {
+        if (hoursElapsed > 12.0) {
           replyToUserStatuses(userId);
         }
         else {
