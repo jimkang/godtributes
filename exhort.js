@@ -1,4 +1,3 @@
-// var Bot = require('./node_modules/twit/examples/bot');
 var Twit = require('twit');
 var config = require('./config');
 var createWordnikSource = require('./wordniksource');
@@ -9,31 +8,31 @@ var queue = require('queue-async');
 var nounfinder = require('./nounfinder');
 var figurepicker = require('./figurepicker');
 var recordkeeper = require('./recordkeeper');
+var behavior = require('./behaviorsettings');
 
 var simulationMode = (process.argv[2] === '--simulate');
-var onlyTargetMe = (process.argv[2] === '--onlyme');
+var onlyTargetTestSubject = (process.argv[2] === '--onlytestsubject');
 
 var twit = new Twit(config.twitter);
 
 console.log('Exhort is running.');
 
 function exhort() {
-  twit.get('followers/ids', function exhortFollowers(error, response) {
-    if (error) {
-      handleError(error);
-    }
-    else {
-      var usersToExhort = response.ids;
-      if (onlyTargetMe) {
-        usersToExhort = usersToExhort.filter(function isMe(user) {
-          return user === 129586119;
-        });        
+  if (onlyTargetTestSubject) {
+    exhortUser(behavior.exhortTestSubjectUserId);
+  }
+  else {
+    twit.get('followers/ids', function exhortFollowers(error, response) {
+      if (error) {
+        handleError(error);
       }
-      console.log('Found followers:', usersToExhort);
-
-      usersToExhort.forEach(exhortUser);
-    }
-  });
+      else {
+        var usersToExhort = response.ids;
+        console.log('Found followers:', usersToExhort);
+        usersToExhort.forEach(exhortUser);
+      }
+    });
+  }
 }
 
 function exhortUser(userId) {
