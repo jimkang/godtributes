@@ -11,6 +11,8 @@ var figurepicker = require('./figurepicker');
 var recordkeeper = require('./recordkeeper');
 
 var simulationMode = (process.argv[2] === '--simulate');
+var onlyTargetMe = (process.argv[2] === '--onlyme');
+
 var twit = new Twit(config.twitter);
 
 console.log('Exhort is running.');
@@ -22,7 +24,13 @@ function exhort() {
     }
     else {
       var usersToExhort = response.ids;
+      if (onlyTargetMe) {
+        usersToExhort = usersToExhort.filter(function isMe(user) {
+          return user === 129586119;
+        });        
+      }
       console.log('Found followers:', usersToExhort);
+
       usersToExhort.forEach(exhortUser);
     }
   });
