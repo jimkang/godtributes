@@ -10,6 +10,7 @@ var nounfinder = require('./nounfinder');
 var figurepicker = require('./figurepicker');
 var recordkeeper = require('./recordkeeper');
 
+var simulationMode = (process.argv[2] === '--simulate');
 var twit = new Twit(config.twitter);
 
 console.log('Exhort is running.');
@@ -123,7 +124,13 @@ function replyToStatusWithNouns(status, nouns) {
     replyText += ('! ' + secondaryTribute);
   }
   // console.log('Replying to status', status.text, 'with :', replyText);
+  if (simulationMode) {
+    console.log('Would have posted:', replyText, 'In reply to:', status.id);
+//      recordkeeper.recordThatTweetWasRepliedTo(status.id_str);
+//      recordkeeper.recordThatUserWasRepliedTo(status.user.id_str);
 
+    return;
+  }
   twit.post('statuses/update', {
       status: replyText, 
       in_reply_to_status_id: status.id
