@@ -80,6 +80,9 @@ function tweetRepliesToStatuses(error, response) {
         console.log(error);
       }
       else {
+        nounGroups = nounGroups.slice(0, 
+          behavior.maxAttemptsToReplyPerUserPerRun
+        );
         nounGroups.forEach(function replyIfTheresEnoughMaterial(nounGroup, i) {
           // If there's two nouns, definitely do it. If there's one, it's a 
           // coin flip.
