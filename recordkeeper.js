@@ -18,11 +18,7 @@ function recordThatTweetWasRepliedTo(tweetId) {
     doc: 'tweetsrepliedto',
     id: tweetId
   },
-  function done(error) {
-    if (error) {
-      console.log(error);
-    }
-  });
+  logError);
 }
 
 function recordThatUserWasRepliedTo(userId) {
@@ -31,11 +27,15 @@ function recordThatUserWasRepliedTo(userId) {
     id: userId,
     date: (new Date()).toISOString()
   },
-  function done(error) {
-    if (error) {
-      console.log(error);
-    }
-  });
+  logError);
+}
+
+function recordThatTopicWasUsedInReplyToUser(topic, userId) {
+  db.saveObject({
+    doc: 'topics-sent-to-' + userId,
+    topic: topic
+  },
+  logError);
 }
 
 function tweetWasRepliedTo(tweetId, done) {
@@ -49,12 +49,24 @@ function whenWasUserLastRepliedTo(userId, done) {
   db.getObject(userId, 'lastreplydatesforusers', 
     function reconstituteDate(error, record) {
       var date = null;
-      if (!error) {
+      if (!error || !error.notFound) {
         date = new Date(record.date);
       }
       done(error, date);
     }
   );
+}
+
+function topicWasUsedInReplyToUser(topic, userId, done) {
+  db.getObject(topic, 'topics-sent-to-' + userId, function checkResult(error) {
+    done(null, (!error || !error.notFound));
+  });
+}
+
+function logError(error) {
+  if (error) {
+    console.log(error);
+  }
 }
 
 (function initialize() {
@@ -73,6 +85,8 @@ function whenWasUserLastRepliedTo(userId, done) {
 module.exports = {
   recordThatTweetWasRepliedTo: recordThatTweetWasRepliedTo,
   recordThatUserWasRepliedTo: recordThatUserWasRepliedTo,
+  recordThatTopicWasUsedInReplyToUser: recordThatTopicWasUsedInReplyToUser,
   tweetWasRepliedTo: tweetWasRepliedTo,
-  whenWasUserLastRepliedTo: whenWasUserLastRepliedTo
+  whenWasUserLastRepliedTo: whenWasUserLastRepliedTo,
+  topicWasUsedInReplyToUser: topicWasUsedInReplyToUser
 };

@@ -74,6 +74,8 @@ function tweetRepliesToStatuses(error, response) {
   var nonReplies = notGodTributesRTs.filter(isNotAReply);
   nonReplies = _.sample(nonReplies, ~~(nonReplies.length/3));
 
+  // TODO: Break up this mess.
+
   filterStatusesForInterestingNouns(nonReplies, 
     function useNounsToReply(error, nounGroups) {
       if (error) {
@@ -84,20 +86,38 @@ function tweetRepliesToStatuses(error, response) {
           behavior.maxAttemptsToReplyPerUserPerRun
         );
         nounGroups.forEach(function replyIfTheresEnoughMaterial(nounGroup, i) {
-          // If there's two nouns, definitely do it. If there's one, it's a 
-          // coin flip.
-          if (nounGroup.length > 0 && probable.roll(2) < nounGroup.length) {
-            recordkeeper.tweetWasRepliedTo(nonReplies[i].id_str, 
-              function replyIfFirstTime(error, didReply) {
-                if (!didReply) {
-                  replyToStatusWithNouns(nonReplies[i], nounGroup);
-                }
-                else {
-                  console.log('Already replied to ', nonReplies[i].text);
-                }
-              }
+          var statusBeingRepliedTo = nonReplies[i];
+          // If these nouns have already been used as topics in replies to this 
+          // users, do not reply.
+          var q = queue();
+          nounGroup.forEach(function queueNounRecordCheck(noun) {
+            q.defer(recordkeeper.topicWasUsedInReplyToUser, noun, 
+              statusBeingRepliedTo.user.id_str
             );
-          }
+          });
+          q.awaitAll(function checkIfNounsWereUsed(error, usedFlags) {
+            if (!usedFlags.every(_.identity)) {
+              console.log('Already used one of these topics -', nounGroup, 
+                'for this user:', statusBeingRepliedTo.user.id_str);
+              return;
+            }
+
+            // If there's two nouns, definitely do it. If there's one, it's a 
+            // coin flip.
+            if (nounGroup.length > 0 && probable.roll(2) < nounGroup.length) {
+
+              recordkeeper.tweetWasRepliedTo(statusBeingRepliedTo.id_str, 
+                function replyIfFirstTime(error, didReply) {
+                  if (!didReply) {
+                    replyToStatusWithNouns(statusBeingRepliedTo, nounGroupReplyTargets);
+                  }
+                  else {
+                    console.log('Already replied to ', statusBeingRepliedTo.text);
+                  }
+                }
+              );
+            }
+          });
         });
       }
     }
@@ -122,8 +142,10 @@ function replyToStatusWithNouns(status, nouns) {
     tributeFigure: figurepicker.getMainTributeFigure()    
   });
 
+  var secondaryTribute;
+
   if (selectedNouns.length > 1) {
-    var secondaryTribute = tributeDemander.makeDemandForTopic({
+    secondaryTribute = tributeDemander.makeDemandForTopic({
       topic: selectedNouns[1],
       tributeFigure: figurepicker.getSecondaryTributeFigure()
     });
@@ -136,8 +158,7 @@ function replyToStatusWithNouns(status, nouns) {
   // console.log('Replying to status', status.text, 'with :', replyText);
   if (simulationMode) {
     console.log('Would have posted:', replyText, 'In reply to:', status.id);
-//      recordkeeper.recordThatTweetWasRepliedTo(status.id_str);
-//      recordkeeper.recordThatUserWasRepliedTo(status.user.id_str);
+    recordReplyDetails(status, selectedNouns.slice(0, 2));
 
     return;
   }
@@ -146,12 +167,20 @@ function replyToStatusWithNouns(status, nouns) {
       in_reply_to_status_id: status.id_str
     },
     function recordTweetResult(error, reply) {
-      console.log('Replied to status', status.text, 'with :', replyText);
-      recordkeeper.recordThatTweetWasRepliedTo(status.id_str);
-      recordkeeper.recordThatUserWasRepliedTo(status.user.id_str)
+      recordReplyDetails(status, selectedNouns.slice(0, 2));
+      console.log('Replied to status', status.text, 'with :', replyText);      
     }
   );
 
+}
+
+function recordReplyDetails(targetStatus, topics) {
+  var userId = targetStatus.user.id_str;
+  recordkeeper.recordThatTweetWasRepliedTo(targetStatus.id_str);
+  recordkeeper.recordThatUserWasRepliedTo(userId);
+  topics.forEach(function recordTopic(topic) {
+    recordkeeper.recordThatTopicWasUsedInReplyToUser(topic, userId);
+  });
 }
 
 function getReplyNounsFromText(text, done) {
