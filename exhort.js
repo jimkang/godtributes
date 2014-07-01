@@ -109,7 +109,7 @@ function tweetRepliesToStatuses(error, response) {
               recordkeeper.tweetWasRepliedTo(statusBeingRepliedTo.id_str, 
                 function replyIfFirstTime(error, didReply) {
                   if (!didReply) {
-                    replyToStatusWithNouns(statusBeingRepliedTo, nounGroupReplyTargets);
+                    replyToStatusWithNouns(statusBeingRepliedTo, nounGroup);
                   }
                   else {
                     console.log('Already replied to ', statusBeingRepliedTo.text);

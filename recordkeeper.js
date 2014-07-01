@@ -33,6 +33,7 @@ function recordThatUserWasRepliedTo(userId) {
 function recordThatTopicWasUsedInReplyToUser(topic, userId) {
   db.saveObject({
     doc: 'topics-sent-to-' + userId,
+    id: userId + '-' + topic,
     topic: topic
   },
   logError);
