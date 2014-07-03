@@ -3,6 +3,7 @@ var config = require('./config');
 var createWordnikSource = require('./wordniksource');
 var tributeDemander = require('./tributedemander');
 var figurepicker = require('./figurepicker');
+var logger = require('./logger');
 
 var wordnikSource = createWordnikSource();
 var bot = new Bot(config.twitter);
@@ -25,11 +26,11 @@ function postTribute() {
       var tweetText = tributeDemander.makeDemandForTopic(demandOpts);
 
       if (simulationMode) {
-        console.log('Would have tweeted:', tweetText);
+        logger.log('Would have tweeted:', tweetText);
       }
       else {
         bot.tweet(tweetText, function reportTweetResult(error, reply) {
-          console.log((new Date()).toString(), 'Tweet posted:', reply.text);
+          logger.log((new Date()).toString(), 'Tweet posted:', reply.text);
         });        
       }
     }
@@ -39,6 +40,6 @@ function postTribute() {
 postTribute();
 
 function handleError(error) {
-  console.error('Response status:', error.statusCode);
-  console.error('Data:', error.data);
+  logger.log('Response status:', error.statusCode);
+  logger.log('Data:', error.data);
 }

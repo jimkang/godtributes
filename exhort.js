@@ -9,13 +9,14 @@ var nounfinder = require('./nounfinder');
 var figurepicker = require('./figurepicker');
 var recordkeeper = require('./recordkeeper');
 var behavior = require('./behaviorsettings');
+var logger = require('./logger');
 
 var simulationMode = (process.argv[2] === '--simulate');
 var onlyTargetTestSubject = (process.argv[2] === '--onlytestsubject');
 
 var twit = new Twit(config.twitter);
 
-console.log('Exhort is running.');
+logger.log('Exhort is running.');
 
 function exhort() {
   if (onlyTargetTestSubject) {
@@ -28,7 +29,7 @@ function exhort() {
       }
       else {
         var usersToExhort = response.ids;
-        console.log('Found followers:', usersToExhort);
+        logger.log('Found followers:', usersToExhort);
         usersToExhort.forEach(exhortUser);
       }
     });
@@ -49,7 +50,7 @@ function exhortUser(userId) {
           replyToUserStatuses(userId);
         }
         else {
-          console.log('Not replying to ', userId, '; last replied', 
+          logger.log('Not replying to ', userId, '; last replied', 
             hoursElapsed, 'hours ago.');
         }
       }
@@ -66,7 +67,7 @@ function replyToUserStatuses(userId) {
 
 function tweetRepliesToStatuses(error, response) {
   if (error) {
-    console.log(error);
+    logger.log(error);
     return;
   }
 
@@ -79,7 +80,7 @@ function tweetRepliesToStatuses(error, response) {
   filterStatusesForInterestingNouns(nonReplies, 
     function useNounsToReply(error, nounGroups) {
       if (error) {
-        console.log(error);
+        logger.log(error);
       }
       else {
         nounGroups = nounGroups.slice(0, 
@@ -97,7 +98,7 @@ function tweetRepliesToStatuses(error, response) {
           });
           q.awaitAll(function checkIfNounsWereUsed(error, usedFlags) {
             if (!usedFlags.every(_.identity)) {
-              console.log('Already used one of these topics -', nounGroup, 
+              logger.log('Already used one of these topics -', nounGroup, 
                 'for this user:', statusBeingRepliedTo.user.id_str);
               return;
             }
@@ -112,7 +113,7 @@ function tweetRepliesToStatuses(error, response) {
                     replyToStatusWithNouns(statusBeingRepliedTo, nounGroup);
                   }
                   else {
-                    console.log('Already replied to ', statusBeingRepliedTo.text);
+                    logger.log('Already replied to ', statusBeingRepliedTo.text);
                   }
                 }
               );
@@ -155,9 +156,9 @@ function replyToStatusWithNouns(status, nouns) {
   if (secondaryTribute) {
     replyText += ('! ' + secondaryTribute);
   }
-  // console.log('Replying to status', status.text, 'with :', replyText);
+  // logger.log('Replying to status', status.text, 'with :', replyText);
   if (simulationMode) {
-    console.log('Would have posted:', replyText, 'In reply to:', status.id);
+    logger.log('Would have posted:', replyText, 'In reply to:', status.id);
     recordReplyDetails(status, selectedNouns.slice(0, 2));
 
     return;
@@ -168,7 +169,7 @@ function replyToStatusWithNouns(status, nouns) {
     },
     function recordTweetResult(error, reply) {
       recordReplyDetails(status, selectedNouns.slice(0, 2));
-      console.log('Replied to status', status.text, 'with :', replyText);      
+      logger.log('Replied to status', status.text, 'with :', replyText);      
     }
   );
 
@@ -186,7 +187,7 @@ function recordReplyDetails(targetStatus, topics) {
 function getReplyNounsFromText(text, done) {
   nounfinder.getNounsFromText(text, function filterReplyNouns(error, nouns) {
     if (error) {
-      console.log(error);
+      logger.log(error);
     }
     else {
       if (nouns.length > 0) {
@@ -213,14 +214,14 @@ function isNotARetweetOfSelf(status) {
     status.text.indexOf('\u201C@godtributes') !== -1;
     
   // if (isRTOfSelf) {
-  //   console.log('Found RT of self:', status.text);
+  //   logger.log('Found RT of self:', status.text);
   // }
   return !isRTOfSelf;
 }
 
 function handleError(error) {
-  console.error('Response status:', error.statusCode);
-  console.error('Data:', error.data);
+  logger.log('Response status:', error.statusCode);
+  logger.log('Data:', error.data);
 }
 
 exhort();
