@@ -10,7 +10,7 @@ var bot = new Bot(config.twitter);
 
 var simulationMode = (process.argv[2] === '--simulate');
 
-console.log('Tribute maker is running.');
+logger.log('Tribute maker is running.');
 
 function postTribute() {
   wordnikSource.getTopic(function postOnTopic(error, topic) {
