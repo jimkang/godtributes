@@ -1,6 +1,6 @@
 module.exports = {
   exhortTestSubjectUserId: 129586119,
-  hoursToWaitBetweenRepliesToSameUser: 11.5,
+  hoursToWaitBetweenRepliesToSameUser: 15.5,
   maxAttemptsToReplyPerUserPerRun: 2,
   buzzkillBlacklist: [
     'Negro',
