@@ -33,7 +33,7 @@ function recordThatUserWasRepliedTo(userId) {
 function recordThatTopicWasUsedInReplyToUser(topic, userId) {
   db.saveObject({
     doc: 'topics-sent-to-' + userId,
-    id: userId + '-' + topic,
+    id: topic,
     topic: topic
   },
   logError);
@@ -60,7 +60,7 @@ function whenWasUserLastRepliedTo(userId, done) {
 
 function topicWasUsedInReplyToUser(topic, userId, done) {
   db.getObject(topic, 'topics-sent-to-' + userId, function checkResult(error) {
-    done(null, (error && error.notFound));
+    done(null, (!error || !error.notFound));
   });
 }
 
