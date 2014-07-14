@@ -27,6 +27,8 @@
   "devDependencies": {
     "mocha": "~1.20.1",
     "idmaker": "~0.1.1",
-    "npm": "~1.4.20"
+    "npm": "~1.4.20",
+    "level": "~0.18.0",
+    "through2": "~0.5.1"
   }
 }
