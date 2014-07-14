@@ -97,7 +97,7 @@ function tweetRepliesToStatuses(error, response) {
             );
           });
           q.awaitAll(function checkIfNounsWereUsed(error, usedFlags) {
-            if (!usedFlags.every(_.identity)) {
+            if (usedFlags.some(_.identity)) {
               logger.log('Already used one of these topics -', nounGroup, 
                 'for this user:', statusBeingRepliedTo.user.id_str);
               return;
