@@ -35,7 +35,7 @@ function followback() {
         );
         logger.log('Going to follow:', unfollowedFriends);
         if (!simulationMode) {
-          usersToFollow.forEach(followUser);
+          unfollowedFriends.forEach(followUser);
         }
       }
     });
