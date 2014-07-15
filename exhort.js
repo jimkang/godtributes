@@ -75,8 +75,6 @@ function tweetRepliesToStatuses(error, response) {
   var nonReplies = notGodTributesRTs.filter(isNotAReply);
   nonReplies = _.sample(nonReplies, ~~(nonReplies.length/3));
 
-  // TODO: Break up this mess.
-
   filterStatusesForInterestingNouns(nonReplies, 
     function useNounsToReply(error, nounGroups) {
       if (error) {
@@ -86,43 +84,46 @@ function tweetRepliesToStatuses(error, response) {
         nounGroups = nounGroups.slice(0, 
           behavior.maxAttemptsToReplyPerUserPerRun
         );
-        nounGroups.forEach(function replyIfTheresEnoughMaterial(nounGroup, i) {
-          var statusBeingRepliedTo = nonReplies[i];
-          // If these nouns have already been used as topics in replies to this 
-          // users, do not reply.
-          var q = queue();
-          nounGroup.forEach(function queueNounRecordCheck(noun) {
-            q.defer(recordkeeper.topicWasUsedInReplyToUser, noun, 
-              statusBeingRepliedTo.user.id_str
-            );
-          });
-          q.awaitAll(function checkIfNounsWereUsed(error, usedFlags) {
-            if (usedFlags.some(_.identity)) {
-              logger.log('Already used one of these topics -', nounGroup, 
-                'for this user:', statusBeingRepliedTo.user.id_str);
-              return;
-            }
-
-            // If there's two nouns, definitely do it. If there's one, it's a 
-            // coin flip.
-            if (nounGroup.length > 0 && probable.roll(2) < nounGroup.length) {
-
-              recordkeeper.tweetWasRepliedTo(statusBeingRepliedTo.id_str, 
-                function replyIfFirstTime(error, didReply) {
-                  if (!didReply) {
-                    replyToStatusWithNouns(statusBeingRepliedTo, nounGroup);
-                  }
-                  else {
-                    logger.log('Already replied to ', statusBeingRepliedTo.text);
-                  }
-                }
-              );
-            }
-          });
-        });
+        for (var i = 0; i < nounGroups.length; ++i) {
+          replyIfTheresEnoughMaterial(nounGroups[i], nonReplies[i]);
+        }
       }
     }
   );
+}
+
+function replyIfTheresEnoughMaterial(nounGroup, statusBeingRepliedTo) {
+  // If these nouns have already been used as topics in replies to this 
+  // users, do not reply.
+  var q = queue();
+  nounGroup.forEach(function queueNounRecordCheck(noun) {
+    q.defer(recordkeeper.topicWasUsedInReplyToUser, noun, 
+      statusBeingRepliedTo.user.id_str
+    );
+  });
+  q.awaitAll(function checkIfNounsWereUsed(error, usedFlags) {
+    if (usedFlags.some(_.identity)) {
+      logger.log('Already used one of these topics -', nounGroup, 
+        'for this user:', statusBeingRepliedTo.user.id_str);
+      return;
+    }
+
+    // If there's two nouns, definitely do it. If there's one, it's a 
+    // coin flip.
+    if (nounGroup.length > 0 && probable.roll(2) < nounGroup.length) {
+
+      recordkeeper.tweetWasRepliedTo(statusBeingRepliedTo.id_str, 
+        function replyIfFirstTime(error, didReply) {
+          if (!didReply) {
+            replyToStatusWithNouns(statusBeingRepliedTo, nounGroup);
+          }
+          else {
+            logger.log('Already replied to ', statusBeingRepliedTo.text);
+          }
+        }
+      );
+    }
+  });
 }
 
 function filterStatusesForInterestingNouns(statuses, done) {
