@@ -33,7 +33,7 @@ function followback() {
         var unfollowedFriends = _.without.apply(_, 
           [followers].concat(friends)
         );
-        logger.log('Going to follow:', unfollowedFriends);
+        logger.log('Going to follow', unfollowedFriends);
         if (!simulationMode) {
           unfollowedFriends.forEach(followUser);
         }
@@ -48,8 +48,8 @@ function followUser(userId) {
 
 function handleError(error) {
   if (error) {
-    logger.log('Response status:', error.statusCode);
-    logger.log('Data:', error.data);
+    logger.log('Response status', error.statusCode);
+    logger.log('Data', error.data);
   }
 }
 

@@ -16,6 +16,10 @@ var onlyTargetTestSubject = (process.argv[2] === '--onlytestsubject');
 
 var twit = new Twit(config.twitter);
 
+if (simulationMode) {
+  logger.turnOffRollbar();
+}
+
 logger.log('Exhort is running.');
 
 function exhort() {
@@ -29,7 +33,7 @@ function exhort() {
       }
       else {
         var usersToExhort = response.ids;
-        logger.log('Found followers:', usersToExhort);
+        logger.log('Found followers', usersToExhort);
         usersToExhort.forEach(exhortUser);
       }
     });
@@ -50,7 +54,7 @@ function exhortUser(userId) {
           replyToUserStatuses(userId);
         }
         else {
-          logger.log('Not replying to ', userId, '; last replied', 
+          logger.log('Not replying', userId, 'was last replied to', 
             hoursElapsed, 'hours ago.');
         }
       }
@@ -103,7 +107,7 @@ function replyIfTheresEnoughMaterial(nounGroup, statusBeingRepliedTo) {
   });
   q.awaitAll(function checkIfNounsWereUsed(error, usedFlags) {
     if (usedFlags.some(_.identity)) {
-      logger.log('Already used one of these topics -', nounGroup, 
+      logger.log('Already used one of these topics', nounGroup, 
         'for this user:', statusBeingRepliedTo.user.id_str);
       return;
     }
@@ -118,7 +122,7 @@ function replyIfTheresEnoughMaterial(nounGroup, statusBeingRepliedTo) {
             replyToStatusWithNouns(statusBeingRepliedTo, nounGroup);
           }
           else {
-            logger.log('Already replied to ', statusBeingRepliedTo.text);
+            logger.log('Already replied to', statusBeingRepliedTo.text);
           }
         }
       );

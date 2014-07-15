@@ -26,11 +26,11 @@ function postTribute() {
       var tweetText = tributeDemander.makeDemandForTopic(demandOpts);
 
       if (simulationMode) {
-        logger.log('Would have tweeted:', tweetText);
+        logger.log('Would have tweeted', tweetText);
       }
       else {
         bot.tweet(tweetText, function reportTweetResult(error, reply) {
-          logger.log((new Date()).toString(), 'Tweet posted:', reply.text);
+          logger.log((new Date()).toString(), 'Tweet posted', reply.text);
         });        
       }
     }
@@ -40,6 +40,6 @@ function postTribute() {
 postTribute();
 
 function handleError(error) {
-  logger.log('Response status:', error.statusCode);
-  logger.log('Data:', error.data);
+  logger.log('Response status', error.statusCode);
+  logger.log('Data', error.data);
 }
