@@ -21,5 +21,6 @@ module.exports = {
     'bombings',
     'shootings',
     'shooting'
-  ]
+  ],
+  minimumInterestingnessForReplyTopic: 20
 };
