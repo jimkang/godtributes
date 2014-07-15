@@ -1,6 +1,6 @@
 module.exports = {
   exhortTestSubjectUserId: 129586119,
-  hoursToWaitBetweenRepliesToSameUser: 15.5,
+  hoursToWaitBetweenRepliesToSameUser: 22.5,
   maxAttemptsToReplyPerUserPerRun: 1,
   buzzkillBlacklist: [
     'Negro',
@@ -16,6 +16,10 @@ module.exports = {
     'rape',
     'rapes',
     'rapist',
-    'rapists'
+    'rapists',
+    'bombing',
+    'bombings',
+    'shootings',
+    'shooting'
   ]
 };
