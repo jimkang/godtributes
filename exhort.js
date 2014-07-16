@@ -76,10 +76,10 @@ function tweetRepliesToStatuses(error, response) {
   }
 
   var notGodTributesRTs = response.filter(isNotARetweetOfSelf);
-  var nonReplies = notGodTributesRTs.filter(isNotAReply);
-  nonReplies = _.sample(nonReplies, ~~(nonReplies.length/3));
+  var targetTweets = notGodTributesRTs.filter(isNotAReplyToSelf);
+  targetTweets = _.sample(targetTweets, ~~(targetTweets.length/3));
 
-  filterStatusesForInterestingNouns(nonReplies, 
+  filterStatusesForInterestingNouns(targetTweets, 
     function useNounsToReply(error, nounGroups) {
       if (error) {
         logger.log(error);
@@ -89,7 +89,7 @@ function tweetRepliesToStatuses(error, response) {
           behavior.maxAttemptsToReplyPerUserPerRun
         );
         for (var i = 0; i < nounGroups.length; ++i) {
-          replyIfTheresEnoughMaterial(nounGroups[i], nonReplies[i]);
+          replyIfTheresEnoughMaterial(nounGroups[i], targetTweets[i]);
         }
       }
     }
@@ -210,6 +210,11 @@ function getReplyNounsFromText(text, done) {
 function isNotAReply(status) {
   return !status.in_reply_to_user_id && !status.in_reply_to_status_id && 
     !status.in_reply_to_screen_name;
+}
+
+function isNotAReplyToSelf(status) {
+  return !status.in_reply_to_screen_name ||
+    status.in_reply_to_screen_name !== 'godtributes';
 }
 
 function isNotARetweetOfSelf(status) {
