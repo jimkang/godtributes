@@ -197,7 +197,7 @@ function getReplyNounsFromText(text, done) {
     else {
       if (nouns.length > 0) {
         nounfinder.filterNounsForInterestingness(nouns, 
-          behavior.minimumInterestingnessForReplyTopic, done
+          behavior.maximumCommonnessForReplyTopic, done
         );
       }
       else {

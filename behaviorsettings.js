@@ -1,6 +1,6 @@
 module.exports = {
   exhortTestSubjectUserId: 129586119,
-  hoursToWaitBetweenRepliesToSameUser: 22.5,
+  hoursToWaitBetweenRepliesToSameUser: 10.5,
   maxAttemptsToReplyPerUserPerRun: 1,
   buzzkillBlacklist: [
     'Negro',
@@ -22,5 +22,5 @@ module.exports = {
     'shootings',
     'shooting'
   ],
-  minimumInterestingnessForReplyTopic: 20
+  maximumCommonnessForReplyTopic: 44
 };
