@@ -10,6 +10,7 @@ var figurepicker = require('./figurepicker');
 var recordkeeper = require('./recordkeeper');
 var behavior = require('./behaviorsettings');
 var logger = require('./logger');
+var handleTwitterError = require('./handletwittererror');
 
 var simulationMode = (process.argv[2] === '--simulate');
 var onlyTargetTestSubject = (process.argv[2] === '--onlytestsubject');
@@ -29,7 +30,7 @@ function exhort() {
   else {
     twit.get('followers/ids', function exhortFollowers(error, response) {
       if (error) {
-        handleError(error);
+        handleTwitterError(error);
       }
       else {
         var usersToExhort = response.ids;
@@ -142,7 +143,6 @@ function filterStatusesForInterestingNouns(statuses, done) {
 // Assumes nouns has at least one element.
 function replyToStatusWithNouns(status, nouns) {
   var selectedNouns = _.sample(nouns, 2);
-  debugger;
   var primaryTribute = tributeDemander.makeDemandForTopic({
     topic: selectedNouns[0],
     tributeFigure: figurepicker.getMainTributeFigure()    
@@ -229,11 +229,6 @@ function isNotARetweetOfSelf(status) {
   //   logger.log('Found RT of self:', status.text);
   // }
   return !isRTOfSelf;
-}
-
-function handleError(error) {
-  logger.log('Response status:', error.statusCode);
-  logger.log('Data:', error.data);
 }
 
 exhort();

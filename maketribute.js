@@ -4,6 +4,7 @@ var createWordnikSource = require('./wordniksource');
 var tributeDemander = require('./tributedemander');
 var figurepicker = require('./figurepicker');
 var logger = require('./logger');
+var handleTwitterError = require('./handletwittererror');
 
 var wordnikSource = createWordnikSource();
 var bot = new Bot(config.twitter);
@@ -15,7 +16,7 @@ logger.log('Tribute maker is running.');
 function postTribute() {
   wordnikSource.getTopic(function postOnTopic(error, topic) {
     if (error) {
-      handleError(error);
+      handleTwitterError(error);
     }
     else {
       var demandOpts = {
@@ -38,8 +39,3 @@ function postTribute() {
 }
 
 postTribute();
-
-function handleError(error) {
-  logger.log('Response status', error.statusCode);
-  logger.log('Data', error.data);
-}

@@ -4,6 +4,7 @@ var _ = require('lodash');
 var queue = require('queue-async');
 var behavior = require('./behaviorsettings');
 var logger = require('./logger');
+var handleTwitterError = require('./handletwittererror');
 
 var simulationMode = (process.argv[2] === '--simulate');
 var onlyTargetTestSubject = (process.argv[2] === '--onlytestsubject');
@@ -24,7 +25,7 @@ function prune() {
       followerResponse, friendResponse) {
 
       if (error) {
-        handleError(error);
+        handleTwitterError(error);
       }
       else {
         var followers = followerResponse.ids;
@@ -41,14 +42,7 @@ function prune() {
 }
 
 function unfollowUser(userId) {
-  twit.post('friendships/destroy', {id: userId}, handleError);
-}
-
-function handleError(error) {
-  if (error) {
-    logger.log('Response status', error.statusCode);
-    logger.log('Data', error.data);
-  }
+  twit.post('friendships/destroy', {id: userId}, handleTwitterError);
 }
 
 prune();
