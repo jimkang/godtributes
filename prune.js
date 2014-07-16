@@ -10,17 +10,17 @@ var onlyTargetTestSubject = (process.argv[2] === '--onlytestsubject');
 
 var twit = new Twit(config.twitter);
 
-logger.log('followback is running.');
+logger.log('prune is running.');
 
-function followback() {
+function prune() {
   if (onlyTargetTestSubject) {
-    followUser(behavior.exhortTestSubjectUserId);
+    unfollowUser(behavior.exhortTestSubjectUserId);
   }
   else {
     var q = queue();
     q.defer(twit.get.bind(twit), 'followers/ids');
     q.defer(twit.get.bind(twit), 'friends/ids');
-    q.await(function followFriendsThatHaventBeenFollowed(error, 
+    q.await(function unfollowNonMutuals(error, 
       followerResponse, friendResponse) {
 
       if (error) {
@@ -30,18 +30,18 @@ function followback() {
         var followers = followerResponse.ids;
         var friends = friendResponse.ids;
         console.log('Found followers', followers, 'and friends', friends);
-        var unfollowedFriends = _.without.apply(_, [followers].concat(friends));
-        logger.log('Going to follow', unfollowedFriends);
+        var nonMutuals = _.without.apply(_, [friends].concat(followers));
+        logger.log('Going to unfollow', nonMutuals);
         if (!simulationMode) {
-          unfollowedFriends.forEach(followUser);
+          nonMutuals.forEach(unfollowUser);
         }
       }
     });
   }
 }
 
-function followUser(userId) {
-  twit.post('friendships/create', {id: userId}, handleError);
+function unfollowUser(userId) {
+  twit.post('friendships/destroy', {id: userId}, handleError);
 }
 
 function handleError(error) {
@@ -51,4 +51,4 @@ function handleError(error) {
   }
 }
 
-followback();
+prune();

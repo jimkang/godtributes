@@ -5,3 +5,4 @@
 30 0,3,7,9,10,13,16,17,19,22 * * 5 /usr/local/bin/node ~/gcw/godtributes/exhort.js
 
 15 0,5,10,15,20  * * * /usr/local/bin/node ~/gcw/godtributes/followback.js
+45 11  * * * /usr/local/bin/node ~/gcw/godtributes/prune.js
