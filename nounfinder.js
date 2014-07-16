@@ -3,14 +3,17 @@
 var createWordnikSource = require('./wordniksource');
 var _ = require('lodash');
 var canonicalizer = require('./canonicalizer');
+var behavior = require('./behaviorsettings');
 
 var wordniksource = createWordnikSource();
 var nounCache = [];
 var frequenciesForNouns = {};
 
 function getNounsFromText(text, done) {
-  var words = getSingularFormsOfWords(worthwhileWordsFromText(text));
+  var words = getSingularFormsOfWords(worthwhileWordsFromText(text));  
   words = _.uniq(words.map(function lower(s) { return s.toLowerCase(); }));
+  words = words.filter(isNotInBlacklist);
+
   // Get already-looked-up nouns from cache.
   var nouns = _.intersection(nounCache, words);
   words = _.without.apply(_, [words].concat(nouns));
@@ -77,6 +80,10 @@ function filterNounsForInterestingness(nouns, maxFrequency, done) {
   );
 }
 
+function isNotInBlacklist(word) {
+  return (behavior.buzzkillBlacklist.indexOf(word) === -1);
+}
+
 function addIndexIfFreqIsUnderMax(maxFreq, indexesUnderMax, freq, index) {
   if (freq < maxFreq) {
     indexesUnderMax.push(index);
@@ -107,6 +114,7 @@ function wordIsNotANumeral(word) {
   return isNaN(+word);
 }
 
+// TODO: nounCache should be in recordkeeper.
 function getNounCache() {
   return nounCache;
 }
