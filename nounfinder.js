@@ -88,7 +88,7 @@ function addIndexIfFreqIsUnderMax(maxFreq, indexesUnderMax, freq, index) {
 }
 
 function worthwhileWordsFromText(text) {
-  var words = text.split(/[ ":.,;!?]'/);
+  var words = text.split(/[ ":.,;!?]/);
   var filteredWords = [];
   words = _.compact(words);
   if (words.length > 0) {
