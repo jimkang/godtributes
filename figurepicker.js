@@ -5,19 +5,24 @@ var alternateFigureTable = probable.createRangeTableFromDict({
   goddess: 10,
   queen: 10,
   lord: 10,
-  friend: 2,
+  friend: 1,
   cat: 1,
   president: 5,
   blob: 5,
   tree: 1,
   monster: 5,
   fiend: 5,
-  salad: 1,
+  salad: 2,
   sandwich: 1,
   corporation: 1,
   community: 2,
   church: 1,
-  committee: 1
+  committee: 1,
+  empress: 1,
+  'god-emperor': 1,
+  dance: 3,
+  recital: 1,
+  mistress: 1
 });
 
 function getSecondaryTributeFigure() {
