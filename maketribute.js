@@ -3,6 +3,7 @@ var config = require('./config');
 var createWordnikSource = require('./wordniksource');
 var tributeDemander = require('./tributedemander');
 var figurepicker = require('./figurepicker');
+var prepphrasepicker = require('./prepphrasepicker');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
 
@@ -21,6 +22,7 @@ function postTribute() {
     else {
       var demandOpts = {
         topic: topic,
+        prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
         tributeFigure: figurepicker.getMainTributeFigure()
       };
 

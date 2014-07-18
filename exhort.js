@@ -7,6 +7,7 @@ var _ = require('lodash');
 var queue = require('queue-async');
 var nounfinder = require('./nounfinder');
 var figurepicker = require('./figurepicker');
+var prepphrasepicker = require('./prepphrasepicker');
 var recordkeeper = require('./recordkeeper');
 var behavior = require('./behaviorsettings');
 var logger = require('./logger');
@@ -145,6 +146,7 @@ function replyToStatusWithNouns(status, nouns) {
   var selectedNouns = _.sample(nouns, 2);
   var primaryTribute = tributeDemander.makeDemandForTopic({
     topic: selectedNouns[0],
+    prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
     tributeFigure: figurepicker.getMainTributeFigure()    
   });
 
@@ -153,6 +155,7 @@ function replyToStatusWithNouns(status, nouns) {
   if (selectedNouns.length > 1) {
     secondaryTribute = tributeDemander.makeDemandForTopic({
       topic: selectedNouns[1],
+      prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
       tributeFigure: figurepicker.getSecondaryTributeFigure()
     });
   }
