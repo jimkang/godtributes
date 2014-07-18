@@ -19,12 +19,12 @@ var wordURLPrefix = 'http://api.wordnik.com:80/v4/word.json/';
 var partOfSpeechURLPostfix = '/definitions?' + 
   'limit=4&' +
   'includeRelated=false&' + 
-  'useCanonical=true&' + 
+  'useCanonical=false&' + 
   'includeTags=false&' + 
   'api_key=' + apiKey;
 
 var frequencyURLPostfix = '/frequency?' + 
-  'useCanonical=true&' +
+  'useCanonical=false&' +
   'startYear=2003&' +
   'endYear=2012&' +
   'api_key=' + apiKey;
