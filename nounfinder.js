@@ -3,7 +3,7 @@
 var createWordnikSource = require('./wordniksource');
 var _ = require('lodash');
 var canonicalizer = require('./canonicalizer');
-var behavior = require('./behaviorsettings');
+var isCool = require('./iscool');
 
 var wordniksource = createWordnikSource();
 var nounCache = [];
@@ -12,7 +12,7 @@ var frequenciesForNouns = {};
 function getNounsFromText(text, done) {
   var words = getSingularFormsOfWords(worthwhileWordsFromText(text));  
   words = _.uniq(words.map(function lower(s) { return s.toLowerCase(); }));
-  words = words.filter(isNotInBlacklist);
+  words = words.filter(isCool);
 
   // Get already-looked-up nouns from cache.
   var nouns = _.intersection(nounCache, words);
@@ -78,10 +78,6 @@ function filterNounsForInterestingness(nouns, maxFrequency, done) {
       }
     }
   );
-}
-
-function isNotInBlacklist(word) {
-  return (behavior.buzzkillBlacklist.indexOf(word) === -1);
 }
 
 function addIndexIfFreqIsUnderMax(maxFreq, indexesUnderMax, freq, index) {

@@ -2,6 +2,10 @@ module.exports = {
   exhortTestSubjectUserId: 129586119,
   hoursToWaitBetweenRepliesToSameUser: 21.5,
   maxAttemptsToReplyPerUserPerRun: 1,
+  falsePositivesList: [
+    'http',
+    'haha'
+  ],
   buzzkillBlacklist: [
     'Negro',
     'Negroes',
@@ -22,5 +26,27 @@ module.exports = {
     'shootings',
     'shooting'
   ],
+  tragedyModeBlacklist: [
+    'Gaza',
+    'Israel',
+    'Palestine',
+    'invasion',
+    'horror',
+    'genocide',
+    'explosion',
+    'assault',
+    'Hamas',
+    'bomb',
+    'plane',
+    'death',
+    'missile',
+    'crash',
+    'passenger',
+    'suicide',
+    'airstrike',
+    'brigadier',
+    'IDF'
+  ],
+  tragedyHappenedRecently: true,
   maximumCommonnessForReplyTopic: 44
 };

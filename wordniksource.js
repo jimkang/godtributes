@@ -2,7 +2,7 @@ var request = require('request');
 var apiKey = require('./config').wordnikAPIKey;
 var _ = require('lodash');
 var queue = require('queue-async');
-var behavior = require('./behaviorsettings');
+var isCool = require('./iscool');
 
 var randomWordURL = 'http://api.wordnik.com:80/v4/words.json/randomWord?' +
   'hasDictionaryDef=false&' + 
@@ -19,12 +19,12 @@ var wordURLPrefix = 'http://api.wordnik.com:80/v4/word.json/';
 var partOfSpeechURLPostfix = '/definitions?' + 
   'limit=4&' +
   'includeRelated=false&' + 
-  'useCanonical=false&' + 
+  'useCanonical=true&' + 
   'includeTags=false&' + 
   'api_key=' + apiKey;
 
 var frequencyURLPostfix = '/frequency?' + 
-  'useCanonical=false&' +
+  'useCanonical=true&' +
   'startYear=2003&' +
   'endYear=2012&' +
   'api_key=' + apiKey;
@@ -37,7 +37,7 @@ function createSource() {
       }
       else {
         var parsed = JSON.parse(body);
-        if (behavior.buzzkillBlacklist.indexOf(parsed.word) === -1) {
+        if (isCool(parsed.word)) {
           done(error, parsed.word);
         }
         else {
