@@ -24,6 +24,12 @@ if (simulationMode) {
 
 logger.log('Exhort is running.');
 
+var maxCommonnessForTopic = 
+  behavior.maxCommonnessForReplyTopic[0] + probable.roll(
+    behavior.maxCommonnessForReplyTopic[1] - 
+    behavior.maxCommonnessForReplyTopic[0]
+  );
+
 function exhort() {
   if (onlyTargetTestSubject) {
     exhortUser(behavior.exhortTestSubjectUserId);
@@ -200,7 +206,7 @@ function getReplyNounsFromText(text, done) {
     else {
       if (nouns.length > 0) {
         nounfinder.filterNounsForInterestingness(nouns, 
-          behavior.maximumCommonnessForReplyTopic, done
+          behavior.maxCommonnessForTopic, done
         );
       }
       else {
