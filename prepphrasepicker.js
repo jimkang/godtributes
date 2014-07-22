@@ -1,9 +1,9 @@
 var probable = require('probable');
 
 var prepPhraseTable = probable.createRangeTableFromDict({
-  'FOR THE': 75,
-  'TO THE': 4,
-  'UNTO THE': 15,
+  'FOR THE': 80,
+  'TO THE': 1,
+  'UNTO THE': 10,
   'BEFORE THE': 1
 });
 
