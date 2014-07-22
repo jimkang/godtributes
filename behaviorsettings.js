@@ -48,5 +48,5 @@ module.exports = {
     'IDF'
   ],
   tragedyHappenedRecently: true,
-  maxCommonnessForReplyTopic: [10, 44]
+  maxCommonnessForReplyTopic: [20, 44]
 };

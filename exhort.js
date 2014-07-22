@@ -30,6 +30,8 @@ var maxCommonnessForTopic =
     behavior.maxCommonnessForReplyTopic[0]
   );
 
+logger.log('maxCommonnessForTopic', maxCommonnessForTopic);
+
 function exhort() {
   if (onlyTargetTestSubject) {
     exhortUser(behavior.exhortTestSubjectUserId);
