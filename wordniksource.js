@@ -3,6 +3,8 @@ var apiKey = require('./config').wordnikAPIKey;
 var _ = require('lodash');
 var queue = require('queue-async');
 var isCool = require('./iscool');
+var isJSON = require('./isjson');
+var logger = require('./logger');
 
 var randomWordURL = 'http://api.wordnik.com:80/v4/words.json/randomWord?' +
   'hasDictionaryDef=false&' + 
@@ -36,8 +38,8 @@ function createSource() {
         done(error);
       }
       else {
-        var parsed = JSON.parse(body);
-        if (isCool(parsed.word)) {
+        var parsed = parseBody(body, randomWordURL);
+        if (parsed && isCool(parsed.word)) {
           done(error, parsed.word);
         }
         else {
@@ -55,11 +57,14 @@ function createSource() {
         done(error);
       }
       else {
-        // TODO: Validate JSON.
-        var parsed = JSON.parse(body);
         var partOfSpeech = null;
-        var partsFound = _.compact(_.pluck(parsed, 'partOfSpeech'));
-        done(error, partsFound);
+        var parsed = parseBody(body, url);
+        if (parsed) {
+          done(null, _.compact(_.pluck(parsed, 'partOfSpeech')));
+        }
+        else {
+          done('Invalid JSON from ' + url);
+        }
       }
     });
   }
@@ -73,17 +78,21 @@ function createSource() {
         done(error);
       }
       else {
-        // TODO: Validate JSON.
-        var parsed = JSON.parse(body);
         var totalCount = 9999999;
-        if (typeof parsed.totalCount === 'number') {
-          totalCount = parsed.totalCount;
+        var parsed = parseBody(body, url);
+        if (parsed) {
+          if (typeof parsed.totalCount === 'number') {
+            totalCount = parsed.totalCount;
+          }
+          else {
+            logger.log('Got word frequency body without totalCount in it for:',
+              word);
+          }
+          done(error, totalCount);
         }
         else {
-          console.log('Got word frequency body without totalCount in it for:',
-            word);
+          done('Invalid JSON from ' + url);
         }
-        done(error, totalCount);
       }
     });
   }  
@@ -102,6 +111,18 @@ function createSource() {
 
   function getWordFrequencies(words, done) {
     runOperationOverWords(getWordFrequency, words, done);
+  }
+
+  function parseBody(body, url) {
+    var parsed;
+    if (isJSON(body)) {
+      parsed = JSON.parse(body);
+    }
+    else {
+      logger.log('Could not parse JSON from', url, body);
+      error = 'Invalid JSON from ' + url;
+    }
+    return parsed;
   }
 
   return {
