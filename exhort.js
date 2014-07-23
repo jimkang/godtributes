@@ -208,7 +208,12 @@ function getReplyNounsFromText(text, done) {
     else {
       if (nouns.length > 0) {
         nounfinder.filterNounsForInterestingness(nouns, 
-          behavior.maxCommonnessForTopic, done
+          maxCommonnessForTopic, function filterDone(error, filteredNouns) {
+            if (filteredNouns.length < 1) {
+              logger.log('Filtered ALL nouns from text', text);
+            }
+            done(error, filteredNouns);
+          }
         );
       }
       else {
