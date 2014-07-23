@@ -13,8 +13,12 @@ var behavior = require('./behaviorsettings');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
 
-var simulationMode = (process.argv[2] === '--simulate');
-var onlyTargetTestSubject = (process.argv[2] === '--onlytestsubject');
+function paramIsInArgs(param) {
+  return (-1 !== process.argv.indexOf(param));
+}
+
+var simulationMode = paramIsInArgs('--simulate');
+var onlyTargetTestSubject = paramIsInArgs('--onlytestsubject');
 
 var twit = new Twit(config.twitter);
 
