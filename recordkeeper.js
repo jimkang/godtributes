@@ -1,5 +1,7 @@
 var levelwrap = require('basicset-levelwrap');
 var db = levelwrap.createLevelWrap('tributes.db');
+var logger = require('./logger');
+var canonicalizer = require('./canonicalizer');
 
 function createDoc(id) {
   db.saveDoc({
@@ -40,7 +42,9 @@ function recordThatTopicWasUsedInReplyToUser(topic, userId) {
 }
 
 function recordThatTopicWasUsedInTribute(topic) {
-  var normalizedTopic = topic.toLowerCase();
+  var normalizedTopic = getSingularForm(topic.toLowerCase());
+  console.log('normalizedTopic', normalizedTopic);
+
   db.saveObject({
     doc: 'tributes',
     id: normalizedTopic,
@@ -77,12 +81,19 @@ function topicWasUsedInReplyToUser(topic, userId, done) {
 }
 
 function topicWasUsedInTribute(topic, done) {
-  var normalizedTopic = topic.toLowerCase();
   console.log('Looking for topic tribute', topic);
+  var normalizedTopic = getSingularForm(topic.toLowerCase());
+
   db.getObject(normalizedTopic, 'tributes', function checkResult(error) {
-    console.log(normalizedTopic, 'tribute:', (!error || !error.notFound));
+    logger.log(normalizedTopic, 'tribute search result:', 
+      (!error || !error.notFound));
     done(null, (!error || !error.notFound));
   });
+}
+
+function getSingularForm(word) {
+  var forms = canonicalizer.getSingularAndPluralForms(word);
+  return forms[0];
 }
 
 function logError(error) {

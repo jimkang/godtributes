@@ -153,10 +153,35 @@ suite('recordkeeper', function recordkeeperSuite() {
               'recordkeeper erroneously reported that this topic was not tweeted in a tribute.'
             );
             testDone();
-          }          
+          }
         }
       );
+
+      test('verify that topic recorded as plural is searchable as singular', 
+        function testPluralSingular(testDone) {
+          var topicBase = idmaker.randomId(8);
+          var pluralTopic = topicBase + 'bons';
+          var singularTopic = topicBase + 'bon';
+          recordkeeper.recordThatTopicWasUsedInTribute(pluralTopic);
+
+          setTimeout(verifyRecording, 0);
+
+          function verifyRecording() {
+            recordkeeper.topicWasUsedInTribute(singularTopic, checkTopicUse);
+          }
+
+          function checkTopicUse(error, wasUsed) {
+            assert.ok(!error);
+            assert.ok(wasUsed, 
+              'recordkeeper erroneously reported that this topic was not tweeted in a tribute.'
+            );
+            testDone();
+          }
+        }
+      );
+      // TODO: Reverse case: record singular, search plural.
+
     }
-  );
+  );  
 
 });
