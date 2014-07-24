@@ -40,10 +40,11 @@ function recordThatTopicWasUsedInReplyToUser(topic, userId) {
 }
 
 function recordThatTopicWasUsedInTribute(topic) {
+  var normalizedTopic = topic.toLowerCase();
   db.saveObject({
     doc: 'tributes',
-    id: topic,
-    topic: topic
+    id: normalizedTopic,
+    topic: normalizedTopic
   },
   logError);  
 }
@@ -76,9 +77,10 @@ function topicWasUsedInReplyToUser(topic, userId, done) {
 }
 
 function topicWasUsedInTribute(topic, done) {
+  var normalizedTopic = topic.toLowerCase();
   console.log('Looking for topic tribute', topic);
-  db.getObject(topic, 'tributes', function checkResult(error) {
-    console.log(topic, 'tribute:', (!error || !error.notFound));
+  db.getObject(normalizedTopic, 'tributes', function checkResult(error) {
+    console.log(normalizedTopic, 'tribute:', (!error || !error.notFound));
     done(null, (!error || !error.notFound));
   });
 }

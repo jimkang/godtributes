@@ -55,6 +55,8 @@ suite('recordkeeper', function recordkeeperSuite() {
     }
   );
 
+  // TODO: Test upper and lowercase stuff.
+
   // Note: This entire suite must be run together. Individual tests within it 
   // will not work.
   suite('Find out if this topic was tweeted at a user', 
@@ -120,12 +122,13 @@ suite('recordkeeper', function recordkeeperSuite() {
 
   suite('Find out if this topic was tweeted as a main tribute', 
     function alreadyTweetedSuite() {
-      var topic = 'drwily' + idmaker.randomId(8);
+      var uppercasetopic = 'DRWILY' + idmaker.randomId(8);
+      var lowercaseTopic = uppercasetopic.toLowerCase();
 
       test('verify topic that hasn\'t been tweeted is reported as such', 
         function testNotTweeted(testDone) {
 
-        recordkeeper.topicWasUsedInTribute(topic, 
+        recordkeeper.topicWasUsedInTribute(lowercaseTopic, 
           function done(error, wasUsed) {
             assert.ok(!error);
             assert.ok(!wasUsed);
@@ -134,12 +137,14 @@ suite('recordkeeper', function recordkeeperSuite() {
         );
       });
 
-      test('record that topic was tweeted in tribute', 
+      test('record that topic was tweeted in tribute (record in uppercase, search in lower)',
         function testRecord(testDone) {
-          recordkeeper.recordThatTopicWasUsedInTribute(topic);
+          recordkeeper.recordThatTopicWasUsedInTribute(uppercasetopic);
+
+          setTimeout(verifyRecording, 0);
 
           function verifyRecording() {
-            recordkeeper.topicWasUsedInTribute(topic, checkTopicUse);
+            recordkeeper.topicWasUsedInTribute(lowercaseTopic, checkTopicUse);
           }
 
           function checkTopicUse(error, wasUsed) {
@@ -147,16 +152,8 @@ suite('recordkeeper', function recordkeeperSuite() {
             assert.ok(wasUsed, 
               'recordkeeper erroneously reported that this topic was not tweeted in a tribute.'
             );
-            recordkeeper.topicWasUsedInTribute(topic, verifyTopicUse);
-          }
-
-          function verifyTopicUse(error, wasUsed) {
-            assert.ok(!error);
-            assert.ok(wasUsed);
             testDone();
-          }
-
-          setTimeout(verifyRecording, 0);
+          }          
         }
       );
     }
