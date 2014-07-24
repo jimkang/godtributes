@@ -6,6 +6,7 @@ var figurepicker = require('./figurepicker');
 var prepphrasepicker = require('./prepphrasepicker');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
+var recordkeeper = require('./recordkeeper');
 
 var wordnikSource = createWordnikSource();
 var bot = new Bot(config.twitter);
@@ -34,8 +35,11 @@ function postTribute() {
       else {
         bot.tweet(tweetText, function reportTweetResult(error, reply) {
           logger.log((new Date()).toString(), 'Tweet posted', reply.text);
-        });        
+
+        });
       }
+      recordkeeper.recordThatTopicWasUsedInTribute(topic);
+      
     }
   });  
 }
