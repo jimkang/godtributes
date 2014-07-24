@@ -118,4 +118,48 @@ suite('recordkeeper', function recordkeeperSuite() {
     }
   );
 
+  suite('Find out if this topic was tweeted as a main tribute', 
+    function alreadyTweetedSuite() {
+      var topic = 'drwily' + idmaker.randomId(8);
+
+      test('verify topic that hasn\'t been tweeted is reported as such', 
+        function testNotTweeted(testDone) {
+
+        recordkeeper.topicWasUsedInTribute(topic, 
+          function done(error, wasUsed) {
+            assert.ok(!error);
+            assert.ok(!wasUsed);
+            testDone();
+          }
+        );
+      });
+
+      test('record that topic was tweeted in tribute', 
+        function testRecord(testDone) {
+          recordkeeper.recordThatTopicWasUsedInTribute(topic);
+
+          function verifyRecording() {
+            recordkeeper.topicWasUsedInTribute(topic, checkTopicUse);
+          }
+
+          function checkTopicUse(error, wasUsed) {
+            assert.ok(!error);
+            assert.ok(wasUsed, 
+              'recordkeeper erroneously reported that this topic was not tweeted in a tribute.'
+            );
+            recordkeeper.topicWasUsedInTribute(topic, verifyTopicUse);
+          }
+
+          function verifyTopicUse(error, wasUsed) {
+            assert.ok(!error);
+            assert.ok(wasUsed);
+            testDone();
+          }
+
+          setTimeout(verifyRecording, 0);
+        }
+      );
+    }
+  );
+
 });

@@ -39,6 +39,15 @@ function recordThatTopicWasUsedInReplyToUser(topic, userId) {
   logError);
 }
 
+function recordThatTopicWasUsedInTribute(topic) {
+  db.saveObject({
+    doc: 'tributes',
+    id: topic,
+    topic: topic
+  },
+  logError);  
+}
+
 function tweetWasRepliedTo(tweetId, done) {
   db.getObject(tweetId, 'tweetsrepliedto', function checkResult(error, index) {
     var replied = (!error);
@@ -59,7 +68,17 @@ function whenWasUserLastRepliedTo(userId, done) {
 }
 
 function topicWasUsedInReplyToUser(topic, userId, done) {
+  console.log('Looking for', topic, 'for', userId);
   db.getObject(topic, 'topics-sent-to-' + userId, function checkResult(error) {
+    console.log(topic, 'for', userId, ':', (!error || !error.notFound));
+    done(null, (!error || !error.notFound));
+  });
+}
+
+function topicWasUsedInTribute(topic, done) {
+  console.log('Looking for topic tribute', topic);
+  db.getObject(topic, 'tributes', function checkResult(error) {
+    console.log(topic, 'tribute:', (!error || !error.notFound));
     done(null, (!error || !error.notFound));
   });
 }
@@ -87,7 +106,9 @@ module.exports = {
   recordThatTweetWasRepliedTo: recordThatTweetWasRepliedTo,
   recordThatUserWasRepliedTo: recordThatUserWasRepliedTo,
   recordThatTopicWasUsedInReplyToUser: recordThatTopicWasUsedInReplyToUser,
+  recordThatTopicWasUsedInTribute: recordThatTopicWasUsedInTribute,
   tweetWasRepliedTo: tweetWasRepliedTo,
   whenWasUserLastRepliedTo: whenWasUserLastRepliedTo,
-  topicWasUsedInReplyToUser: topicWasUsedInReplyToUser
+  topicWasUsedInReplyToUser: topicWasUsedInReplyToUser,
+  topicWasUsedInTribute: topicWasUsedInTribute
 };
