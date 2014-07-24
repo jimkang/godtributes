@@ -90,8 +90,7 @@ function tweetRepliesToStatuses(error, response) {
   }
 
   var notGodTributesRTs = response.filter(isNotARetweetOfSelf);
-  var targetTweets = notGodTributesRTs.filter(isNotAReplyToSelf);
-  targetTweets = _.sample(targetTweets, ~~(targetTweets.length/3));
+  var targetTweets = _.sample(notGodTributesRTs, ~~(notGodTributesRTs.length/3));
 
   filterStatusesForInterestingNouns(targetTweets, 
     function useNounsToReply(error, nounGroups) {
@@ -114,10 +113,12 @@ function replyIfTheresEnoughMaterial(nounGroup, statusBeingRepliedTo) {
   // If these nouns have already been used as topics in replies to this 
   // users, do not reply.
   var q = queue();
+
   nounGroup.forEach(function queueNounRecordCheck(noun) {
     q.defer(recordkeeper.topicWasUsedInReplyToUser, noun, 
       statusBeingRepliedTo.user.id_str
     );
+    q.defer(recordkeeper.topicWasUsedInTribute, noun);
   });
   q.awaitAll(function checkIfNounsWereUsed(error, usedFlags) {
     if (usedFlags.some(_.identity)) {
