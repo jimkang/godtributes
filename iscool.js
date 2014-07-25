@@ -1,5 +1,6 @@
 var behavior = require('./behaviorsettings');
 var logger = require('./logger');
+var wordfilter = require('wordfilter');
 
 function isCool(word) {
   var cool = (behavior.falsePositivesList.indexOf(word) === -1);
@@ -9,6 +10,10 @@ function isCool(word) {
 
   if (cool) {
     cool = (behavior.buzzkillBlacklist.indexOf(word) === -1);
+  }
+
+  if (cool) {
+    cool = !wordfilter.blacklisted(word);
   }
 
   if (cool && behavior.tragedyHappenedRecently) {

@@ -22,7 +22,8 @@
     "probable": "~0.1.0",
     "queue-async": "~1.0.7",
     "basicset-levelwrap": "~0.1.0",
-    "rollbar": "~0.3.8"
+    "rollbar": "~0.3.8",
+    "wordfilter": "~0.1.5"
   },
   "devDependencies": {
     "mocha": "~1.20.1",
