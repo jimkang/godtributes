@@ -84,7 +84,10 @@ suite('Praise generator', function tributeDemanderSuite() {
           'sweatpants',
           'growth',
           'sourness',
-          'counseling'
+          'counseling',
+          '90s',
+          'nineties',
+          '2000s'
         ],
         expectedDemands: [
           'CORN SYRUP FOR THE CORN SYRUP GOD',
@@ -95,7 +98,10 @@ suite('Praise generator', function tributeDemanderSuite() {
           'SWEATPANTS FOR THE SWEATPANT GOD',
           'GROWTH FOR THE GROWTH GOD',
           'SOURNESS FOR THE SOURNESS GOD',
-          'COUNSELING FOR THE COUNSELING GOD'
+          'COUNSELING FOR THE COUNSELING GOD',
+          '90S FOR THE 90S GOD',
+          'NINETIES FOR THE NINETIES GOD',
+          '2000S FOR THE 2000S GOD'
         ]
       });
     }
