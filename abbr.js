@@ -10,7 +10,9 @@ var fullWordsForAbbreviations = {
   oct: 'Rocktober',
   october: 'Rocktober',
   nov: 'November',
-  dec: 'December'
+  dec: 'December',
+  lb: 'pound',
+  lbs: 'pounds'
 };
 
 function expand(word) {

@@ -153,11 +153,15 @@ suite('Praise generator', function tributeDemanderSuite() {
     topicsTest({
       topics: [
         'sept',
-        'oct'
+        'oct',
+        'lb',
+        'lbs'
       ],
       expectedDemands: [
         'SEPTEMBERS FOR THE SEPTEMBER GOD',
         'ROCKTOBERS FOR THE ROCKTOBER GOD',
+        'POUNDS FOR THE POUND GOD',
+        'POUNDS FOR THE POUND GOD'
       ]
     });
   });
