@@ -194,6 +194,8 @@ var uncountableNouns = [
   'patience',
   'permission',
   'physics',
+  'pi',
+  'pix',
   'poetry',
   'pollution',
   'poverty',

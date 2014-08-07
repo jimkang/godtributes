@@ -11,7 +11,8 @@ function getSingularAndPluralForms(word) {
   word = depossess(word);
 
   var isUncountable = 
-    isAGerund(word) || _.find(uncountableNouns, endsWithUncountableNoun);
+    isAGerund(word) || _.find(uncountableNouns, endsWithUncountableNoun) ||
+    endsWith(word, 'ware');
 
   var pluralWord = word;
   var singularWord = word;  

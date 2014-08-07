@@ -90,7 +90,10 @@ suite('Praise generator', function tributeDemanderSuite() {
           'nineties',
           'iOS',
           'mars',
-          'ALA'
+          'ALA',
+          'pi',
+          'earthenware',
+          'pix'
         ],
         expectedDemands: [
           'CORN SYRUP FOR THE CORN SYRUP GOD',
@@ -105,14 +108,17 @@ suite('Praise generator', function tributeDemanderSuite() {
           'NINETIES FOR THE NINETIES GOD',
           'IOS FOR THE IOS GOD',
           'MARS FOR THE MARS GOD',
-          'ALA FOR THE ALA GOD'
+          'ALA FOR THE ALA GOD',
+          'PI FOR THE PI GOD',
+          'EARTHENWARE FOR THE EARTHENWARE GOD',
+          'PIX FOR THE PIX GOD'
         ]
       });
     }
   );
 
   test('Make demands for number nouns', 
-    function massNounTopicsTest() {
+    function numberNounTopicsTest() {
       topicsTest({
         topics: [
           '1000s',
