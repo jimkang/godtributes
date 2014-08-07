@@ -85,9 +85,10 @@ suite('Praise generator', function tributeDemanderSuite() {
           'growth',
           'sourness',
           'counseling',
-          '90s',
           'nineties',
-          '2000s'
+          'iOS',
+          'mars',
+          'ALA'
         ],
         expectedDemands: [
           'CORN SYRUP FOR THE CORN SYRUP GOD',
@@ -99,13 +100,34 @@ suite('Praise generator', function tributeDemanderSuite() {
           'GROWTH FOR THE GROWTH GOD',
           'SOURNESS FOR THE SOURNESS GOD',
           'COUNSELING FOR THE COUNSELING GOD',
-          '90S FOR THE 90S GOD',
           'NINETIES FOR THE NINETIES GOD',
-          '2000S FOR THE 2000S GOD'
+          'IOS FOR THE IOS GOD',
+          'MARS FOR THE MARS GOD',
+          'ALA FOR THE ALA GOD'
         ]
       });
     }
   );
+
+  test('Make demands for number nouns', 
+    function massNounTopicsTest() {
+      topicsTest({
+        topics: [
+          '1000s',
+          '90s',
+          '2000s',
+          '187'
+        ],
+        expectedDemands: [
+          '1000S FOR THE 1000S GOD',
+          '90S FOR THE 90S GOD',
+          '2000S FOR THE 2000S GOD',
+          '187 FOR THE 187 GOD'
+        ]
+      });
+    }
+  );
+
 
   test('Make demands for possessive topics', function pluralTopicsTest() {
     topicsTest({

@@ -23,6 +23,13 @@ function getSingularAndPluralForms(word) {
     else {
       singularWord = inflection.singularize(word);
       pluralWord = inflection.pluralize(word);
+
+      if (!isNaN(singularWord)) {
+        // If the original word was a number, then do not pluralize or 
+        // singularize it. Revert both to the original form.
+        singularWord = word;
+        pluralWord = word;
+      }
     }
   }
 
