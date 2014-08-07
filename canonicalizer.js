@@ -20,14 +20,13 @@ function getSingularAndPluralForms(word) {
   var singularWord = word;  
 
   if (!isUncountable) {
-    // TODO: Move this into inflection?
-    if (endsWith(word, 'is') || endsWith(word, 'us')) {
-      pluralWord = pluralWord + 'es';
-    }
-    else if (oddities.wordIsInOddities(word)) {
+    if (oddities.wordIsInOddities(word)) {
       var forms = oddities.getBothForms(word);
       singularWord = forms[0];
       pluralWord = forms[1];
+    }
+    else if (endsWith(word, 'is') || endsWith(word, 'us')) {
+      pluralWord = pluralWord + 'es';
     }
     else {
       singularWord = inflection.singularize(word);

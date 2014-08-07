@@ -171,12 +171,20 @@ suite('Praise generator', function tributeDemanderSuite() {
       topics: [
         'criteria',
         'criterion',
-        'cafe'
+        'cafe',
+        'phenomenon',
+        'phenomena',
+        'octopus',
+        'octopi'
       ],
       expectedDemands: [
         'CRITERIA FOR THE CRITERION GOD',
         'CRITERIA FOR THE CRITERION GOD',
-        'CAFES FOR THE CAFE GOD'
+        'CAFES FOR THE CAFE GOD',
+        'PHENOMENA FOR THE PHENOMENON GOD',
+        'PHENOMENA FOR THE PHENOMENON GOD',
+        'OCTOPI FOR THE OCTOPUS GOD',
+        'OCTOPI FOR THE OCTOPUS GOD',
       ]
     });
   });
