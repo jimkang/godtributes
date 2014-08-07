@@ -4,7 +4,8 @@ module.exports = {
   maxAttemptsToReplyPerUserPerRun: 1,
   falsePositivesList: [
     'http',
-    'haha'
+    'haha',
+    'adv'
   ],
   buzzkillBlacklist: [
     'Negro',
