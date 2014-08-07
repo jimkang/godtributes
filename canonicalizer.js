@@ -1,6 +1,7 @@
 var inflection = require('inflection');
 var uncountableNouns = require('./uncountablenouns');
 var _ = require('lodash');
+var oddities = require('./canonicaloddities');
 
 function getSingularAndPluralForms(word) {
   function endsWithUncountableNoun(uncountable) {
@@ -19,6 +20,11 @@ function getSingularAndPluralForms(word) {
     // TODO: Move this into inflection?
     if (endsWith(word, 'is') || endsWith(word, 'us')) {
       pluralWord = pluralWord + 'es';
+    }
+    else if (oddities.wordIsInOddities(word)) {
+      var forms = oddities.getBothForms(word);
+      singularWord = forms[0];
+      pluralWord = forms[1];
     }
     else {
       singularWord = inflection.singularize(word);

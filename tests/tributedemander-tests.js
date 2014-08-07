@@ -61,12 +61,14 @@ suite('Praise generator', function tributeDemanderSuite() {
       topics: [
         'sandwiches',
         'grappling hooks',
-        'harmonicas'
+        'harmonicas',
+        'geese'
       ],
       expectedDemands: [
         'SANDWICHES FOR THE SANDWICH GOD',
         'GRAPPLING HOOKS FOR THE GRAPPLING HOOK GOD',
-        'HARMONICAS FOR THE HARMONICA GOD'
+        'HARMONICAS FOR THE HARMONICA GOD',
+        'GEESE FOR THE GOOSE GOD'
       ]
     });
 
