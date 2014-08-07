@@ -2,6 +2,7 @@ var inflection = require('inflection');
 var uncountableNouns = require('./uncountablenouns');
 var _ = require('lodash');
 var oddities = require('./canonicaloddities');
+var abbr = require('./abbr');
 
 function getSingularAndPluralForms(word) {
   function endsWithUncountableNoun(uncountable) {
@@ -9,6 +10,7 @@ function getSingularAndPluralForms(word) {
   }
 
   word = depossess(word);
+  word = abbr.expand(word);
 
   var isUncountable = 
     isAGerund(word) || _.find(uncountableNouns, endsWithUncountableNoun) ||

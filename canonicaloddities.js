@@ -1,7 +1,7 @@
 var _ = require('lodash');
 
 var pluralsForSingulars = {
-  goose: 'geese',  
+  goose: 'geese',
 };
 
 var singularsForPlurals = _.invert(pluralsForSingulars);

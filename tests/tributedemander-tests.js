@@ -136,7 +136,6 @@ suite('Praise generator', function tributeDemanderSuite() {
     }
   );
 
-
   test('Make demands for possessive topics', function pluralTopicsTest() {
     topicsTest({
       topics: [
@@ -146,6 +145,19 @@ suite('Praise generator', function tributeDemanderSuite() {
       expectedDemands: [
         'BUTCHERS FOR THE BUTCHER GOD',
         'FISHES FOR THE FISH GOD'
+      ]
+    });
+  });
+
+  test('Make demands for abbreviated topics', function abbrTopicsTest() {
+    topicsTest({
+      topics: [
+        'sept',
+        'oct'
+      ],
+      expectedDemands: [
+        'SEPTEMBERS FOR THE SEPTEMBER GOD',
+        'ROCKTOBERS FOR THE ROCKTOBER GOD',
       ]
     });
   });
