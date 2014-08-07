@@ -162,6 +162,19 @@ suite('Praise generator', function tributeDemanderSuite() {
     });
   });
 
+  test('Make demands for oddly pluralized topics', function oddPluralsTest() {
+    topicsTest({
+      topics: [
+        'criteria',
+        'criterion'
+      ],
+      expectedDemands: [
+        'CRITERIA FOR THE CRITERION GOD',
+        'CRITERIA FOR THE CRITERION GOD'
+      ]
+    });
+  });
+
   test('Make demands for thrones', function pluralTopicsTest() {
     topicsTest({
       tributeFigure: 'throne',
