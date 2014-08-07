@@ -15,6 +15,8 @@ module.exports = {
     'gooks',
     'nigger',
     'niggers',
+    'nigga',
+    'niggas',
     'spic',
     'spics',
     'rape',
