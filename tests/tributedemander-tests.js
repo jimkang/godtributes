@@ -170,11 +170,13 @@ suite('Praise generator', function tributeDemanderSuite() {
     topicsTest({
       topics: [
         'criteria',
-        'criterion'
+        'criterion',
+        'cafe'
       ],
       expectedDemands: [
         'CRITERIA FOR THE CRITERION GOD',
-        'CRITERIA FOR THE CRITERION GOD'
+        'CRITERIA FOR THE CRITERION GOD',
+        'CAFES FOR THE CAFE GOD'
       ]
     });
   });

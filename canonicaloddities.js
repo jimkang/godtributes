@@ -2,7 +2,8 @@ var _ = require('lodash');
 
 var pluralsForSingulars = {
   goose: 'geese',
-  criterion: 'criteria'
+  criterion: 'criteria',
+  cafe: 'cafes'
 };
 
 var singularsForPlurals = _.invert(pluralsForSingulars);
