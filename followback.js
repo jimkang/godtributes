@@ -30,7 +30,7 @@ function followback() {
       else {
         var followers = followerResponse.ids;
         var friends = friendResponse.ids;
-        console.log('Found followers', followers, 'and friends', friends);
+        logger.log('Found followers', followers, 'and friends', friends);
         var unfollowedFriends = _.without.apply(_, [followers].concat(friends));
         logger.log('Going to follow', unfollowedFriends);
         if (!simulationMode) {
