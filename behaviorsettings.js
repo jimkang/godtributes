@@ -5,7 +5,8 @@ module.exports = {
   falsePositivesList: [
     'http',
     'haha',
-    'adv'
+    'adv',
+    'san'
   ],
   buzzkillBlacklist: [
     'Negro',
@@ -48,7 +49,8 @@ module.exports = {
     'suicide',
     'airstrike',
     'brigadier',
-    'IDF'
+    'IDF',
+    'ISIS'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 44]
