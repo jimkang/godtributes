@@ -6,7 +6,9 @@ var pluralsForSingulars = {
   cafe: 'cafes',
   phenomenon: 'phenomena',
   octopus: 'octopi',
-  pi: 'pi'
+  pi: 'pi',
+  usa: 'usa',
+  ia: 'ia! ia!'
 };
 
 var singularsForPlurals = _.invert(pluralsForSingulars);

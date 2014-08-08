@@ -253,6 +253,7 @@ var uncountableNouns = [
   'success',
   'sugar',
   'sunshine',
+  'surf',
   'symmetry',
   'syrup',
   'tea',

@@ -93,7 +93,10 @@ suite('Praise generator', function tributeDemanderSuite() {
           'ALA',
           'pi',
           'earthenware',
-          'pix'
+          'pix',
+          'surf',
+          'usa',
+          'ia'
         ],
         expectedDemands: [
           'CORN SYRUP FOR THE CORN SYRUP GOD',
@@ -111,7 +114,10 @@ suite('Praise generator', function tributeDemanderSuite() {
           'ALA FOR THE ALA GOD',
           'PI FOR THE PI GOD',
           'EARTHENWARE FOR THE EARTHENWARE GOD',
-          'PIX FOR THE PIX GOD'
+          'PIX FOR THE PIX GOD',
+          'SURF FOR THE SURF GOD',
+          'USA FOR THE USA GOD',
+          'IA! IA! FOR THE IA GOD'
         ]
       });
     }
@@ -184,7 +190,7 @@ suite('Praise generator', function tributeDemanderSuite() {
         'PHENOMENA FOR THE PHENOMENON GOD',
         'PHENOMENA FOR THE PHENOMENON GOD',
         'OCTOPI FOR THE OCTOPUS GOD',
-        'OCTOPI FOR THE OCTOPUS GOD',
+        'OCTOPI FOR THE OCTOPUS GOD'
       ]
     });
   });
