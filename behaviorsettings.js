@@ -52,7 +52,11 @@ module.exports = {
     'IDF',
     'ISIS',
     'mourner',
-    'mourners'
+    'mourners',
+    'rebel',
+    'Iraq',
+    'accident',
+    'ebola'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 44]
