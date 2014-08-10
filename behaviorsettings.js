@@ -50,7 +50,9 @@ module.exports = {
     'airstrike',
     'brigadier',
     'IDF',
-    'ISIS'
+    'ISIS',
+    'mourner',
+    'mourners'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 44]
