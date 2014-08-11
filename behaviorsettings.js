@@ -61,5 +61,5 @@ module.exports = {
     'asphyxiation'
   ],
   tragedyHappenedRecently: true,
-  maxCommonnessForReplyTopic: [20, 44]
+  maxCommonnessForReplyTopic: [20, 40]
 };
