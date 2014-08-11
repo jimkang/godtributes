@@ -56,7 +56,9 @@ module.exports = {
     'rebel',
     'Iraq',
     'accident',
-    'ebola'
+    'ebola',
+    'depression',
+    'asphyxiation'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 44]
