@@ -1,8 +1,7 @@
 0 0,3,7,10,13,16,19,22	*	*	1,2,3,4,6,7	/usr/local/bin/node ~/gcw/godtributes/maketribute.js
 0 0,3,7,9,10,13,16,17,19,22	*	*	5	/usr/local/bin/node ~/gcw/godtributes/maketribute.js
 
-30 * * * 1,2,3,4,6,7 /usr/local/bin/node ~/gcw/godtributes/exhort.js
-30 * * * 5 /usr/local/bin/node ~/gcw/godtributes/exhort.js
+30 1,3,5,7,9,11,13,15,17,19,21,23	*	*	1,2,3,4,5,6,7 /usr/local/bin/node ~/gcw/godtributes/exhort.js
 
 15 0,5,10,15,20  * * * /usr/local/bin/node ~/gcw/godtributes/followback.js
 45 11  * * * /usr/local/bin/node ~/gcw/godtributes/prune.js
