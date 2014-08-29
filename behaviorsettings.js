@@ -2,6 +2,10 @@ module.exports = {
   exhortTestSubjectUserId: 129586119,
   hoursToWaitBetweenRepliesToSameUser: 38.5,
   maxAttemptsToReplyPerUserPerRun: 1,
+
+  // Everything in the lists should be lowercase. Potential matches will also 
+  // be converted to lowercase.
+
   falsePositivesList: [
     'http',
     'haha',
@@ -9,8 +13,8 @@ module.exports = {
     'san'
   ],
   buzzkillBlacklist: [
-    'Negro',
-    'Negroes',
+    'negro',
+    'negroes',
     'chink',
     'chinks',
     'gook',
@@ -31,15 +35,15 @@ module.exports = {
     'shooting'
   ],
   tragedyModeBlacklist: [
-    'Gaza',
-    'Israel',
-    'Palestine',
+    'gaza',
+    'israel',
+    'palestine',
     'invasion',
     'horror',
     'genocide',
     'explosion',
     'assault',
-    'Hamas',
+    'hamas',
     'bomb',
     'plane',
     'death',
@@ -49,12 +53,12 @@ module.exports = {
     'suicide',
     'airstrike',
     'brigadier',
-    'IDF',
-    'ISIS',
+    'idf',
+    'isis',
     'mourner',
     'mourners',
     'rebel',
-    'Iraq',
+    'iraq',
     'accident',
     'ebola',
     'depression',

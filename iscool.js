@@ -3,21 +3,23 @@ var logger = require('./logger');
 var wordfilter = require('wordfilter');
 
 function isCool(word) {
-  var cool = (behavior.falsePositivesList.indexOf(word) === -1);
+  var normalizedWord = word.toLowerCase();
+  
+  var cool = (behavior.falsePositivesList.indexOf(normalizedWord) === -1);
   if (!cool) {
     return cool;
   }
 
   if (cool) {
-    cool = (behavior.buzzkillBlacklist.indexOf(word) === -1);
+    cool = (behavior.buzzkillBlacklist.indexOf(normalizedWord) === -1);
   }
 
   if (cool) {
-    cool = !wordfilter.blacklisted(word);
+    cool = !wordfilter.blacklisted(normalizedWord);
   }
 
   if (cool && behavior.tragedyHappenedRecently) {
-    cool = (behavior.tragedyModeBlacklist.indexOf(word) === -1);
+    cool = (behavior.tragedyModeBlacklist.indexOf(normalizedWord) === -1);
   }
 
   if (!cool) {
