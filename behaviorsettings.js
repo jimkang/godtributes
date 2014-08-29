@@ -62,7 +62,8 @@ module.exports = {
     'accident',
     'ebola',
     'depression',
-    'asphyxiation'
+    'asphyxiation',
+    'ferguson'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 40]
