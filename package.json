@@ -1,8 +1,12 @@
 {
-  "name": "botforthebotgod",
+  "name": "godtributes",
   "version": "0.1.0",
   "description": "Bot that makes demands for gods appropriately.",
   "main": "maketribute.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jimkang/godtributes.git"
+  },
   "scripts": {
     "test": "make test"
   },
@@ -23,12 +27,11 @@
     "queue-async": "~1.0.7",
     "basicset-levelwrap": "~0.1.0",
     "rollbar": "~0.3.8",
-    "wordfilter": "~0.1.5"
+    "wordfilter": "~0.1.6"
   },
   "devDependencies": {
     "mocha": "~1.20.1",
     "idmaker": "~0.1.1",
-    "npm": "~1.4.20",
     "level": "~0.18.0",
     "through2": "~0.5.1"
   }
