@@ -3,7 +3,11 @@ var logger = require('./logger');
 
 function isTextOKToReplyTo(text) {
   var words = text.split(/[ ":.,;!?#]/);
-  return !words.some(isWordInTragedyBlacklist);
+  var isOK = !words.some(isWordInTragedyBlacklist);
+  if (!isOK) {
+    logger.log('Is NOT OK to respond to', text);
+  }
+  return isOK;
 }
 
 function isWordInTragedyBlacklist(word) {

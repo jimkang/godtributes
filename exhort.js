@@ -12,6 +12,7 @@ var recordkeeper = require('./recordkeeper');
 var behavior = require('./behaviorsettings');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
+var tweetAnalyzer = require('./tweetanalyzer');
 
 function paramIsInArgs(param) {
   return (-1 !== process.argv.indexOf(param));
@@ -91,6 +92,7 @@ function tweetRepliesToStatuses(error, response) {
 
   var notGodTributesRTs = response.filter(isNotARetweetOfSelf);
   var targetTweets = _.sample(notGodTributesRTs, ~~(notGodTributesRTs.length/3));
+  targetTweets = targetTweets.filter(statusContainsTextThatIsOKToReplyTo);
 
   filterStatusesForInterestingNouns(targetTweets, 
     function useNounsToReply(error, nounGroups) {
@@ -152,6 +154,10 @@ function filterStatusesForInterestingNouns(statuses, done) {
     q.defer(getReplyNounsFromText, text);
   });
   q.awaitAll(done);
+}
+
+function statusContainsTextThatIsOKToReplyTo(status) {
+  return tweetAnalyzer.isTextOKToReplyTo(status.text);
 }
 
 // Assumes nouns has at least one element.
