@@ -1,5 +1,6 @@
 var inflection = require('inflection');
 var uncountableNouns = require('./uncountablenouns');
+var uncountableSuffixes = require('./uncountablesuffixes');
 var _ = require('lodash');
 var oddities = require('./canonicaloddities');
 var abbr = require('./abbr');
@@ -8,13 +9,16 @@ function getSingularAndPluralForms(word) {
   function endsWithUncountableNoun(uncountable) {
     return endsWith(word, uncountable);
   }
+  function endsWithUncountableSuffix(uncountableSuffix) {
+    return endsWith(word, uncountableSuffix);
+  }
 
   word = depossess(word);
   word = abbr.expand(word);
 
-  var isUncountable = 
-    isAGerund(word) || _.find(uncountableNouns, endsWithUncountableNoun) ||
-    endsWith(word, 'ware');
+  var isUncountable = isAGerund(word) ||
+    _.find(uncountableNouns, endsWithUncountableNoun) ||
+    _.find(uncountableSuffixes, endsWithUncountableNoun);
 
   var pluralWord = word;
   var singularWord = word;  
