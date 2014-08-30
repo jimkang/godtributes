@@ -8,7 +8,8 @@ var pluralsForSingulars = {
   octopus: 'octopi',
   pi: 'pi',
   usa: 'usa',
-  ia: 'ia! ia!'
+  ia: 'ia! ia!',
+  'drive-by': 'drive-bys'
 };
 
 var singularsForPlurals = _.invert(pluralsForSingulars);

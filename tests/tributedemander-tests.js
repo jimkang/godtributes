@@ -96,7 +96,11 @@ suite('Praise generator', function tributeDemanderSuite() {
           'pix',
           'surf',
           'usa',
-          'ia'
+          'ia',
+          'oxygen',
+          'estrogen',
+          'narcissism',
+          'democratization'
         ],
         expectedDemands: [
           'CORN SYRUP FOR THE CORN SYRUP GOD',
@@ -117,7 +121,11 @@ suite('Praise generator', function tributeDemanderSuite() {
           'PIX FOR THE PIX GOD',
           'SURF FOR THE SURF GOD',
           'USA FOR THE USA GOD',
-          'IA! IA! FOR THE IA GOD'
+          'IA! IA! FOR THE IA GOD',
+          'OXYGEN FOR THE OXYGEN GOD',
+          'ESTROGEN FOR THE ESTROGEN GOD',
+          'NARCISSISM FOR THE NARCISSISM GOD',
+          'DEMOCRATIZATION FOR THE DEMOCRATIZATION GOD'
         ]
       });
     }
@@ -181,7 +189,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'phenomenon',
         'phenomena',
         'octopus',
-        'octopi'
+        'octopi',
+        'drive-by'
       ],
       expectedDemands: [
         'CRITERIA FOR THE CRITERION GOD',
@@ -190,7 +199,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'PHENOMENA FOR THE PHENOMENON GOD',
         'PHENOMENA FOR THE PHENOMENON GOD',
         'OCTOPI FOR THE OCTOPUS GOD',
-        'OCTOPI FOR THE OCTOPUS GOD'
+        'OCTOPI FOR THE OCTOPUS GOD',
+        'DRIVE-BYS FOR THE DRIVE-BY GOD'
       ]
     });
   });

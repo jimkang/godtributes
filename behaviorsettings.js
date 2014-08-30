@@ -11,7 +11,10 @@ module.exports = {
     'http',
     'haha',
     'adv',
-    'san'
+    'san',
+    'tri',
+    'asa',
+    'att'
   ],
   buzzkillBlacklist: [
     'negro',
@@ -50,7 +53,6 @@ module.exports = {
     'death',
     'missile',
     'crash',
-    'passenger',
     'suicide',
     'airstrike',
     'brigadier',
@@ -58,7 +60,6 @@ module.exports = {
     'isis',
     'mourner',
     'mourners',
-    'rebel',
     'iraq',
     'accident',
     'ebola',
