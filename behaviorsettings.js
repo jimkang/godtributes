@@ -7,6 +7,7 @@ module.exports = {
   // be converted to lowercase.
 
   falsePositivesList: [
+    'rt',
     'http',
     'haha',
     'adv',
