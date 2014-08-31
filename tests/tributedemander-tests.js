@@ -74,7 +74,7 @@ suite('Praise generator', function tributeDemanderSuite() {
 
   });
 
-  test('Make demands for with mass nouns that are the same', 
+  test('Make demands for with mass nouns that do not change when pluralized', 
     function massNounTopicsTest() {
       topicsTest({
         topics: [
@@ -100,7 +100,14 @@ suite('Praise generator', function tributeDemanderSuite() {
           'oxygen',
           'estrogen',
           'narcissism',
-          'democratization'
+          'democratization',
+          'physics',
+          'frost',
+          'hemlock',
+          'camouflauge',
+          'shoes'
+          'shoe',
+          'paranoia'
         ],
         expectedDemands: [
           'CORN SYRUP FOR THE CORN SYRUP GOD',
@@ -125,7 +132,14 @@ suite('Praise generator', function tributeDemanderSuite() {
           'OXYGEN FOR THE OXYGEN GOD',
           'ESTROGEN FOR THE ESTROGEN GOD',
           'NARCISSISM FOR THE NARCISSISM GOD',
-          'DEMOCRATIZATION FOR THE DEMOCRATIZATION GOD'
+          'DEMOCRATIZATION FOR THE DEMOCRATIZATION GOD',
+          'PHYSICS FOR THE PHYSICS GOD',
+          'FROST FOR THE FROST GOD',
+          'HEMLOCK FOR THE HEMLOCK GOD',
+          'CAMOUFLAUGE FOR THE CAMOUFLAUGE GOD',
+          'SHOES FOR THE SHOE GOD',
+          'SHOES FOR THE SHOE GOD',
+          'PARANOIA FOR THE PARANOIA GOD'
         ]
       });
     }
