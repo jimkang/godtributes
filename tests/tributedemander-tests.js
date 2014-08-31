@@ -105,7 +105,7 @@ suite('Praise generator', function tributeDemanderSuite() {
           'frost',
           'hemlock',
           'camouflauge',
-          'shoes'
+          'shoes',
           'shoe',
           'paranoia'
         ],
