@@ -83,6 +83,7 @@ var uncountableNouns = [
   'food',
   'forties',
   'freedom',
+  'frost',
   'fruit',
   'fuel',
   'fun',
