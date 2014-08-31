@@ -9,7 +9,8 @@ var pluralsForSingulars = {
   pi: 'pi',
   usa: 'usa',
   ia: 'ia! ia!',
-  'drive-by': 'drive-bys'
+  'drive-by': 'drive-bys',
+  shoe: 'shoes'
 };
 
 var singularsForPlurals = _.invert(pluralsForSingulars);
