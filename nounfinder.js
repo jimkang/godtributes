@@ -4,15 +4,19 @@ var createWordnikSource = require('./wordniksource');
 var _ = require('lodash');
 var canonicalizer = require('./canonicalizer');
 var isCool = require('./iscool');
+var cardinalNumbers = require('./cardinalNumbers');
 
 var wordniksource = createWordnikSource();
 var nounCache = [];
 var frequenciesForNouns = {};
 
 function getNounsFromText(text, done) {
-  var words = getSingularFormsOfWords(worthwhileWordsFromText(text));  
+  var words = getSingularFormsOfWords(worthwhileWordsFromText(text));
   words = _.uniq(words.map(function lower(s) { return s.toLowerCase(); }));
+  words = words.filter(wordIsAtLeastTwoCharacters);
   words = words.filter(isCool);
+  words = words.filter(wordIsNotANumeral);
+  words = words.filter(wordIsNotACardinalNumber);
 
   // Get already-looked-up nouns from cache.
   var nouns = _.intersection(nounCache, words);
@@ -23,13 +27,10 @@ function getNounsFromText(text, done) {
     function filterToNouns(error, partsOfSpeech) {
       if (!error) {
         var newNouns = (words.filter(function couldBeNoun(word, i) {
-          // console.log(word, ':', partsOfSpeech[i]);
           return (partsOfSpeech[i].indexOf('noun') !== -1);
         }));
         nouns = nouns.concat(newNouns);
-        // console.log('newNouns', newNouns, 'nouns', nouns);
         nounCache = nounCache.concat(newNouns);
-        // console.log('nounCache:', nounCache);
       }
       done(error, nouns);
     }
@@ -98,8 +99,7 @@ function worthwhileWordsFromText(text) {
 }
 
 function isWorthCheckingForNounHood(word) {
-  return word.length > 1 && wordDoesNotStartWithAtSymbol(word) &&
-    wordIsNotANumeral(word);
+  return word.length > 1 && wordDoesNotStartWithAtSymbol(word);
 }
 
 function wordDoesNotStartWithAtSymbol(word) {
@@ -110,6 +110,14 @@ function wordIsNotANumeral(word) {
   return isNaN(+word);
 }
 
+function wordIsNotACardinalNumber(word) {
+  return cardinalNumbers.indexOf(word) === -1;
+}
+
+function wordIsAtLeastTwoCharacters(word) {
+  return word.length > 1;
+}
+
 // TODO: nounCache should be in recordkeeper.
 function getNounCache() {
   return nounCache;
@@ -118,7 +126,6 @@ function getNounCache() {
 function getFrequenciesForCachedNouns() {
   return frequenciesForNouns;
 }
-
 
 module.exports = {
   getNounsFromText: getNounsFromText,

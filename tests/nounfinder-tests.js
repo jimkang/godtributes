@@ -80,20 +80,39 @@ var textsAndNouns = [
   },
   {
     text: 'So @seventeenmag\'s app has shared my stripes vs. polkadots ' + 
+      '@polarpolls poll. http://polarb.com/65517  They know I\'m a dude in my forties, right?',
+    nouns: [
+      'app',
+      'stripe',
+      // 'v',
+      'poll',
+      'dude',
+      // 'forties'
+      // Should leave out v and forties.
+    ],
+    interestingNouns: [
+      'stripe',
+      'dude',
+      // '40s'
+      // should leave out 40s
+    ]
+  },  
+  {
+    text: 'So @seventeenmag\'s app has shared my stripes vs. polkadots ' + 
       '@polarpolls poll. http://polarb.com/65517  They know I\'m a dude in my 40s, right?',
     nouns: [
       'app',
       'stripe',
-      'v',
+      // 'v',
       'poll',
       'dude',
-      '40s'
+      // '40s'
       // Should leave out v and 40.
     ],
     interestingNouns: [
       'stripe',
       'dude',
-      '40s'
+      // '40s'
       // should leave out 40s
     ]
   }
@@ -147,7 +166,11 @@ suite('Noun getting', function gettingSuite() {
       'republican',
       'person',
       'doing',
-      'hello' 
+      'hello',
+      'app',
+      'stripe',
+      'poll',
+      'dude'
     ]);
   });
 
@@ -182,6 +205,7 @@ suite('Noun frequencies', function frequenciesSuite() {
   });
 
   test('Check frequency cache.', function testFrequencyCache() {
+    console.log(nounfinder.getFrequenciesForCachedNouns());
     assert.deepEqual(nounfinder.getFrequenciesForCachedNouns(), {
       facebook: 151,
       running: 1102,
@@ -207,7 +231,11 @@ suite('Noun frequencies', function frequenciesSuite() {
       republican: 51,
       person: 1675,
       doing: 2149,
-      hello: 87
+      hello: 87,
+      app: 163,
+      stripe: 8,
+      poll: 387,
+      dude: 76      
     });
   });
 
