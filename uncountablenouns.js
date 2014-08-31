@@ -194,6 +194,7 @@ var uncountableNouns = [
   'oil',
   'oxygen',
   'paper',
+  'paranoia',
   'passion',
   'pasta',
   'patience',
