@@ -77,6 +77,25 @@ var textsAndNouns = [
     interestingNouns: [
       'hello'
     ]
+  },
+  {
+    text: 'So @seventeenmag\'s app has shared my stripes vs. polkadots ' + 
+      '@polarpolls poll. http://polarb.com/65517  They know I\'m a dude in my 40s, right?',
+    nouns: [
+      'app',
+      'stripe',
+      'v',
+      'poll',
+      'dude',
+      '40s'
+      // Should leave out v and 40.
+    ],
+    interestingNouns: [
+      'stripe',
+      'dude',
+      '40s'
+      // should leave out 40s
+    ]
   }
 ];
 
