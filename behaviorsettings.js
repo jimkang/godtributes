@@ -14,7 +14,10 @@ module.exports = {
     'san',
     'tri',
     'asa',
-    'att'
+    'att',
+    'ios',
+    'imo',
+    'pls'
   ],
   buzzkillBlacklist: [
     'negro',
