@@ -39,7 +39,8 @@ module.exports = {
     'bombing',
     'bombings',
     'shootings',
-    'shooting'
+    'shooting',
+    'miscarriage'
   ],
   tragedyModeBlacklist: [
     'gaza',
