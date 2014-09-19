@@ -7,7 +7,7 @@ suite('Topic getting', function gettingSuite() {
     var source = createWordnikSource();
 
     source.getTopic(function checkTopic(error, topic) {
-      assert.ok(!error);
+      assert.ok(!error, error);
       assert.equal(typeof topic, 'string');
       assert.ok(topic.length > 0);
       testDone();
@@ -20,7 +20,7 @@ suite('Topic getting', function gettingSuite() {
 
       source.getPartsOfSpeech('students', 
         function checkResult(error, parts) {
-          assert.ok(!error);
+          assert.ok(!error, error);
           assert.deepEqual(parts, ['noun']);
           testDone();
         }
@@ -49,7 +49,7 @@ suite('Topic getting', function gettingSuite() {
           'feeds'
         ],
         function checkResult(error, parts) {
-          assert.ok(!error);
+          assert.ok(!error, error);
           assert.deepEqual(parts, 
             [
               [
@@ -128,7 +128,7 @@ suite('Topic getting', function gettingSuite() {
 
       source.getWordFrequency('students', 
         function checkResult(error, frequency) {
-          assert.ok(!error);
+          assert.ok(!error, error);
           assert.equal(frequency, 1105);
           testDone();
         }
@@ -156,7 +156,7 @@ suite('Topic getting', function gettingSuite() {
           'morally',
         ],
         function checkResult(error, frequencies) {
-          assert.ok(!error);
+          assert.ok(!error, error);
           assert.deepEqual(frequencies, [
             599, 
             1105, 
