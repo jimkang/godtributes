@@ -73,7 +73,9 @@ module.exports = {
     'asphyxiation',
     'ferguson',
     'beheading',
-    'foley'
+    'foley',
+    'gun',
+    'rip'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 40]
