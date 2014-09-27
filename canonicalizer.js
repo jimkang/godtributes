@@ -43,7 +43,12 @@ function getSingularAndPluralForms(word) {
 
 // http://stackoverflow.com/questions/280634/endswith-in-javascript
 function endsWith(str, suffix) {
+  if (str.length < 1 || str.length < suffix.length) {
+    return false;
+  }
+  else {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
+  }
 }
 
 function isAGerund(word) {
