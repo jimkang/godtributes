@@ -115,6 +115,16 @@ var textsAndNouns = [
       // '40s'
       // should leave out 40s
     ]
+  },  
+  {
+    text: 'PLS don\'t use pls in an exhortation',
+    nouns: [
+      'don\'t',
+      'exhortation',
+    ],
+    interestingNouns: [
+      'exhortation'
+    ]
   }
 ];
 
@@ -170,7 +180,9 @@ suite('Noun getting', function gettingSuite() {
       'app',
       'stripe',
       'poll',
-      'dude'
+      'dude',
+      'don\'t',
+      'exhortation'
     ]);
   });
 
@@ -235,7 +247,9 @@ suite('Noun frequencies', function frequenciesSuite() {
       app: 163,
       stripe: 8,
       poll: 387,
-      dude: 76      
+      dude: 76,
+      'don\'t': 5157,
+      exhortation: 1
     });
   });
 

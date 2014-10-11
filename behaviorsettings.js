@@ -6,6 +6,8 @@ module.exports = {
   // Everything in the lists should be lowercase. Potential matches will also 
   // be converted to lowercase.
 
+  // falsePositivesList should contain only the singular forms of the words, 
+  // words will be singularized before being checked against this list.
   falsePositivesList: [
     'rt',
     'http',
@@ -15,10 +17,9 @@ module.exports = {
     'tri',
     'asa',
     'att',
-    'ios',
     'io',
     'imo',
-    'pls',
+    'pl',
     'dr',
     'alas'
   ],
