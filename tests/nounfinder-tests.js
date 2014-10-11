@@ -125,6 +125,19 @@ var textsAndNouns = [
     interestingNouns: [
       'exhortation'
     ]
+  },  
+  {
+    text: 'w/e. tl;dr capitalism ruins everything. i’m going to bed.',
+    nouns: [
+      'capitalism',
+      'ruin',
+      'going',
+      'bed'
+    ],
+    interestingNouns: [
+      'capitalism',
+      'ruin'
+    ]
   }
 ];
 
@@ -182,7 +195,11 @@ suite('Noun getting', function gettingSuite() {
       'poll',
       'dude',
       'don\'t',
-      'exhortation'
+      'exhortation',
+      'capitalism',
+      'ruin',
+      'going',
+      'bed'
     ]);
   });
 
@@ -249,7 +266,11 @@ suite('Noun frequencies', function frequenciesSuite() {
       poll: 387,
       dude: 76,
       'don\'t': 5157,
-      exhortation: 1
+      exhortation: 1,
+      capitalism: 88,
+      ruin: 65,
+      going: 6355,
+      bed: 519      
     });
   });
 
