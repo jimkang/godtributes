@@ -10,7 +10,8 @@ var pluralsForSingulars = {
   usa: 'usa',
   ia: 'ia! ia!',
   'drive-by': 'drive-bys',
-  shoe: 'shoes'
+  shoe: 'shoes',
+  cookie: 'cookies'
 };
 
 var singularsForPlurals = _.invert(pluralsForSingulars);

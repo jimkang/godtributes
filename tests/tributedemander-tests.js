@@ -185,7 +185,9 @@ suite('Praise generator', function tributeDemanderSuite() {
         'phenomena',
         'octopus',
         'octopi',
-        'drive-by'
+        'drive-by',
+        'cookie',
+        'cookies'
       ],
       expectedDemands: [
         'CRITERIA FOR THE CRITERION GOD',
@@ -195,7 +197,9 @@ suite('Praise generator', function tributeDemanderSuite() {
         'PHENOMENA FOR THE PHENOMENON GOD',
         'OCTOPI FOR THE OCTOPUS GOD',
         'OCTOPI FOR THE OCTOPUS GOD',
-        'DRIVE-BYS FOR THE DRIVE-BY GOD'
+        'DRIVE-BYS FOR THE DRIVE-BY GOD',
+        'COOKIES FOR THE COOKIE GOD',
+        'COOKIES FOR THE COOKIE GOD'
       ]
     });
   });
