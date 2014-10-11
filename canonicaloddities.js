@@ -11,7 +11,8 @@ var pluralsForSingulars = {
   ia: 'ia! ia!',
   'drive-by': 'drive-bys',
   shoe: 'shoes',
-  cookie: 'cookies'
+  cookie: 'cookies',
+  microwave: 'microwaves'
 };
 
 var singularsForPlurals = _.invert(pluralsForSingulars);

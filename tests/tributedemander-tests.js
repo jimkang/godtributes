@@ -188,7 +188,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'drive-by',
         'cookie',
         'cookies',
-        'pis'        
+        'pis',
+        'microwaves'
       ],
       expectedDemands: [
         'CRITERIA FOR THE CRITERION GOD',
@@ -201,7 +202,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'DRIVE-BYS FOR THE DRIVE-BY GOD',
         'COOKIES FOR THE COOKIE GOD',
         'COOKIES FOR THE COOKIE GOD',
-        'PI FOR THE PI GOD'        
+        'PI FOR THE PI GOD',
+        'MICROWAVES FOR THE MICROWAVE GOD'
       ]
     });
   });
