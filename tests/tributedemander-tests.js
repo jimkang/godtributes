@@ -107,7 +107,8 @@ suite('Praise generator', function tributeDemanderSuite() {
           'camouflauge',
           'shoes',
           'shoe',
-          'paranoia'
+          'paranoia',
+          'pis'
         ],
         expectedDemands: [
           'CORN SYRUP FOR THE CORN SYRUP GOD',
@@ -139,7 +140,8 @@ suite('Praise generator', function tributeDemanderSuite() {
           'CAMOUFLAUGE FOR THE CAMOUFLAUGE GOD',
           'SHOES FOR THE SHOE GOD',
           'SHOES FOR THE SHOE GOD',
-          'PARANOIA FOR THE PARANOIA GOD'
+          'PARANOIA FOR THE PARANOIA GOD',
+          'PI FOR THE PI GOD'
         ]
       });
     }
