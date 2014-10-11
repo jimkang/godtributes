@@ -107,8 +107,7 @@ suite('Praise generator', function tributeDemanderSuite() {
           'camouflauge',
           'shoes',
           'shoe',
-          'paranoia',
-          'pis'
+          'paranoia'
         ],
         expectedDemands: [
           'CORN SYRUP FOR THE CORN SYRUP GOD',
@@ -140,8 +139,7 @@ suite('Praise generator', function tributeDemanderSuite() {
           'CAMOUFLAUGE FOR THE CAMOUFLAUGE GOD',
           'SHOES FOR THE SHOE GOD',
           'SHOES FOR THE SHOE GOD',
-          'PARANOIA FOR THE PARANOIA GOD',
-          'PI FOR THE PI GOD'
+          'PARANOIA FOR THE PARANOIA GOD'
         ]
       });
     }
@@ -189,7 +187,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'octopi',
         'drive-by',
         'cookie',
-        'cookies'
+        'cookies',
+        'pis'        
       ],
       expectedDemands: [
         'CRITERIA FOR THE CRITERION GOD',
@@ -201,7 +200,8 @@ suite('Praise generator', function tributeDemanderSuite() {
         'OCTOPI FOR THE OCTOPUS GOD',
         'DRIVE-BYS FOR THE DRIVE-BY GOD',
         'COOKIES FOR THE COOKIE GOD',
-        'COOKIES FOR THE COOKIE GOD'
+        'COOKIES FOR THE COOKIE GOD',
+        'PI FOR THE PI GOD'        
       ]
     });
   });
