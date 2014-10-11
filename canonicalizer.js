@@ -6,6 +6,8 @@ var oddities = require('./canonicaloddities');
 var abbr = require('./abbr');
 
 function getSingularAndPluralForms(word) {
+  var word = word.toLowerCase();
+  
   function endsWithUncountableNoun(uncountable) {
     return endsWith(word, uncountable);
   }
