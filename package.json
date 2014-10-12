@@ -1,6 +1,6 @@
 {
   "name": "godtributes",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Bot that makes demands for gods appropriately.",
   "main": "maketribute.js",
   "repository": {
