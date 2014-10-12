@@ -80,5 +80,6 @@ module.exports = {
     'rip'
   ],
   tragedyHappenedRecently: true,
-  maxCommonnessForReplyTopic: [20, 40]
+  maxCommonnessForReplyTopic: [20, 40],
+  emojiThresholdPercentage: 20
 };

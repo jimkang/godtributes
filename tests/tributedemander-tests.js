@@ -228,5 +228,17 @@ suite('Praise generator', function tributeDemanderSuite() {
     });
   });
 
+  test('Repeat-style pluralization', function emojiTest() {
+    var demandOpts = {
+      topic: 'some-emoji',
+      isEmoji: true,
+      repeatNTimesToPluralize: 4
+    };
+
+    var demand = tributeDemander.makeDemandForTopic(demandOpts);
+    assert.equal(demand, 'some-emoji some-emoji some-emoji some-emoji' + 
+      '  FOR THE some-emoji  GOD'
+    );
+  });
 });
 
