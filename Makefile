@@ -10,4 +10,4 @@ debug-test:
 
 install-cron:
 	echo "Note: You need to edit the paths in schedule.cron for this to work.\n"
-	crontab schedule.cron
+	crontab -l > tmp.cron && cat tmp.cron schedule.cron > tmp.cron && crontab tmp.cron
