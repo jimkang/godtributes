@@ -15,6 +15,8 @@ var handleTwitterError = require('./handletwittererror');
 var tweetAnalyzer = require('./tweetanalyzer');
 var isEmoji = require('is-emoji');
 
+var logVerbosely = false;
+
 function paramIsInArgs(param) {
   return (-1 !== process.argv.indexOf(param));
 }
@@ -49,7 +51,9 @@ function exhort() {
       }
       else {
         var usersToExhort = response.ids;
-        logger.log('Found followers', usersToExhort);
+        if (logVerbosely) {
+          logger.log('Found followers', usersToExhort);
+        }
         usersToExhort.forEach(exhortUser);
       }
     });
@@ -69,7 +73,7 @@ function exhortUser(userId) {
         if (hoursElapsed > behavior.hoursToWaitBetweenRepliesToSameUser) {
           replyToUserStatuses(userId);
         }
-        else {
+        else if (logVerbosely) {
           logger.log('Not replying', userId, 'was last replied to', 
             hoursElapsed, 'hours ago.');
         }
@@ -233,7 +237,7 @@ function getReplyNounsFromText(text, done) {
       if (nouns.length > 0) {
         nounfinder.filterNounsForInterestingness(nouns, 
           maxCommonnessForTopic, function filterDone(error, filteredNouns) {
-            if (filteredNouns.length < 1) {
+            if (logVerbosely && filteredNouns.length < 1) {
               logger.log('Filtered ALL nouns from text', text);
             }
             done(error, filteredNouns);
