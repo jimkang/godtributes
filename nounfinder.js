@@ -4,7 +4,7 @@ var createWordnikSource = require('./wordniksource');
 var _ = require('lodash');
 var canonicalizer = require('./canonicalizer');
 var isCool = require('./iscool');
-var cardinalNumbers = require('./cardinalNumbers');
+var cardinalNumbers = require('./cardinalnumbers');
 var isEmoji = require('is-emoji');
 var emojiSource = require('./emojisource');
 
