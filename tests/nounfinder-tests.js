@@ -138,6 +138,20 @@ var textsAndNouns = [
       'capitalism',
       'ruin'
     ]
+  },
+  {
+    text: 'Back when some stuff is done. 😊 🐸 📈',
+    nouns: [
+      'back',
+      'stuff',
+      '😊',
+      '🐸',
+      '📈'
+    ],
+    interestingNouns: [
+      '🐸',
+      '📈'
+    ]
   }
 ];
 
@@ -199,7 +213,9 @@ suite('Noun getting', function gettingSuite() {
       'capitalism',
       'ruin',
       'going',
-      'bed'
+      'bed',
+      'back',
+      'stuff'
     ]);
   });
 
@@ -270,7 +286,9 @@ suite('Noun frequencies', function frequenciesSuite() {
       capitalism: 88,
       ruin: 65,
       going: 6355,
-      bed: 519      
+      bed: 519,
+      back: 6613,
+      stuff: 1107
     });
   });
 

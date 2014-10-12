@@ -21,6 +21,7 @@
   "dependencies": {
     "basicset-levelwrap": "~0.1.0",
     "inflection": "~1.3.6",
+    "is-emoji": "^0.1.1",
     "lodash": "~2.4.1",
     "node-emoji": "^0.1.0",
     "probable": "~0.1.0",

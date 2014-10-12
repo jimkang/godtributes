@@ -5,6 +5,8 @@ var _ = require('lodash');
 var canonicalizer = require('./canonicalizer');
 var isCool = require('./iscool');
 var cardinalNumbers = require('./cardinalNumbers');
+var isEmoji = require('is-emoji');
+var emojiSource = require('./emojisource');
 
 var wordniksource = createWordnikSource();
 var nounCache = [];
@@ -13,7 +15,7 @@ var frequenciesForNouns = {};
 function getNounsFromText(text, done) {
   var words = getSingularFormsOfWords(worthwhileWordsFromText(text));
   words = _.uniq(words.map(function lower(s) { return s.toLowerCase(); }));
-  words = words.filter(wordIsAtLeastTwoCharacters);
+  words = words.filter(wordIsCorrectLength);
   words = words.filter(isCool);
   words = words.filter(wordIsNotANumeral);
   words = words.filter(wordIsNotACardinalNumber);
@@ -22,8 +24,11 @@ function getNounsFromText(text, done) {
   var nouns = _.intersection(nounCache, words);
   words = _.without.apply(_, [words].concat(nouns));
 
+  var emojiNouns = words.filter(isEmoji);
+  var regularWords = _.without(words, emojiNouns);
+
   wordniksource.getPartsOfSpeechForMultipleWords(
-    words, 
+    regularWords, 
     function filterToNouns(error, partsOfSpeech) {
       if (!error) {
         var newNouns = (words.filter(function couldBeNoun(word, i) {
@@ -32,7 +37,8 @@ function getNounsFromText(text, done) {
         nouns = nouns.concat(newNouns);
         nounCache = nounCache.concat(newNouns);
       }
-      done(error, nouns);
+      
+      done(error, nouns.concat(emojiNouns));
     }
   );
 }
@@ -62,7 +68,14 @@ function filterNounsForInterestingness(nouns, maxFrequency, done) {
 
   nouns = _.without.apply(_, [nouns].concat(interestingNouns));
 
-  wordniksource.getWordFrequencies(nouns, 
+  var emojiNouns = nouns.filter(isEmoji)
+    .filter(emojiSource.emojiValueIsOKAsATopic);
+
+  nouns = nouns.filter(function isNotEmoji(noun) {
+    return !isEmoji(noun);
+  });
+
+  wordniksource.getWordFrequencies(nouns,
     function filterByFrequency(error, frequencies) {
       if (error) {
         done(error, interestingNouns);
@@ -75,7 +88,7 @@ function filterNounsForInterestingness(nouns, maxFrequency, done) {
         frequencies.forEach(function saveFreqForNoun(freq, i) {
           frequenciesForNouns[nouns[i]] = freq;
         });
-        done(null, interestingNouns);
+        done(null, interestingNouns.concat(emojiNouns));
       }
     }
   );
@@ -112,6 +125,10 @@ function wordIsNotANumeral(word) {
 
 function wordIsNotACardinalNumber(word) {
   return cardinalNumbers.indexOf(word) === -1;
+}
+
+function wordIsCorrectLength(word) {
+  return wordIsAtLeastTwoCharacters(word) || isEmoji(word);
 }
 
 function wordIsAtLeastTwoCharacters(word) {

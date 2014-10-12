@@ -13,6 +13,7 @@ var behavior = require('./behaviorsettings');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
 var tweetAnalyzer = require('./tweetanalyzer');
+var isEmoji = require('is-emoji');
 
 function paramIsInArgs(param) {
   return (-1 !== process.argv.indexOf(param));
@@ -163,20 +164,23 @@ function statusContainsTextThatIsOKToReplyTo(status) {
 // Assumes nouns has at least one element.
 function replyToStatusWithNouns(status, nouns) {
   var selectedNouns = _.sample(nouns, 2);
-  var primaryTribute = tributeDemander.makeDemandForTopic({
-    topic: selectedNouns[0],
-    prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
-    tributeFigure: figurepicker.getMainTributeFigure()    
-  });
+
+  var primaryTribute = 
+    tributeDemander.makeDemandForTopic(addEmojiDemandOptsIfApt({
+      topic: selectedNouns[0],
+      prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
+      tributeFigure: figurepicker.getMainTributeFigure()    
+    }));
 
   var secondaryTribute;
 
   if (selectedNouns.length > 1) {
-    secondaryTribute = tributeDemander.makeDemandForTopic({
-      topic: selectedNouns[1],
-      prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
-      tributeFigure: figurepicker.getSecondaryTributeFigure()
-    });
+    secondaryTribute = 
+      tributeDemander.makeDemandForTopic(addEmojiDemandOptsIfApt({
+        topic: selectedNouns[1],
+        prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
+        tributeFigure: figurepicker.getSecondaryTributeFigure()
+      }));
   }
 
   var replyText = '@' + status.user.screen_name + ' ' + primaryTribute;
@@ -200,6 +204,15 @@ function replyToStatusWithNouns(status, nouns) {
     }
   );
 
+}
+
+function addEmojiDemandOptsIfApt(demandOpts) {
+  if (isEmoji(demandOpts.topic)) {
+    demandOpts.isEmoji = true;
+    demandOpts.repeatNTimesToPluralize = 
+      probable.roll(3) + probable.roll(3) + 2;
+  }
+  return demandOpts;
 }
 
 function recordReplyDetails(targetStatus, topics) {
