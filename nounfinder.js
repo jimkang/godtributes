@@ -13,7 +13,10 @@ var nounCache = [];
 var frequenciesForNouns = {};
 
 function getNounsFromText(text, done) {
-  var words = getSingularFormsOfWords(worthwhileWordsFromText(text));
+  var emojiNouns = getEmojiFromText(text);
+  var nonEmojiText = _.without(text.split(''), emojiNouns).join('');
+
+  var words = getSingularFormsOfWords(worthwhileWordsFromText(nonEmojiText));
   words = _.uniq(words.map(function lower(s) { return s.toLowerCase(); }));
   words = words.filter(wordIsCorrectLength);
   words = words.filter(isCool);
@@ -24,11 +27,8 @@ function getNounsFromText(text, done) {
   var nouns = _.intersection(nounCache, words);
   words = _.without.apply(_, [words].concat(nouns));
 
-  var emojiNouns = words.filter(isEmoji);
-  var regularWords = _.without(words, emojiNouns);
-
   wordniksource.getPartsOfSpeechForMultipleWords(
-    regularWords, 
+    words,
     function filterToNouns(error, partsOfSpeech) {
       if (!error) {
         var newNouns = (words.filter(function couldBeNoun(word, i) {
@@ -142,6 +142,45 @@ function getNounCache() {
 
 function getFrequenciesForCachedNouns() {
   return frequenciesForNouns;
+}
+
+// From http://crocodillon.com/blog/parsing-emoji-unicode-in-javascript.
+var emojiSurrogateRangeDefs = [
+  {
+    lead: '\ud83c',
+    trailRange: ['\udf00', '\udfff']
+  },
+  {
+    lead: '\ud83d',
+    trailRange: ['\udc00', '\ude4f']
+  },
+  {
+    lead: '\ud83d',
+    trailRange: ['\ude80', '\udeff']
+  }
+];
+
+function isEmojiSurrogatePair(leadChar, trailingChar) {
+  return emojiSurrogateRangeDefs.some(function charCodeIsInRange(rangeDef) {
+    debugger;
+    return leadChar === rangeDef.lead &&
+      trailingChar >= rangeDef.trailRange[0] &&
+      trailingChar <= rangeDef.trailRange[1];
+  });
+}
+
+function getEmojiFromText(text) {
+  var emojiArray = [];
+  debugger;
+  for (var i = 0; i < text.length - 1; ++i) {
+    var leadChar = text[i];
+    var trailChar = text[i + 1];
+    debugger;
+    if (isEmojiSurrogatePair(leadChar, trailChar)) {
+      emojiArray.push(text.substr(i, 2));
+    }
+  }
+  return emojiArray;
 }
 
 module.exports = {
