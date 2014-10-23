@@ -189,7 +189,11 @@ suite('Praise generator', function tributeDemanderSuite() {
         'cookie',
         'cookies',
         'pis',
-        'microwaves'
+        'microwaves',
+        'corgi',
+        'corgis',
+        'passerby',
+        'passersby'
       ],
       expectedDemands: [
         'CRITERIA FOR THE CRITERION GOD',
@@ -203,7 +207,11 @@ suite('Praise generator', function tributeDemanderSuite() {
         'COOKIES FOR THE COOKIE GOD',
         'COOKIES FOR THE COOKIE GOD',
         'PI FOR THE PI GOD',
-        'MICROWAVES FOR THE MICROWAVE GOD'
+        'MICROWAVES FOR THE MICROWAVE GOD',
+        'CORGIS FOR THE CORGI GOD',
+        'CORGIS FOR THE CORGI GOD',
+        'PASSERSBY FOR THE PASSERBY GOD',
+        'PASSERSBY FOR THE PASSERBY GOD'        
       ]
     });
   });

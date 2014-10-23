@@ -12,7 +12,9 @@ var pluralsForSingulars = {
   'drive-by': 'drive-bys',
   shoe: 'shoes',
   cookie: 'cookies',
-  microwave: 'microwaves'
+  microwave: 'microwaves',
+  corgi: 'corgis',
+  passerby: 'passersby'
 };
 
 var singularsForPlurals = _.invert(pluralsForSingulars);
