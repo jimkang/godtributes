@@ -152,6 +152,16 @@ var textsAndNouns = [
       '🐸',
       '📈'
     ]
+  },
+  {
+    text: 'Read a really cool AMA with the Zodiac Killer!',
+    nouns: [
+      'zodiac',
+      'killer'
+    ],
+    interestingNouns: [
+      'zodiac'
+    ]
   }
 ];
 
@@ -215,7 +225,9 @@ suite('Noun getting', function gettingSuite() {
       'going',
       'bed',
       'back',
-      'stuff'
+      'stuff',
+      'zodiac',
+      'killer'
     ]);
   });
 
@@ -288,7 +300,9 @@ suite('Noun frequencies', function frequenciesSuite() {
       going: 6355,
       bed: 519,
       back: 6613,
-      stuff: 1107
+      stuff: 1107,
+      zodiac: 1,
+      killer: 150
     });
   });
 
