@@ -13,7 +13,7 @@ var nounCache = [];
 var frequenciesForNouns = {};
 
 function getNounsFromText(text, done) {
-  var emojiNouns = getEmojiFromText(text);
+  var emojiNouns = _.uniq(getEmojiFromText(text));
   var nonEmojiText = _.without(text.split(''), emojiNouns).join('');
 
   var words = getSingularFormsOfWords(worthwhileWordsFromText(nonEmojiText));
@@ -162,7 +162,6 @@ var emojiSurrogateRangeDefs = [
 
 function isEmojiSurrogatePair(leadChar, trailingChar) {
   return emojiSurrogateRangeDefs.some(function charCodeIsInRange(rangeDef) {
-    debugger;
     return leadChar === rangeDef.lead &&
       trailingChar >= rangeDef.trailRange[0] &&
       trailingChar <= rangeDef.trailRange[1];
@@ -171,11 +170,9 @@ function isEmojiSurrogatePair(leadChar, trailingChar) {
 
 function getEmojiFromText(text) {
   var emojiArray = [];
-  debugger;
   for (var i = 0; i < text.length - 1; ++i) {
     var leadChar = text[i];
     var trailChar = text[i + 1];
-    debugger;
     if (isEmojiSurrogatePair(leadChar, trailChar)) {
       emojiArray.push(text.substr(i, 2));
     }

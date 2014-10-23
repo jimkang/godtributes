@@ -140,7 +140,7 @@ var textsAndNouns = [
     ]
   },
   {
-    text: 'Back when some stuff is done. 😊 🐸📈',
+    text: 'Back when some stuff is done. 😊 🐸📈🐸',
     nouns: [
       'back',
       'stuff',
