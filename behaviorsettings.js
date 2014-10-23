@@ -82,5 +82,5 @@ module.exports = {
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 40],
-  emojiThresholdPercentage: 20
+  emojiThresholdPercentage: 10
 };
