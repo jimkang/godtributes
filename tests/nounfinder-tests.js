@@ -162,9 +162,59 @@ var textsAndNouns = [
     interestingNouns: [
       'zodiac'
     ]
+  },
+  {
+    text: 'Alas. I seem to have missed the boat.',
+    nouns: [
+      'boat'
+    ],
+    interestingNouns: [
+    ]
   }
 ];
 
+var expectedNounCache = {
+    facebook: 151,
+    running: 1102,
+    study: 880,
+    user: 373,
+    state: 2719,
+    work: 4804,
+    street: 569,
+    will: 18228,
+    motorist: 5,
+    abutter: 0,
+    property: 649,
+    owner: 387,
+    access: 936,
+    driveway: 34,
+    addition: 532,
+    closure: 56,
+    no: 9127,
+    parking: 201,
+    side: 1657,
+    voting: 377,
+    matter: 1382,
+    republican: 51,
+    person: 1675,
+    doing: 2149,
+    hello: 87,
+    app: 163,
+    stripe: 8,
+    poll: 387,
+    dude: 76,
+    'don\'t': 5157,
+    exhortation: 1,
+    capitalism: 88,
+    ruin: 65,
+    going: 6355,
+    bed: 519,
+    back: 6613,
+    stuff: 1107,
+    zodiac: 1,
+    killer: 150,
+    boat: 231
+  };
 
 suite('Noun getting', function gettingSuite() {
   this.timeout(30000);
@@ -188,47 +238,7 @@ suite('Noun getting', function gettingSuite() {
   });
 
   test('Check noun cache.', function testNounCache() {
-    assert.deepEqual(nounfinder.getNounCache(), [
-      'facebook',
-      'running',
-      'study',
-      'user',
-      'state',
-      'work',
-      'street',
-      'will',
-      'motorist',
-      'abutter',
-      'property',
-      'owner',
-      'access',
-      'driveway',
-      'addition',
-      'closure',
-      'no',
-      'parking',
-      'side',
-      'voting',
-      'matter',
-      'republican',
-      'person',
-      'doing',
-      'hello',
-      'app',
-      'stripe',
-      'poll',
-      'dude',
-      'don\'t',
-      'exhortation',
-      'capitalism',
-      'ruin',
-      'going',
-      'bed',
-      'back',
-      'stuff',
-      'zodiac',
-      'killer'
-    ]);
+    assert.deepEqual(nounfinder.getNounCache(), Object.keys(expectedNounCache));
   });
 
 });
@@ -263,47 +273,9 @@ suite('Noun frequencies', function frequenciesSuite() {
 
   test('Check frequency cache.', function testFrequencyCache() {
     console.log(nounfinder.getFrequenciesForCachedNouns());
-    assert.deepEqual(nounfinder.getFrequenciesForCachedNouns(), {
-      facebook: 151,
-      running: 1102,
-      study: 880,
-      user: 373,
-      state: 2719,
-      work: 4804,
-      street: 569,
-      will: 18228,
-      motorist: 5,
-      abutter: 0,
-      property: 649,
-      owner: 387,
-      access: 936,
-      driveway: 34,
-      addition: 532,
-      closure: 56,
-      no: 9127,
-      parking: 201,
-      side: 1657,
-      voting: 377,
-      matter: 1382,
-      republican: 51,
-      person: 1675,
-      doing: 2149,
-      hello: 87,
-      app: 163,
-      stripe: 8,
-      poll: 387,
-      dude: 76,
-      'don\'t': 5157,
-      exhortation: 1,
-      capitalism: 88,
-      ruin: 65,
-      going: 6355,
-      bed: 519,
-      back: 6613,
-      stuff: 1107,
-      zodiac: 1,
-      killer: 150
-    });
+    assert.deepEqual(nounfinder.getFrequenciesForCachedNouns(), 
+      expectedNounCache
+    );
   });
 
 });

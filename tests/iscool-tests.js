@@ -12,9 +12,8 @@ suite('Custom blacklist', function customBlacklistSuite() {
 
 suite('False positives', function falsePositivesSuite() {
   test('Test false positives', function testFalsePositives() {
-    assert.ok(!isCool('iOS'));
-    assert.ok(!isCool('IOS'));
-    assert.ok(isCool('io'));
+    assert.ok(!isCool('IO'));
+    assert.ok(isCool('iOS'));
     assert.ok(!isCool('imo'));
     assert.ok(!isCool('IMO'));
   });

@@ -21,7 +21,7 @@ module.exports = {
     'imo',
     'pl',
     'dr',
-    'alas',
+    'ala',
     'ama'
   ],
   buzzkillBlacklist: [
