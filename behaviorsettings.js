@@ -1,6 +1,6 @@
 module.exports = {
   exhortTestSubjectUserId: 129586119,
-  hoursToWaitBetweenRepliesToSameUser: 38.5,
+  hoursToWaitBetweenRepliesToSameUser: 42.5,
   maxAttemptsToReplyPerUserPerRun: 1,
 
   // Everything in the lists should be lowercase. Potential matches will also 
@@ -82,5 +82,5 @@ module.exports = {
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 40],
-  emojiThresholdPercentage: 10
+  emojiThresholdPercentage: 5
 };
