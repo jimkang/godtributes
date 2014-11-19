@@ -15,7 +15,6 @@ var randomWordURL = 'http://api.wordnik.com:80/v4/words.json/randomWord?' +
   'minLength=2&maxLength=120&' +
   'api_key=' + apiKey;
 
-
 var wordURLPrefix = 'http://api.wordnik.com:80/v4/word.json/';
 
 var partOfSpeechURLPostfix = '/definitions?' + 

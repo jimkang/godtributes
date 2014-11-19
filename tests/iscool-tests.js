@@ -7,6 +7,8 @@ suite('Custom blacklist', function customBlacklistSuite() {
     assert.ok(isCool('Jello'));
     assert.ok(!isCool('Negro'));
     assert.ok(!isCool('negro'));
+    assert.ok(!isCool('Coon'));
+    assert.ok(!isCool('coon'));
   });  
 });
 
