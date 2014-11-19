@@ -9,7 +9,11 @@ suite('Custom blacklist', function customBlacklistSuite() {
     assert.ok(!isCool('negro'));
     assert.ok(!isCool('Coon'));
     assert.ok(!isCool('coon'));
-  });  
+  });
+
+  test('Basic test', function basicTest() {
+    assert.ok(isCool('transgender')); // Not OK as a noun.
+  });
 });
 
 suite('False positives', function falsePositivesSuite() {
