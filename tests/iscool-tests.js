@@ -12,9 +12,10 @@ suite('Custom blacklist', function customBlacklistSuite() {
   });
 
   test('Basic test', function basicTest() {
-    assert.ok(isCool('transgender')); // Not OK as a noun.
+    assert.ok(!isCool('transgender')); // Not OK as a noun.
   });
 });
+
 
 suite('False positives', function falsePositivesSuite() {
   test('Test false positives', function testFalsePositives() {
