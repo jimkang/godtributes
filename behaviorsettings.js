@@ -48,7 +48,8 @@ module.exports = {
     'miscarriage',
     'coon',
     'transgender', // OK normally, not OK as a noun.
-    'swastika'
+    'swastika',
+    'nazi'
   ],
   tragedyModeBlacklist: [
     'gaza',

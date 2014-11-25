@@ -14,6 +14,7 @@ suite('Custom blacklist', function customBlacklistSuite() {
   test('Basic test', function basicTest() {
     assert.ok(!isCool('transgender')); // Not OK as a noun.
     assert.ok(!isCool('swastika'));
+    assert.ok(!isCool('nazi'));
   });
 });
 
