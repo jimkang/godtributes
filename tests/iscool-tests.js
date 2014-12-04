@@ -15,6 +15,13 @@ suite('Custom blacklist', function customBlacklistSuite() {
     assert.ok(!isCool('transgender')); // Not OK as a noun.
     assert.ok(!isCool('swastika'));
     assert.ok(!isCool('nazi'));
+    assert.ok(!isCool('holocaust'));
+  });
+
+  test('Tragedy mode', function tragedyTest() {
+    // Assumes `tragedyHappenedRecently` is true, which it usually is.
+    assert.ok(!isCool('chokehold'));
+    assert.ok(!isCool('coroner'));
   });
 });
 

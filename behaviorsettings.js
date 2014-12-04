@@ -49,7 +49,8 @@ module.exports = {
     'coon',
     'transgender', // OK normally, not OK as a noun.
     'swastika',
-    'nazi'
+    'nazi',
+    'holocaust'
   ],
   tragedyModeBlacklist: [
     'gaza',
@@ -82,7 +83,9 @@ module.exports = {
     'beheading',
     'foley',
     'gun',
-    'rip'
+    'rip',
+    'chokehold',
+    'coroner'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 40],
