@@ -85,7 +85,9 @@ module.exports = {
     'gun',
     'rip',
     'chokehold',
-    'coroner'
+    'coroner',
+    'eric',
+    'garner'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 40],

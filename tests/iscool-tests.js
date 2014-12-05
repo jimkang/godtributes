@@ -22,6 +22,8 @@ suite('Custom blacklist', function customBlacklistSuite() {
     // Assumes `tragedyHappenedRecently` is true, which it usually is.
     assert.ok(!isCool('chokehold'));
     assert.ok(!isCool('coroner'));
+    assert.ok(!isCool('eric'));
+    assert.ok(!isCool('garner'));
   });
 });
 
