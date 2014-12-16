@@ -1,4 +1,4 @@
-var canonicalizer = require('./canonicalizer');
+var canonicalizer = require('canonicalizer');
 
 function makeDemandForTopic(opts) {
   var tributeFigure = (opts && opts.tributeFigure) ? 

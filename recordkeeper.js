@@ -1,7 +1,7 @@
 var levelwrap = require('basicset-levelwrap');
 var db = levelwrap.createLevelWrap('tributes.db');
 var logger = require('./logger');
-var canonicalizer = require('./canonicalizer');
+var canonicalizer = require('canonicalizer');
 
 function createDoc(id) {
   db.saveDoc({
