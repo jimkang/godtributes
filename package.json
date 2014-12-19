@@ -19,6 +19,7 @@
   "author": "Jim Kang",
   "license": "ISC",
   "dependencies": {
+    "basicset-chronicler": "^1.0.0",
     "basicset-levelwrap": "~0.1.0",
     "canonicalizer": "^1.0.0",
     "inflection": "~1.3.6",

@@ -6,7 +6,7 @@ var figurepicker = require('./figurepicker');
 var prepphrasepicker = require('./prepphrasepicker');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
-var recordkeeper = require('./recordkeeper');
+var createChronicler = require('basicset-chronicler');
 var emojiSource = require('./emojisource');
 var behavior = require('./behaviorsettings');
 var probable = require('probable');
@@ -17,6 +17,10 @@ var bot = new Bot(config.twitter);
 var simulationMode = (process.argv[2] === '--simulate');
 
 logger.log('Tribute maker is running.');
+
+var chronicler = createChronicler({
+  dbLocation: 'tributes.db'
+});
 
 var emojiTopic = false;
 
@@ -58,8 +62,7 @@ function postOnTopic(error, topic) {
 
       });
     }
-    recordkeeper.recordThatTopicWasUsedInTribute(topic);
-    
+    chronicler.recordThatTopicWasUsedInTribute(topic);    
   }
 }
 

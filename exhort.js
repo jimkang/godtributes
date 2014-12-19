@@ -8,7 +8,7 @@ var queue = require('queue-async');
 var nounfinder = require('./nounfinder');
 var figurepicker = require('./figurepicker');
 var prepphrasepicker = require('./prepphrasepicker');
-var recordkeeper = require('./recordkeeper');
+var createChronicler = require('basicset-chronicler');
 var behavior = require('./behaviorsettings');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
@@ -31,6 +31,10 @@ if (simulationMode) {
 }
 
 logger.log('Exhort is running.');
+
+var chronicler = createChronicler({
+  dbLocation: 'tributes.db'
+});
 
 var maxCommonnessForTopic = 
   behavior.maxCommonnessForReplyTopic[0] + probable.roll(
@@ -61,7 +65,7 @@ function exhort() {
 }
 
 function exhortUser(userId) {
-  recordkeeper.whenWasUserLastRepliedTo(userId.toString(),
+  chronicler.whenWasUserLastRepliedTo(userId.toString(),
     function exhortIfNotTooSoon(error, lastReplyDate) {
       if (error) {
         // Never replied to, we assume.
@@ -122,10 +126,10 @@ function replyIfTheresEnoughMaterial(nounGroup, statusBeingRepliedTo) {
   var q = queue();
 
   nounGroup.forEach(function queueNounRecordCheck(noun) {
-    q.defer(recordkeeper.topicWasUsedInReplyToUser, noun, 
+    q.defer(chronicler.topicWasUsedInReplyToUser, noun, 
       statusBeingRepliedTo.user.id_str
     );
-    q.defer(recordkeeper.topicWasUsedInTribute, noun);
+    q.defer(chronicler.topicWasUsedInTribute, noun);
   });
   q.awaitAll(function checkIfNounsWereUsed(error, usedFlags) {
     if (usedFlags.some(_.identity)) {
@@ -138,7 +142,7 @@ function replyIfTheresEnoughMaterial(nounGroup, statusBeingRepliedTo) {
     // coin flip.
     if (nounGroup.length > 0 && probable.roll(2) < nounGroup.length) {
 
-      recordkeeper.tweetWasRepliedTo(statusBeingRepliedTo.id_str, 
+      chronicler.tweetWasRepliedTo(statusBeingRepliedTo.id_str, 
         function replyIfFirstTime(error, didReply) {
           if (!didReply) {
             replyToStatusWithNouns(statusBeingRepliedTo, nounGroup);
@@ -221,10 +225,10 @@ function addEmojiDemandOptsIfApt(demandOpts) {
 
 function recordReplyDetails(targetStatus, topics) {
   var userId = targetStatus.user.id_str;
-  recordkeeper.recordThatTweetWasRepliedTo(targetStatus.id_str);
-  recordkeeper.recordThatUserWasRepliedTo(userId);
+  chronicler.recordThatTweetWasRepliedTo(targetStatus.id_str);
+  chronicler.recordThatUserWasRepliedTo(userId);
   topics.forEach(function recordTopic(topic) {
-    recordkeeper.recordThatTopicWasUsedInReplyToUser(topic, userId);
+    chronicler.recordThatTopicWasUsedInReplyToUser(topic, userId);
   });
 }
 

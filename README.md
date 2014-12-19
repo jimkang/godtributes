@@ -67,11 +67,11 @@ Structure
 **figurepicker** rolls on a RPG-style table to generate figures for tribute. The main tribute figure has a 75% chance of being 'GOD'.
 
 
-**exhort.js** is the script that gets the followers of @godtributes, decides whether to tweet at them, then comes up with a tribute to tweet at them. It uses all of the above modules, plus *nounfinder* to find interesting nouns within a follower's tweet and *recordkeeper* to keep track of what it's already done.
+**exhort.js** is the script that gets the followers of @godtributes, decides whether to tweet at them, then comes up with a tribute to tweet at them. It uses all of the above modules, plus *nounfinder* to find interesting nouns within a follower's tweet and *chronicler* to keep track of what it's already done.
 
 **nounfinder** uses a few internal rules and *wordniksource* for parts of speech and frequency to decide what words are interesting nouns.
 
-**recordkeeper** uses a LevelDB database (via [basicset-levelwrap](https://github.com/jimkang/basicset-levelwrap)) to track which tweets have been replied to and when a user was last replied to.
+**chronicler** uses a LevelDB database (via [basicset-levelwrap](https://github.com/jimkang/basicset-levelwrap)) to track which tweets have been replied to and when a user was last replied to.
 
 License
 -------
