@@ -19,10 +19,12 @@
   "author": "Jim Kang",
   "license": "ISC",
   "dependencies": {
-    "basicset-chronicler": "^1.1.0",
+    "basicset-chronicler": "^1.2.0",
     "canonicalizer": "^1.0.0",
     "is-emoji": "^0.1.1",
+    "jsonfile": "^2.0.0",
     "lodash": "~2.4.1",
+    "multilevel": "^6.0.1",
     "node-emoji": "^0.1.0",
     "pm2": "^0.12.2",
     "probable": "~0.1.0",
