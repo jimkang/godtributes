@@ -1,4 +1,4 @@
-var createChroniclerServer = require('chronicler/chronicler-server');
+var createChroniclerServer = require('basicset-chronicler').createServer;
 
 createChroniclerServer({
   dbLocation: 'tributes.db',
