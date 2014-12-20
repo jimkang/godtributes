@@ -17,10 +17,10 @@ debug-test:
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/topicpool-tests.js
 
 start-chronicler:
-	$(PM2) start start-chronicler.js -i 1 --name godtributes-chronicler
+	$(PM2) start start-chronicler.js --name godtributes-chronicler
 
 stop-chronicler:
-	$(PM2) stop godtributes-chronicler
+	$(PM2) stop godtributes-chronicler || echo "Didn't need to stop process."
 
 npm-install:
 	cd $(HOMEDIR)
@@ -29,7 +29,6 @@ npm-install:
 
 sync-worktree-to-git:
 	git --work-tree=$(HOMEDIR) --git-dir=$(GITDIR) checkout -f
-	#sudo -u $(USER) bash -c 'git --work-tree=$(HOMEDIR) --git-dir=$(GITDIR) checkout -f'
 
 post-receive: sync-worktree-to-git npm-install stop-chronicler start-chronicler 
 
