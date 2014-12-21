@@ -95,7 +95,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'Replied too recently.');
 	      			assert.equal(error.userId, mockTweet.user.id);
@@ -119,7 +119,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'This is a retweet of myself.');
 	      			assert.equal(error.id, mockTweet.id_str);
@@ -140,7 +140,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'This is a retweet of myself.');
 	      			assert.equal(error.id, mockTweet.id_str);
@@ -168,7 +168,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'Contents unsafe to respond to.');
 	      			assert.equal(error.id, mockTweet.id_str);
@@ -196,7 +196,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'No nouns found.');
 	      			assert.equal(error.id, mockTweet.id_str);
@@ -221,7 +221,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'Filtered ALL nouns from text.');
 	      			assert.equal(error.id, mockTweet.id_str);
@@ -252,7 +252,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'No new material for user.');
 	      			assert.equal(error.userId, mockTweet.user.id);
@@ -280,7 +280,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'Tweet was already replied to.');
 	      			assert.equal(error.id, mockTweet.id_str);
@@ -302,7 +302,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		exhorter.exhortationForTweet(
       			mockTweet,
-	      		function checkResult(error, exhortation) {
+	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message,
 	      				'There aren\'t enough nouns to work with.'
