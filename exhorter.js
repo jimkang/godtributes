@@ -13,7 +13,31 @@ function createExhorter(opts) {
 	var maxCommonnessForTopic = opts.maxCommonnessForTopic;
 
 	function exhortationForTweet(tweet, exhortationDone) {
-		async.waterfall([
+
+		//	  		                   +|
+		//	   		          WHOA!   ++|
+		//	  		               \ +++|
+		//	  		                ++++|
+		//	  		                    |
+		//			                 vvvvvvvvvv
+		//			                  vvvvvvvv
+		//		      		             +-++---------
+		//		      		           o | ||   || |
+		//		      		           | ||   || |
+		//		    		           | ||   || |
+		//		    		        +-+-----+++-+
+		//		    		       o| || || |
+		//		  		        | || || |
+		//		  		        | || || o
+		//		  		      +--++-+++o+
+		//				      | || || || |
+		//				      | || || || | o
+		//				   o  |o|| || || o
+		//				    oo  o  || || |
+		//				ooo   o o  |o || |
+
+		async.waterfall(
+			[
 				waterfallKickoff,
 				isNotARetweetOfSelf,
 				findLastReplyDateForUser,
