@@ -36,18 +36,22 @@ function createExhorter(opts) {
 		//				    oo  o  || || |
 		//				ooo   o o  |o || |
 
+		// Each step in the waterfall passes the tweet (plus anything else 
+		// necessary) to the next step.
+		// If any step returns an error, we bail on generating an exhortation.
+
 		async.waterfall(
 			[
 				waterfallKickoff,
 				isNotARetweetOfSelf,
+				checkThatTweetWasNotRepliedTo,				
 				findLastReplyDateForUser,
 				replyDateWasNotTooRecent,
 				statusContainsTextThatIsOKToReplyTo,
 				getNounsFromTweet,
 				filterToNouns,
 				filterOutOldNouns,
-				// TODO: Break up and insert replyIfTheresEnoughMaterial here. Next 
-				// part: tweetWasRepliedTo (should be earlier in the chain.)
+				// TODO: Break up and insert replyIfTheresEnoughMaterial here.
 			],
 			finalDone
 		);
@@ -71,6 +75,22 @@ function createExhorter(opts) {
 		chronicler.whenWasUserLastRepliedTo(
 			tweet.user.id.toString(), function passLastReplyDate(error, date) {
 				done(error, tweet, date);
+			}
+		);
+	}
+
+	function checkThatTweetWasNotRepliedTo(tweet, done) {
+		chronicler.tweetWasRepliedTo(
+			tweet.user.id.toString(), function stopIfReplied(error, wasRepliedTo) {
+			  var error = null;
+
+			  if (wasRepliedTo) {
+			  	error = createErrorForTweet(tweet, {
+			  		message: 'Tweet was already replied to.',
+			  	});
+			  }
+
+				done(error, tweet);
 			}
 		);
 	}

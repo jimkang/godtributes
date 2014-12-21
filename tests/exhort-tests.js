@@ -12,7 +12,17 @@ var utils = {
 	getDefaultExhorterOpts: function getDefaultExhorterOpts() {
 		return {
 			chronicler: {
-				whenWasUserLastRepliedTo: utils.mockLastRepliedToLongAgo
+				whenWasUserLastRepliedTo: utils.mockLastRepliedToLongAgo,
+				topicWasUsedInReplyToUser:
+					function mockTopicWasUsedInReplyToUser(noun, userId, done) {
+    				conformAsync.callBackOnNextTick(done, null, false);
+    			},
+				topicWasUsedInTribute: function mockTributeUseCheck(noun, done) {
+  				conformAsync.callBackOnNextTick(done, null, false);
+				},
+				tweetWasRepliedTo: function mockTweetWasRepliedTo(tweetId, done) {
+  				conformAsync.callBackOnNextTick(done, null, false);
+  			}
 			},
 			behavior: {
 				hoursToWaitBetweenRepliesToSameUser: 1
@@ -226,6 +236,33 @@ describe('exhortationForTweet', function exhortSuite() {
 	      			assert.ok(error);
 	      			assert.equal(error.message, 'No new material for user.');
 	      			assert.equal(error.userId, mockTweet.user.id);
+	      			assert.equal(error.id, mockTweet.id_str);
+	      			assert.equal(error.text, mockTweet.text);
+	      			assert.ok(!exhortation);
+	      			testDone();
+	      		}
+	      	);
+     		}
+     	);
+
+     	it('has been replied to before',
+     		function testAlreadyReplied(testDone) {
+     			var mockTweet = utils.getDefaultMockTweet();
+
+    			var opts = utils.getDefaultExhorterOpts();
+    			opts.chronicler.tweetWasRepliedTo = 
+    			function mockTweetWasRepliedTo(tweetId, done) {
+    				// Always say that it was replied to for this test.
+    				conformAsync.callBackOnNextTick(done, null, true);
+    			};
+
+      		var exhorter = createExhorter(opts);
+
+      		exhorter.exhortationForTweet(
+      			mockTweet,
+	      		function checkResult(error, exhortation) {
+	      			assert.ok(error);
+	      			assert.equal(error.message, 'Tweet was already replied to.');
 	      			assert.equal(error.id, mockTweet.id_str);
 	      			assert.equal(error.text, mockTweet.text);
 	      			assert.ok(!exhortation);
