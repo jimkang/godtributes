@@ -11,6 +11,7 @@ function createExhorter(opts) {
 	var tweetAnalyzer = opts.tweetAnalyzer;
 	var nounfinder = opts.nounfinder;
 	var maxCommonnessForTopic = opts.maxCommonnessForTopic;
+	var nounCountThreshold = opts.nounCountThreshold;
 
 	function exhortationForTweet(tweet, exhortationDone) {
 
@@ -51,7 +52,8 @@ function createExhorter(opts) {
 				getNounsFromTweet,
 				filterToNouns,
 				filterOutOldNouns,
-				// TODO: Break up and insert replyIfTheresEnoughMaterial here.
+				checkThatNounThresholdIsMet
+				// makeExhortationFromNouns
 			],
 			finalDone
 		);
@@ -206,6 +208,17 @@ function createExhorter(opts) {
 	  	done(error, tweet, unusedNouns);
 	  });
 	}
+
+	function checkThatNounThresholdIsMet(tweet, nouns, done) {
+		var error = null;
+		if (nouns.length < nounCountThreshold) {
+			error = createErrorForTweet(tweet, {
+				message: 'There aren\'t enough nouns to work with.'
+			});
+		}
+		conformAsync.callBackOnNextTick(done, error, tweet, nouns);
+	}
+
 
 	function createErrorForTweet(tweet, overrides) {
 		return new StandardError(_.defaults(overrides, {

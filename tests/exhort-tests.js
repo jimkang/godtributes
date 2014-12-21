@@ -25,7 +25,7 @@ var utils = {
   			}
 			},
 			behavior: {
-				hoursToWaitBetweenRepliesToSameUser: 1
+				hoursToWaitBetweenRepliesToSameUser: 1,
 			},
 			logger: console,
 			tweetAnalyzer: {
@@ -44,7 +44,9 @@ var utils = {
 						debugger;
     				conformAsync.callBackOnNextTick(done, null, ['squash', 'burger']);
     			}
-			}
+			},
+			maxCommonnessForTopic: 30,
+			nounCountThreshold: 2
 		};
 	},
 	getDefaultMockTweet: function getDefaultMockTweet() {
@@ -271,6 +273,31 @@ describe('exhortationForTweet', function exhortSuite() {
 	      	);
      		}
      	);
+
+     	it('the noun threshold is not met after the all the filtering',
+     		function testNounThresholdNotMet(testDone) {
+     			var mockTweet = utils.getDefaultMockTweet();
+
+    			var opts = utils.getDefaultExhorterOpts();
+    			opts.nounCountThreshold = 3;
+    			var exhorter = createExhorter(opts);
+
+      		exhorter.exhortationForTweet(
+      			mockTweet,
+	      		function checkResult(error, exhortation) {
+	      			assert.ok(error);
+	      			assert.equal(error.message,
+	      				'There aren\'t enough nouns to work with.'
+	      			);
+	      			assert.equal(error.id, mockTweet.id_str);
+	      			assert.equal(error.text, mockTweet.text);
+	      			assert.ok(!exhortation);
+	      			testDone();
+	      		}
+	      	);
+     		}
+     	);
+
     }
   );
 
