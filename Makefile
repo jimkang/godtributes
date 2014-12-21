@@ -1,7 +1,7 @@
 MOCHA = node_modules/mocha/bin/mocha
 MOCHACMD = $(MOCHA) --ui tdd -R spec 
-HOMEDIR = /var/www/godtributes
-# HOMEDIR = ~/gcw/godtributes
+# HOMEDIR = /var/www/godtributes
+HOMEDIR = ~/gcw/godtributes
 PM2 = $(HOMEDIR)/node_modules/pm2/bin/pm2
 GITDIR = /var/repos/godtributes.git
 USER = noderunner
@@ -15,6 +15,9 @@ test: test-exhort
 
 test-exhort:
 	$(MOCHA) --R spec tests/exhort-tests.js
+
+test-exhort-integration: stop-chronicler start-chronicler
+	node tests/integration/exhort-tweet-test.js
 
 debug-test:
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/tributedemander-tests.js
