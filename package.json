@@ -19,8 +19,10 @@
   "author": "Jim Kang",
   "license": "ISC",
   "dependencies": {
+    "async": "^0.9.0",
     "basicset-chronicler": "^1.2.0",
     "canonicalizer": "^1.0.0",
+    "conform-async": "^1.0.0",
     "is-emoji": "^0.1.1",
     "jsonfile": "^2.0.0",
     "lodash": "~2.4.1",
@@ -31,13 +33,14 @@
     "queue-async": "~1.0.7",
     "request": "~2.36.0",
     "rollbar": "~0.3.8",
+    "standard-error": "^1.1.0",
     "twit": "~1.1.14",
     "wordfilter": "~0.1.6"
   },
   "devDependencies": {
-    "mocha": "~1.20.1",
     "idmaker": "~0.1.1",
     "level": "~0.18.0",
+    "mocha": "~1.20.1",
     "through2": "~0.5.1"
   }
 }
