@@ -1,5 +1,6 @@
 var canonicalizer = require('canonicalizer');
 var isEmoji = require('is-emoji');
+var probable = require('probable');
 
 function makeDemandForTopic(opts) {
   var tributeFigure = (opts && opts.tributeFigure) ? 
