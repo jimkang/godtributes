@@ -23,7 +23,11 @@ var utils = {
   				conformAsync.callBackOnNextTick(done, null, false);
 				},
 				tweetWasRepliedTo: function mockTweetWasRepliedTo(tweetId, done) {
-  				conformAsync.callBackOnNextTick(done, null, false);
+  				conformAsync.callBackOnNextTick(
+  					done,
+  					new Error('Key not found in database'),
+  					false
+  				);
   			}
 			},
 			behavior: {

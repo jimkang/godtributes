@@ -88,12 +88,17 @@ function createExhorter(opts) {
 	function checkThatTweetWasNotRepliedTo(tweet, done) {
 		chronicler.tweetWasRepliedTo(
 			tweet.user.id.toString(), function stopIfReplied(error, wasRepliedTo) {
-			  var error = null;
+			  var error;
 
 			  if (wasRepliedTo) {
 			  	error = createErrorForTweet(tweet, {
 			  		message: 'Tweet was already replied to.',
 			  	});
+			  }
+			  else {
+			  	// If chronicler can't find the key, it will return an error for that.
+			  	// To us, that's not an error.
+			  	error = null;
 			  }
 
 				done(error, tweet);
