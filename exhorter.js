@@ -1,5 +1,6 @@
 var StandardError = require('standard-error');
 var async = require('async');
+var queue = require('queue-async');
 var conformAsync = require('conform-async');
 var _ = require('lodash');
 
@@ -19,8 +20,10 @@ function createExhorter(opts) {
 				replyDateWasNotTooRecent,
 				statusContainsTextThatIsOKToReplyTo,
 				getNounsFromTweet,
-				filterNouns
-				// TODO: Break up and insert replyIfTheresEnoughMaterial here.
+				filterToNouns,
+				filterOutOldNouns,
+				// TODO: Break up and insert replyIfTheresEnoughMaterial here. Next 
+				// part: tweetWasRepliedTo (should be earlier in the chain.)
 			],
 			finalDone
 		);
@@ -113,11 +116,12 @@ function createExhorter(opts) {
 		);
 	}
 
-	function filterNouns(tweet, nouns, done) {
+	function filterToNouns(tweet, nouns, done) {
 		nounfinder.filterNounsForInterestingness(
 			nouns, 
       maxCommonnessForTopic, 
       function filterDone(finderError, filteredNouns) {
+      	var error = null;
 				if (!filteredNouns || filteredNouns.length < 1) {
 					error = createErrorForTweet(tweet, {
 						message: 'Filtered ALL nouns from text.',
@@ -128,6 +132,35 @@ function createExhorter(opts) {
         done(error, tweet, filteredNouns);
       }
     );
+	}
+
+	function filterOutOldNouns(tweet, nouns, done) {
+	  var q = queue();
+	  nouns.forEach(function queueNounRecordCheck(noun) {
+	    q.defer(chronicler.topicWasUsedInReplyToUser, noun, tweet.user.id_str);
+	    q.defer(chronicler.topicWasUsedInTribute, noun);
+	  });
+	  q.awaitAll(function buildListOfUnusedNouns(lookupError, usedFlags) {
+	  	var unusedNouns = [];
+
+	  	for (var i = 0; i < usedFlags.length; i += 2) {
+	  		if (!usedFlags[i] && !usedFlags[i + 1]) {
+	  			unusedNouns.push(nouns[i/2]);
+	  		}
+	  	}
+	  	logger.log('unusedNouns', unusedNouns);
+
+			var error = null;
+			if (lookupError || !unusedNouns || unusedNouns.length < 1) {
+				error = createErrorForTweet(tweet, {
+					message: 'No new material for user.',
+	    		userId: tweet.user.id,
+					chroniclerError: lookupError
+				});
+			}
+
+	  	done(error, tweet, unusedNouns);
+	  });
 	}
 
 	function createErrorForTweet(tweet, overrides) {

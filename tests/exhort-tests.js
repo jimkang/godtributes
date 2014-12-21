@@ -28,7 +28,12 @@ var utils = {
 					conformAsync.callBackOnNextTick(
 						done, null, ['squash', 'pie', 'burger']
 					);
-				}
+				},
+				filterNounsForInterestingness: 
+					function mockFilter(nouns, maxCommonness, done) {
+						debugger;
+    				conformAsync.callBackOnNextTick(done, null, ['squash', 'burger']);
+    			}
 			}
 		};
 	},
@@ -194,11 +199,41 @@ describe('exhortationForTweet', function exhortSuite() {
 	      			assert.ok(!exhortation);
 	      			testDone();
 	      		}
-	      	);      		
+	      	);
       	}
       );
 
-     	it('has no new topics for the user');
+     	it('has no new topics for the user',
+     		function testNotNewToUser(testDone) {
+     			var mockTweet = utils.getDefaultMockTweet();
+
+    			var opts = utils.getDefaultExhorterOpts();
+    			opts.chronicler.topicWasUsedInReplyToUser = 
+    			function mockTopicWasUsedInReplyToUser(noun, userId, done) {
+    				// Always say that it was used for this test.
+    				conformAsync.callBackOnNextTick(done, null, true);
+    			};
+    			opts.chronicler.topicWasUsedInTribute = 
+    				function mockTributeUseCheck(noun, done) {
+	    				conformAsync.callBackOnNextTick(done, null, true);
+    				};
+
+      		var exhorter = createExhorter(opts);
+
+      		exhorter.exhortationForTweet(
+      			mockTweet,
+	      		function checkResult(error, exhortation) {
+	      			assert.ok(error);
+	      			assert.equal(error.message, 'No new material for user.');
+	      			assert.equal(error.userId, mockTweet.user.id);
+	      			assert.equal(error.id, mockTweet.id_str);
+	      			assert.equal(error.text, mockTweet.text);
+	      			assert.ok(!exhortation);
+	      			testDone();
+	      		}
+	      	);
+     		}
+     	);
     }
   );
 
