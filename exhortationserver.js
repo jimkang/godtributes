@@ -40,14 +40,14 @@ console.log('maxCommonnessForTopic:', maxCommonnessForTopic);
 var exhorter = createExhorter(exhorterOpts);
 
 stream.on('tweet', function respondToTweet(tweet) {
-  exhorter.exhortationForTweet(
-    tweet,
-    function tweetExhortation(error, tweet, exhortation) {
-      console.log('error:', error);
-      console.log('exhortation:', exhortation);
-    }
-  );
+  exhorter.getExhortationForTweet(tweet, tweetExhortation);
 });
+
+function tweetExhortation(error, tweet, exhortation) {
+  console.log('error:', error);
+  console.log('exhortation:', exhortation);
+  
+}
 
 // 1. Get exhortation.
 // 2. Record that it's being used in a reply.

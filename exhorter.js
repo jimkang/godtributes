@@ -17,7 +17,7 @@ function createExhorter(opts) {
   var figurePicker = opts.figurePicker;
   var decorateWithEmojiOpts = opts.decorateWithEmojiOpts;
 
-  function exhortationForTweet(tweet, exhortationDone) {
+  function getExhortationForTweet(tweet, exhortationDone) {
 
     //                           +|
     //                  WHOA!   ++|
@@ -273,7 +273,7 @@ function createExhorter(opts) {
   }
 
   return {
-    exhortationForTweet: exhortationForTweet
+    getExhortationForTweet: getExhortationForTweet
   };
 };
 

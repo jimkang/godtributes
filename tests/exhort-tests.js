@@ -82,7 +82,7 @@ var utils = {
 	}
 };
 
-describe('exhortationForTweet', function exhortSuite() {
+describe('getExhortationForTweet', function exhortSuite() {
   describe('should not return an exhortation for a tweet that', 
     function disqualificationSuite() {
       it('has a user that has been replied to recently',
@@ -97,7 +97,7 @@ describe('exhortationForTweet', function exhortSuite() {
       		var exhorter = createExhorter(opts);
       		var mockTweet = utils.getDefaultMockTweet();
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -121,7 +121,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		var exhorter = createExhorter(utils.getDefaultExhorterOpts());
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -142,7 +142,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		var exhorter = createExhorter(utils.getDefaultExhorterOpts());
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -170,7 +170,7 @@ describe('exhortationForTweet', function exhortSuite() {
 					};
       		var exhorter = createExhorter(opts);
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -198,7 +198,7 @@ describe('exhortationForTweet', function exhortSuite() {
 					};
       		var exhorter = createExhorter(opts);
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -223,7 +223,7 @@ describe('exhortationForTweet', function exhortSuite() {
     			};    			
       		var exhorter = createExhorter(opts);
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -254,7 +254,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		var exhorter = createExhorter(opts);
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -282,7 +282,7 @@ describe('exhortationForTweet', function exhortSuite() {
 
       		var exhorter = createExhorter(opts);
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -304,7 +304,7 @@ describe('exhortationForTweet', function exhortSuite() {
     			opts.nounCountThreshold = 3;
     			var exhorter = createExhorter(opts);
 
-      		exhorter.exhortationForTweet(
+      		exhorter.getExhortationForTweet(
       			mockTweet,
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
@@ -331,7 +331,7 @@ describe('exhortationForTweet', function exhortSuite() {
 			var emojiDecoratorSpy = sinon.spy(opts, 'decorateWithEmojiOpts');
 			var exhorter = createExhorter(opts);
 
-  		exhorter.exhortationForTweet(
+  		exhorter.getExhortationForTweet(
   			mockTweet,
     		function checkResult(error, tweet, exhortation) {
     			assert.ok(!error);

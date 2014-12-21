@@ -36,7 +36,7 @@ var targetTweet = {
 
 // Make sure the chronicler server is running before you run this.
 
-exhorter.exhortationForTweet(
+exhorter.getExhortationForTweet(
 	targetTweet,
 	function checkResult(error, tweet, exhortation) {
 		console.log('error:', error);
