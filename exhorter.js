@@ -201,6 +201,8 @@ function createExhorter(opts) {
       q.defer(chronicler.topicWasUsedInReplyToUser, noun, tweet.user.id_str);
       q.defer(chronicler.topicWasUsedInTribute, noun);
     });
+    // Here, `unused` means we haven't used it yet, and thus, we can use them
+    // potentially.
     q.awaitAll(function buildListOfUnusedNouns(lookupError, usedFlags) {
       var unusedNouns = [];
 
@@ -228,7 +230,7 @@ function createExhorter(opts) {
     var error = null;
     if (nouns.length < nounCountThreshold) {
       error = createErrorForTweet(tweet, {
-        message: 'There aren\'t enough nouns to work with.'
+        message: 'There aren\'t enough usable nouns to work with.'
       });
     }
     conformAsync.callBackOnNextTick(done, error, tweet, nouns);

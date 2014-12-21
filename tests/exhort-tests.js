@@ -309,7 +309,7 @@ describe('exhortationForTweet', function exhortSuite() {
 	      		function checkResult(error, tweet, exhortation) {
 	      			assert.ok(error);
 	      			assert.equal(error.message,
-	      				'There aren\'t enough nouns to work with.'
+	      				'There aren\'t enough usable nouns to work with.'
 	      			);
 	      			assert.equal(error.id, mockTweet.id_str);
 	      			assert.equal(error.text, mockTweet.text);
