@@ -29,6 +29,9 @@ start-chronicler:
 stop-chronicler:
 	$(PM2) stop godtributes-chronicler || echo "Didn't need to stop process."
 
+start-exhortation-server:
+	$(PM2) start exhortationserver.js --name godtributes-exhortations
+
 npm-install:
 	cd $(HOMEDIR)
 	npm install
