@@ -80,6 +80,12 @@ function createExhorter(opts) {
 	function findLastReplyDateForUser(tweet, done) {
 		chronicler.whenWasUserLastRepliedTo(
 			tweet.user.id.toString(), function passLastReplyDate(error, date) {
+				// Don't pass on the error – `whenWasUserLastRepliedTo` can't find a
+				// key, it returns a NotFoundError. For us, that's expected.
+				if (error && error.type === 'NotFoundError') {
+					error = null;
+					date = new Date(0);
+				}
 				done(error, tweet, date);
 			}
 		);
