@@ -1,4 +1,5 @@
 var canonicalizer = require('canonicalizer');
+var isEmoji = require('is-emoji');
 
 function makeDemandForTopic(opts) {
   var tributeFigure = (opts && opts.tributeFigure) ? 
@@ -36,6 +37,16 @@ function makeDemandForTopic(opts) {
   return demand;
 }
 
+function decorateWithEmojiOpts(demandOpts) {
+  if (isEmoji(demandOpts.topic)) {
+    demandOpts.isEmoji = true;
+    demandOpts.repeatNTimesToPluralize = 
+      probable.roll(3) + probable.roll(3) + 2;
+  }
+  return demandOpts;
+}
+
 module.exports = {
-  makeDemandForTopic: makeDemandForTopic
+  makeDemandForTopic: makeDemandForTopic,
+  decorateWithEmojiOpts: decorateWithEmojiOpts
 };

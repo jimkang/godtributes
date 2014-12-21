@@ -8,7 +8,6 @@ var tweetAnalyzer = require('../../tweetanalyzer');
 var nounfinder = require('../../nounfinder');
 var figurePicker = require('../../figurepicker');
 var prepPhrasePicker = require('../../prepphrasepicker');
-var isEmoji = require('is-emoji');
 
 var exhorterOpts = {
 	chronicler: chroniclerclient.getDb(),
@@ -19,14 +18,7 @@ var exhorterOpts = {
 	tributeDemander: tributeDemander,
 	prepPhrasePicker: prepPhrasePicker,
 	figurePicker: figurePicker,
-	decorateWithEmojiOpts: function decorateWithEmojiOpts(demandOpts) {
-	  if (isEmoji(demandOpts.topic)) {
-	    demandOpts.isEmoji = true;
-	    demandOpts.repeatNTimesToPluralize = 
-	      probable.roll(3) + probable.roll(3) + 2;
-	  }
-	  return demandOpts;
-	},
+	decorateWithEmojiOpts: tributeDemander.decorateWithEmojiOpts,
 	maxCommonnessForTopic: 30,
 	nounCountThreshold: 1
 };
