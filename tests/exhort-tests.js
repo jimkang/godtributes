@@ -3,6 +3,8 @@ var createExhorter = require('../exhorter');
 var jsonfile = require('jsonfile');
 var conformAsync = require('conform-async');
 var _ = require('lodash');
+var tributeDemander = require('../tributedemander');
+var sinon = require('sinon');
 
 var utils = {
 	mockLastRepliedToLongAgo: function mockLastRepliedToLongAgo(id, cb) {
@@ -41,9 +43,25 @@ var utils = {
 				},
 				filterNounsForInterestingness: 
 					function mockFilter(nouns, maxCommonness, done) {
-						debugger;
     				conformAsync.callBackOnNextTick(done, null, ['squash', 'burger']);
     			}
+			},
+			tributeDemander: tributeDemander,
+			prepPhrasePicker: {
+				getPrepPhrase: function mockGetPrepPhrase() {
+					return 'FOR THE';
+				}
+			},
+			figurePicker: {
+				getMainTributeFigure: function mockGetMainTributeFigure() {
+					return 'GOD';
+				},
+				getSecondaryTributeFigure: function mockGetSecondaryTributeFigure() {
+					return 'THRONE';
+				}
+			},
+			decorateWithEmojiOpts: function mockDecorateWithEmojiOpts(opts) {
+				return opts;
 			},
 			maxCommonnessForTopic: 30,
 			nounCountThreshold: 2
@@ -301,5 +319,26 @@ describe('exhortationForTweet', function exhortSuite() {
     }
   );
 
-  it('should return an exhortation for a worthy tweet');
+  it('should return an exhortation for a worthy tweet',
+  	function testWorthy(testDone) {
+ 			var mockTweet = utils.getDefaultMockTweet();
+
+			var opts = utils.getDefaultExhorterOpts();
+			var emojiDecoratorSpy = sinon.spy(opts, 'decorateWithEmojiOpts');
+			var exhorter = createExhorter(opts);
+
+  		exhorter.exhortationForTweet(
+  			mockTweet,
+    		function checkResult(error, tweet, exhortation) {
+    			assert.ok(!error);
+    			// console.log(exhortation);
+    			assert.ok(exhortation);
+    			assert.ok(emojiDecoratorSpy.calledTwice);
+    			opts.decorateWithEmojiOpts.restore();
+    			testDone();
+    		}
+    	);
+  	}
+  );
+
 });

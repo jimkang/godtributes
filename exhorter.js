@@ -12,6 +12,10 @@ function createExhorter(opts) {
 	var nounfinder = opts.nounfinder;
 	var maxCommonnessForTopic = opts.maxCommonnessForTopic;
 	var nounCountThreshold = opts.nounCountThreshold;
+	var tributeDemander = opts.tributeDemander;
+	var prepPhrasePicker = opts.prepPhrasePicker;
+	var figurePicker = opts.figurePicker;
+	var decorateWithEmojiOpts = opts.decorateWithEmojiOpts;
 
 	function exhortationForTweet(tweet, exhortationDone) {
 
@@ -52,8 +56,8 @@ function createExhorter(opts) {
 				getNounsFromTweet,
 				filterToNouns,
 				filterOutOldNouns,
-				checkThatNounThresholdIsMet
-				// makeExhortationFromNouns
+				checkThatNounThresholdIsMet,
+				makeExhortationFromNouns
 			],
 			finalDone
 		);
@@ -62,13 +66,13 @@ function createExhorter(opts) {
 			conformAsync.callBackOnNextTick(done, null, tweet);
 		}
 
-		function finalDone(error, result) {
+		function finalDone(error, tweet, exhortation) {
 			if (error) {
 				logger.log(error);
 				exhortationDone(error);
 			}
 			else {
-				exhortationDone(error, result);
+				exhortationDone(error, tweet, exhortation);
 			}
 		}
 	}
@@ -219,6 +223,34 @@ function createExhorter(opts) {
 		conformAsync.callBackOnNextTick(done, error, tweet, nouns);
 	}
 
+	// Assumes nouns has at least one element.
+	function makeExhortationFromNouns(tweet, nouns, done) {
+	  var selectedNouns = _.sample(nouns, 2);
+
+	  var primaryTribute =
+	    tributeDemander.makeDemandForTopic(decorateWithEmojiOpts({
+	      topic: selectedNouns[0],
+	      prepositionalPhrase: prepPhrasePicker.getPrepPhrase(),
+	      tributeFigure: figurePicker.getMainTributeFigure()
+	    }));
+
+	  var secondaryTribute;
+
+	  if (selectedNouns.length > 1) {
+	    secondaryTribute =
+	      tributeDemander.makeDemandForTopic(decorateWithEmojiOpts({
+	        topic: selectedNouns[1],
+	        prepositionalPhrase: prepPhrasePicker.getPrepPhrase(),
+	        tributeFigure: figurePicker.getSecondaryTributeFigure()
+	      }));
+	  }
+
+	  var exhortation = '@' + tweet.user.screen_name + ' ' + primaryTribute;
+	  if (secondaryTribute) {
+	    exhortation += ('! ' + secondaryTribute);
+	  }
+	  conformAsync.callBackOnNextTick(done, null, tweet, exhortation);
+	}
 
 	function createErrorForTweet(tweet, overrides) {
 		return new StandardError(_.defaults(overrides, {

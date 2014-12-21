@@ -33,6 +33,7 @@
     "queue-async": "~1.0.7",
     "request": "~2.36.0",
     "rollbar": "~0.3.8",
+    "sinon": "^1.12.2",
     "standard-error": "^1.1.0",
     "twit": "~1.1.14",
     "wordfilter": "~0.1.6"
