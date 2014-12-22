@@ -32,6 +32,9 @@ stop-chronicler:
 start-exhortation-server:
 	$(PM2) start exhortationserver.js --name godtributes-exhortations
 
+stop-exhortation-server:
+	$(PM2) stop godtributes-exhortations || echo "Didn't need to stop process."
+
 npm-install:
 	cd $(HOMEDIR)
 	npm install
@@ -40,7 +43,8 @@ npm-install:
 sync-worktree-to-git:
 	git --work-tree=$(HOMEDIR) --git-dir=$(GITDIR) checkout -f
 
-post-receive: sync-worktree-to-git npm-install stop-chronicler start-chronicler 
+post-receive: sync-worktree-to-git npm-install stop-chronicler start-chronicler \
+	stop-exhortation-server start-exhortation-server
 
 # The idea is for the repo's post-receive hook to simply be:
 # cd /var/www/godtributes && make post-receive
