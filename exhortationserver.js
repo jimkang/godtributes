@@ -10,8 +10,12 @@ var figurePicker = require('./figurepicker');
 var prepPhrasePicker = require('./prepphrasepicker');
 var probable = require('probable');
 
+console.log('The exhortation server is running.');
+
 var twit = new Twit(config.twitter);
 var stream = twit.stream('user');
+
+var db = chroniclerclient.getDb();
 
 var maxCommonnessForTopic = behavior.maxCommonnessForReplyTopic[0] + 
   probable.roll(
@@ -20,7 +24,7 @@ var maxCommonnessForTopic = behavior.maxCommonnessForReplyTopic[0] +
   );
 
 var exhorterOpts = {
-  chronicler: chroniclerclient.getDb(),
+  chronicler: db,
   behavior: behavior,
   logger: console,
   tweetAnalyzer: tweetAnalyzer,
@@ -43,12 +47,36 @@ stream.on('tweet', function respondToTweet(tweet) {
   exhorter.getExhortationForTweet(tweet, tweetExhortation);
 });
 
-function tweetExhortation(error, tweet, exhortation) {
-  console.log('error:', error);
+function tweetExhortation(error, tweet, exhortation, topics) {
   console.log('exhortation:', exhortation);
-  
+  if (error) {
+    console.log('Error from getExhortationForTweet:', error);
+  }
+  else if (!exhortation || exhortation.length < 1) {
+    console.log(
+      'No error, but got nothing from getExhortationForTweet. Tweet:', tweet
+    );
+  }
+  else {
+    twit.post(
+      'statuses/update',
+      {
+        status: exhortation,
+        in_reply_to_status_id: tweet.id_str
+      },
+      function recordTweetResult(error, reply) {
+        recordReplyDetails(tweet, topics);
+        console.log('Replied to status', tweet.text, 'with :', exhortation);      
+      }
+    );
+  }
 }
 
-// 1. Get exhortation.
-// 2. Record that it's being used in a reply.
-// 3. Tweet it.
+function recordReplyDetails(targetStatus, topics) {
+  var userId = targetStatus.user.id_str;
+  db.recordThatTweetWasRepliedTo(targetStatus.id_str);
+  db.recordThatUserWasRepliedTo(userId);
+  topics.forEach(function recordTopic(topic) {
+    db.recordThatTopicWasUsedInReplyToUser(topic, userId);
+  });
+}
