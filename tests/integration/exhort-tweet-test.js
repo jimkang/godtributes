@@ -38,10 +38,11 @@ var targetTweet = {
 
 exhorter.getExhortationForTweet(
 	targetTweet,
-	function checkResult(error, tweet, exhortation) {
+	function checkResult(error, tweet, exhortation, topics) {
 		console.log('error:', error);
 		assert.ok(!error);
 		assert.ok(exhortation);
+    assert.ok(Array.isArray(topics));
 		console.log(exhortation);
 		process.exit();		
 	}

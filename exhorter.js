@@ -66,13 +66,13 @@ function createExhorter(opts) {
       conformAsync.callBackOnNextTick(done, null, tweet);
     }
 
-    function finalDone(error, tweet, exhortation) {
+    function finalDone(error, tweet, exhortation, topics) {
       if (error) {
         logger.log(error);
         exhortationDone(error);
       }
       else {
-        exhortationDone(error, tweet, exhortation);
+        exhortationDone(error, tweet, exhortation, topics);
       }
     }
   }
@@ -262,7 +262,9 @@ function createExhorter(opts) {
     if (secondaryTribute) {
       exhortation += ('! ' + secondaryTribute);
     }
-    conformAsync.callBackOnNextTick(done, null, tweet, exhortation);
+    conformAsync.callBackOnNextTick(
+      done, null, tweet, exhortation, selectedNouns
+    );
   }
 
   function createErrorForTweet(tweet, overrides) {

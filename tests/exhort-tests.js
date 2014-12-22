@@ -333,9 +333,9 @@ describe('getExhortationForTweet', function exhortSuite() {
 
   		exhorter.getExhortationForTweet(
   			mockTweet,
-    		function checkResult(error, tweet, exhortation) {
+    		function checkResult(error, tweet, exhortation, topics) {
     			assert.ok(!error);
-    			// console.log(exhortation);
+          assert.ok(Array.isArray(topics));
     			assert.ok(exhortation);
     			assert.ok(emojiDecoratorSpy.calledTwice);
     			opts.decorateWithEmojiOpts.restore();
