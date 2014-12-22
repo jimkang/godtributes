@@ -113,8 +113,10 @@ function createExhorter(opts) {
   }
 
   function replyDateWasNotTooRecent(tweet, date, done) {
-    var hoursElapsed = 
-      (Date.now() - date.getTime()) / (60 * 60 * 1000);
+    if (typeof date !== 'object') {
+      date = new Date(date);
+    }
+    var hoursElapsed = (Date.now() - date.getTime()) / (60 * 60 * 1000);
 
     if (hoursElapsed > behavior.hoursToWaitBetweenRepliesToSameUser) {
       // Pass the tweet down the waterfall.
