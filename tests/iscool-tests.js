@@ -24,6 +24,8 @@ suite('Custom blacklist', function customBlacklistSuite() {
     assert.ok(!isCool('coroner'));
     assert.ok(!isCool('eric'));
     assert.ok(!isCool('garner'));
+    assert.ok(!isCool('torture'));
+    assert.ok(!isCool('torturer'));
   });
 });
 
