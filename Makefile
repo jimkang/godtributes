@@ -35,6 +35,9 @@ start-exhortation-server:
 stop-exhortation-server:
 	$(PM2) stop godtributes-exhortations || echo "Didn't need to stop process."
 
+check-exhortation-server:
+	$(PM2) info godtributes-exhortations
+
 npm-install:
 	cd $(HOMEDIR)
 	npm install
