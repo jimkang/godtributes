@@ -23,7 +23,9 @@ var alternateFigureTable = probable.createRangeTableFromDict({
   dance: 3,
   recital: 1,
   mistress: 1,
-  nation: 1
+  nation: 1,
+  dome: 2,
+  dragon: 1
 });
 
 function getSecondaryTributeFigure() {
