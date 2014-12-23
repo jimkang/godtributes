@@ -48,3 +48,6 @@ post-receive: sync-worktree-to-git npm-install stop-chronicler start-chronicler 
 
 # The idea is for the repo's post-receive hook to simply be:
 # cd /var/www/godtributes && make post-receive
+
+install-logrotate-conf:
+	cp $(HOMEDIR)/admin/logrotate.conf_entry /etc/logrotate.d/godtributes
