@@ -48,6 +48,7 @@ function createExhorter(opts) {
     async.waterfall(
       [
         waterfallKickoff,
+        isNotTweetOfSelf,
         isNotARetweetOfSelf,
         checkThatTweetWasNotRepliedTo,        
         findLastReplyDateForUser,
@@ -148,6 +149,20 @@ function createExhorter(opts) {
     }
 
     // Passes on the tweet. Error indicates if the tweet was a RT.
+    conformAsync.callBackOnNextTick(done, error, tweet);
+  }
+
+  function isNotTweetOfSelf(tweet, done) {
+    var isOwnTweet = (tweet.user && tweet.user.screen_name === 'godtributes');
+    var error = null;
+
+    if (isOwnTweet) {
+      error = createErrorForTweet(tweet, {
+        message: 'This is one of my tweets.',
+      });
+    }
+
+    // Passes on the tweet. Error indicates if the tweet was a self-tweet.
     conformAsync.callBackOnNextTick(done, error, tweet);
   }
 

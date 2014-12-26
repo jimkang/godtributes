@@ -135,6 +135,30 @@ describe('getExhortationForTweet', function exhortSuite() {
         }
       );
 
+      it('is a tweet of @godtributes', 
+        function testSelfTweet(testDone) {
+          var mockTweet = utils.getDefaultMockTweet();
+
+          mockTweet.user = {
+            screen_name: 'godtributes'
+          };
+
+          var exhorter = createExhorter(utils.getDefaultExhorterOpts());
+
+          exhorter.getExhortationForTweet(
+            mockTweet,
+            function checkResult(error, tweet, exhortation) {
+              assert.ok(error);
+              assert.equal(error.message, 'This is one of my tweets.');
+              assert.equal(error.id, mockTweet.id_str);
+              assert.equal(error.text, mockTweet.text);
+              assert.ok(!exhortation);
+              testDone();
+            }
+          );
+        }
+      );
+
       it('is a manual retweet of @godtributes', 
         function testManualRetweet(testDone) {
           var mockTweet = utils.getDefaultMockTweet();
