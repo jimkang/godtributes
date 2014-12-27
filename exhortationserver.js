@@ -5,12 +5,16 @@ var tributeDemander = require('./tributedemander');
 var chroniclerclient = require('./chroniclerclient');
 var behavior = require('./behaviorsettings');
 var tweetAnalyzer = require('./tweetanalyzer');
-var nounfinder = require('./nounfinder');
+var createNounfinder = require('nounfinder');
 var figurePicker = require('./figurepicker');
 var prepPhrasePicker = require('./prepphrasepicker');
 var probable = require('probable');
 
 console.log('The exhortation server is running.');
+
+var nounfinder = createNounfinder({
+  wordnikAPIKey: config.wordnikAPIKey
+});
 
 var twit = new Twit(config.twitter);
 var stream = twit.stream('user');

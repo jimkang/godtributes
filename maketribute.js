@@ -7,7 +7,7 @@ var prepphrasepicker = require('./prepphrasepicker');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
 var chroniclerclient = require('./chroniclerclient');
-var emojiSource = require('./emojisource');
+var emojiSource = require('emojisource');
 var behavior = require('./behaviorsettings');
 var probable = require('probable');
 

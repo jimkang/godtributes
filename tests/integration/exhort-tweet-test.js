@@ -5,9 +5,14 @@ var tributeDemander = require('../../tributedemander');
 var chroniclerclient = require('../../chroniclerclient');
 var behavior = require('../../behaviorsettings');
 var tweetAnalyzer = require('../../tweetanalyzer');
-var nounfinder = require('../../nounfinder');
+var createNounfinder = require('nounfinder');
 var figurePicker = require('../../figurepicker');
 var prepPhrasePicker = require('../../prepphrasepicker');
+var config = require('../../config');
+
+var nounfinder = createNounfinder({
+  wordnikAPIKey: config.wordnikAPIKey
+});
 
 var exhorterOpts = {
   chronicler: chroniclerclient.getDb(),
