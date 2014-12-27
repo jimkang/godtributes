@@ -1,6 +1,6 @@
 var Bot = require('./node_modules/twit/examples/bot');
 var config = require('./config');
-var createWordnikSource = require('./wordniksource');
+var createWordnok = require('wordnok');
 var tributeDemander = require('./tributedemander');
 var figurepicker = require('./figurepicker');
 var prepphrasepicker = require('./prepphrasepicker');
@@ -11,7 +11,11 @@ var emojiSource = require('./emojisource');
 var behavior = require('./behaviorsettings');
 var probable = require('probable');
 
-var wordnikSource = createWordnikSource();
+var wordnok = createWordnok({
+  apiKey: config.wordnikAPIKey,
+  logger: logger
+});
+
 var bot = new Bot(config.twitter);
 
 var simulationMode = (process.argv[2] === '--simulate');
@@ -28,7 +32,7 @@ function postTribute() {
     postOnTopic(null, emojiSource.getRandomTopicEmoji());
   }
   else {
-    wordnikSource.getTopic(postOnTopic);
+    wordnok.getTopic(postOnTopic);
   }
 }
 

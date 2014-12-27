@@ -36,7 +36,8 @@
     "rollbar": "~0.3.8",
     "sinon": "^1.12.2",
     "standard-error": "^1.1.0",
-    "twit": "~1.1.14"
+    "twit": "~1.1.14",
+    "wordnok": "^1.0.0"
   },
   "devDependencies": {
     "idmaker": "~0.1.1",

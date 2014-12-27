@@ -1,18 +1,23 @@
 // Singleton.
 
-var createWordnikSource = require('./wordniksource');
+var createWordnok = require('wordnok');
 var _ = require('lodash');
 var canonicalizer = require('canonicalizer');
 var createIsCool = require('iscool');
 var cardinalNumbers = require('./cardinalnumbers');
 var isEmoji = require('is-emoji');
 var emojiSource = require('./emojisource');
+var config = require('./config');
 
 var isCool = createIsCool({
   logger: console
 });
 
-var wordniksource = createWordnikSource();
+var wordnok = createWordnok({
+  apiKey: config.wordnikAPIKey,
+  logger: console
+});
+
 var nounCache = [];
 var frequenciesForNouns = {};
 
@@ -31,7 +36,7 @@ function getNounsFromText(text, done) {
   var nouns = _.intersection(nounCache, words);
   words = _.without.apply(_, [words].concat(nouns));
 
-  wordniksource.getPartsOfSpeechForMultipleWords(
+  wordnok.getPartsOfSpeechForMultipleWords(
     words,
     function filterToNouns(error, partsOfSpeech) {
       if (!error) {
@@ -79,7 +84,7 @@ function filterNounsForInterestingness(nouns, maxFrequency, done) {
     return !isEmoji(noun);
   });
 
-  wordniksource.getWordFrequencies(nouns,
+  wordnok.getWordFrequencies(nouns,
     function filterByFrequency(error, frequencies) {
       if (error) {
         done(error, interestingNouns);
