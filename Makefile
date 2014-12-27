@@ -9,7 +9,6 @@ USER = noderunner
 test: test-exhort
 	$(MOCHACMD) tests/tributedemander-tests.js
 	$(MOCHACMD) tests/topicpool-tests.js -t 3000
-	$(MOCHACMD) tests/iscool-tests.js
 	$(MOCHACMD) tests/tweetanalyzer-tests.js
 	$(MOCHACMD) tests/nounfinder-tests.js
 

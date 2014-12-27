@@ -24,6 +24,7 @@
     "canonicalizer": "^1.0.0",
     "conform-async": "^1.1.1",
     "is-emoji": "^0.1.1",
+    "iscool": "^1.0.1",
     "jsonfile": "^2.0.0",
     "lodash": "~2.4.1",
     "multilevel": "^6.0.1",
@@ -35,8 +36,7 @@
     "rollbar": "~0.3.8",
     "sinon": "^1.12.2",
     "standard-error": "^1.1.0",
-    "twit": "~1.1.14",
-    "wordfilter": "~0.1.6"
+    "twit": "~1.1.14"
   },
   "devDependencies": {
     "idmaker": "~0.1.1",

@@ -2,9 +2,13 @@ var request = require('request');
 var apiKey = require('./config').wordnikAPIKey;
 var _ = require('lodash');
 var queue = require('queue-async');
-var isCool = require('./iscool');
 var isJSON = require('./isjson');
 var logger = require('./logger');
+var createIsCool = require('iscool');
+
+var isCool = createIsCool({
+  logger: logger
+});
 
 var randomWordURL = 'http://api.wordnik.com:80/v4/words.json/randomWord?' +
   'hasDictionaryDef=false&' + 
