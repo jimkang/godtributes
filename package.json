@@ -21,6 +21,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "basicset-chronicler": "^1.2.0",
+    "better-know-a-tweet": "^1.0.0",
     "canonicalizer": "^1.0.0",
     "conform-async": "^1.1.1",
     "emojisource": "^1.0.0",

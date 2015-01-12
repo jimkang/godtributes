@@ -3,6 +3,7 @@ var async = require('async');
 var queue = require('queue-async');
 var conformAsync = require('conform-async');
 var _ = require('lodash');
+var betterKnow = require('better-know-a-tweet');
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -133,16 +134,9 @@ function createExhorter(opts) {
   }
 
   function isNotARetweetOfSelf(tweet, done) {
-    var isRTOfSelf = 
-      (tweet.retweeted_status && 
-       tweet.retweeted_status.user.screen_name === 'godtributes') ||
-      tweet.text.indexOf('RT @godtributes') !== -1 ||
-      tweet.text.indexOf('"@godtributes') !== -1 ||
-      tweet.text.indexOf('\u201C@godtributes') !== -1;
-
     var error = null;
 
-    if (isRTOfSelf) {
+    if (betterKnow.isRetweetOfUser('godtributes', tweet)) {
       error = createErrorForTweet(tweet, {
         message: 'This is a retweet of myself.',
       });
@@ -153,10 +147,9 @@ function createExhorter(opts) {
   }
 
   function isNotTweetOfSelf(tweet, done) {
-    var isOwnTweet = (tweet.user && tweet.user.screen_name === 'godtributes');
     var error = null;
 
-    if (isOwnTweet) {
+    if (betterKnow.isTweetOfUser('godtributes', tweet)) {
       error = createErrorForTweet(tweet, {
         message: 'This is one of my tweets.',
       });
