@@ -89,7 +89,9 @@ module.exports = {
     'eric',
     'garner',
     'torture',
-    'torturer'
+    'torturer',
+    'donetsk',
+    'ukraine'
   ],
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 40],
