@@ -1,5 +1,7 @@
-var behavior = require('./behaviorsettings');
 var logger = require('./logger');
+
+var tragedyModeBlacklist = require('iscool/defaultlists')
+  .get('tragedyModeBlacklist');
 
 function isTextOKToReplyTo(text) {
   var words = text.split(/[ ":.,;!?#]/);
@@ -12,7 +14,7 @@ function isTextOKToReplyTo(text) {
 
 function isWordInTragedyBlacklist(word) {
   var normalizedWord = word.toLowerCase();
-  return (behavior.tragedyModeBlacklist.indexOf(normalizedWord) !== -1);
+  return (tragedyModeBlacklist.indexOf(normalizedWord) !== -1);
 }
 
 module.exports = {

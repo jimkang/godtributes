@@ -48,6 +48,11 @@ To make tributes for followers and print them to the console, but not post them:
 
     node exhort.js --simulate
 
+Blacklisting
+------------
+
+godtributes now uses [iscool](https://github.com/jimkang/iscool)'s blacklists. If you'd like to add to them, make an issue or PR there.
+
 Tests
 -----
 
