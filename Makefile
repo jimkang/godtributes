@@ -1,7 +1,7 @@
 MOCHA = node_modules/mocha/bin/mocha
 MOCHACMD = $(MOCHA) --ui tdd -R spec 
-HOMEDIR = /var/www/godtributes
-# HOMEDIR = ~/gcw/godtributes
+#HOMEDIR = /var/www/godtributes
+HOMEDIR = ~/gcw/godtributes
 PM2 = $(HOMEDIR)/node_modules/pm2/bin/pm2
 GITDIR = /var/repos/godtributes.git
 USER = noderunner
