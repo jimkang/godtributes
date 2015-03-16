@@ -41,7 +41,7 @@
     "sinon": "^1.12.2",
     "standard-error": "^1.1.0",
     "twit": "^1.1.19",
-    "twitterjerkdetector": "^1.1.0",
+    "twitterjerkdetector": "^1.1.1",
     "wordnok": "^1.0.0"
   },
   "devDependencies": {
