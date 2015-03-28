@@ -11,7 +11,8 @@ var prepPhrasePicker = require('../../prepphrasepicker');
 var config = require('../../config');
 
 var nounfinder = createNounfinder({
-  wordnikAPIKey: config.wordnikAPIKey
+  wordnikAPIKey: config.wordnikAPIKey,
+  memoizeServerPort: 4444
 });
 
 var exhorterOpts = {

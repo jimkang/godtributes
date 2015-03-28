@@ -13,7 +13,8 @@ var probable = require('probable');
 console.log('The exhortation server is running.');
 
 var nounfinder = createNounfinder({
-  wordnikAPIKey: config.wordnikAPIKey
+  wordnikAPIKey: config.wordnikAPIKey,
+  memoizeServerPort: 4444
 });
 
 var twit = new Twit(config.twitter);

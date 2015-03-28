@@ -27,6 +27,8 @@ Then, create a `config.js` file in the project root that contains your [Twitter 
       wordnikAPIKey: 'mkomniojnnuibiybvuytvutrctrxezewarewetxyfcftvuhbg'
     };
 
+Set up an instance of [level-cache-server](https://github.com/jimkang/level-cache-server) in a parallel directory.
+
 Optionally, set up a cron job for run `maketributes.js` and/or `exhort.js` periodically.
 
 Usage

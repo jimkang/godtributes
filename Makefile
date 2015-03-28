@@ -1,10 +1,10 @@
 MOCHA = node_modules/mocha/bin/mocha
 MOCHACMD = $(MOCHA) --ui tdd -R spec 
-HOMEDIR = /var/www/godtributes
-#HOMEDIR = ~/gcw/godtributes
+HOMEDIR = $(shell pwd)
 PM2 = $(HOMEDIR)/node_modules/pm2/bin/pm2
 GITDIR = /var/repos/godtributes.git
 USER = noderunner
+LEVELCACHEDIR = '../level-cache-server'
 
 test: test-exhort
 	$(MOCHACMD) tests/tributedemander-tests.js
@@ -13,7 +13,7 @@ test: test-exhort
 test-exhort:
 	$(MOCHA) --R spec tests/exhort-tests.js
 
-test-exhort-integration: stop-chronicler start-chronicler
+test-exhort-integration: stop-chronicler start-chronicler start-level-cache
 	node tests/integration/exhort-tweet-test.js
 
 debug-test:
@@ -26,7 +26,7 @@ start-chronicler:
 stop-chronicler:
 	$(PM2) stop godtributes-chronicler || echo "Didn't need to stop process."
 
-start-exhortation-server:
+start-exhortation-server: start-level-cache
 	$(PM2) start exhortationserver.js --name godtributes-exhortations
 
 stop-exhortation-server:
@@ -51,3 +51,10 @@ post-receive: sync-worktree-to-git npm-install stop-chronicler start-chronicler 
 
 install-logrotate-conf:
 	cp $(HOMEDIR)/admin/logrotate.conf_entry /etc/logrotate.d/godtributes
+
+start-level-cache:
+	$(PM2) start $(LEVELCACHEDIR)/start-cache-server.js --name level-cache || \
+	echo "level-cache has already been started."
+
+tribute: start-chronicler
+	node maketribute.js

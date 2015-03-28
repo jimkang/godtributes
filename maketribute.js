@@ -1,6 +1,6 @@
 var Bot = require('./node_modules/twit/examples/bot');
 var config = require('./config');
-var createWordnok = require('wordnok');
+var createWordnok = require('wordnok').createWordnok;
 var tributeDemander = require('./tributedemander');
 var figurepicker = require('./figurepicker');
 var prepphrasepicker = require('./prepphrasepicker');
