@@ -58,5 +58,5 @@ start-level-cache:
 	$(PM2) start $(LEVELCACHEDIR)/start-cache-server.js --name level-cache || \
 	echo "level-cache has already been started."
 
-tribute: start-chronicler
+tribute: start-chronicler start-level-cache
 	node maketribute.js
