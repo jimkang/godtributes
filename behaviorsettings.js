@@ -4,5 +4,6 @@ module.exports = {
   maxAttemptsToReplyPerUserPerRun: 1,
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 40],
+  maxCommonnessForSecondaryTopic: [50, 90],
   emojiThresholdPercentage: 5
 };
