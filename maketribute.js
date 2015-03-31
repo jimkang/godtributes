@@ -104,17 +104,19 @@ function makeDemands(relatedWordsError, relatedWords) {
 function tweetAndRecord(tweetText) {
   if (simulationMode) {
     logger.log('Would have tweeted', tweetText);
+    cleanUp();
   }
   else {
     bot.tweet(tweetText, function reportTweetResult(error, reply) {
       logger.log((new Date()).toString(), 'Tweet posted', reply.text);
-
+      db.recordThatTopicWasUsedInTribute(primaryTopic, cleanUp);
     });
   }
-  db.recordThatTopicWasUsedInTribute(primaryTopic, function done() {
-    db.close();
-    process.exit();
-  });
+}
+
+function cleanUp() {
+  db.close();
+  process.exit();
 }
 
 function getPrimaryDemand(topic, isEmoji) {
