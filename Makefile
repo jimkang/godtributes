@@ -1,7 +1,7 @@
 MOCHA = node_modules/mocha/bin/mocha
 MOCHACMD = $(MOCHA) --ui tdd -R spec 
 HOMEDIR = $(shell pwd)
-PM2 = $(HOMEDIR)/node_modules/pm2/bin/pm2
+PM2 = pm2
 GITDIR = /var/repos/godtributes.git
 USER = noderunner
 LEVELCACHEDIR = '../level-cache-server'
@@ -27,7 +27,7 @@ start-chronicler:
 stop-chronicler:
 	$(PM2) stop godtributes-chronicler || echo "Didn't need to stop process."
 
-start-exhortation-server: start-level-cache start-chronicler
+start-exhortation-server:
 	$(PM2) start exhortationserver.js --watch --name godtributes-exhortations || \
 	echo "godtributes-exhortations has already been started."
 
