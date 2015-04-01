@@ -27,7 +27,7 @@ start-chronicler:
 stop-chronicler:
 	$(PM2) stop godtributes-chronicler || echo "Didn't need to stop process."
 
-start-exhortation-server: start-level-cache
+start-exhortation-server: start-level-cache start-chronicler
 	$(PM2) start exhortationserver.js --watch --name godtributes-exhortations || \
 	echo "godtributes-exhortations has already been started."
 
