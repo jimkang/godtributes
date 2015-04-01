@@ -21,14 +21,14 @@ debug-test:
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/topicpool-tests.js
 
 start-chronicler:
-	$(PM2) start start-chronicler.js --name godtributes-chronicler || \
+	$(PM2) start start-chronicler.js --watch --name godtributes-chronicler || \
 	echo "godtributes-chronicler has already been started."
 
 stop-chronicler:
 	$(PM2) stop godtributes-chronicler || echo "Didn't need to stop process."
 
 start-exhortation-server: start-level-cache
-	$(PM2) start exhortationserver.js --name godtributes-exhortations || \
+	$(PM2) start exhortationserver.js --watch --name godtributes-exhortations || \
 	echo "godtributes-exhortations has already been started."
 
 stop-exhortation-server:
