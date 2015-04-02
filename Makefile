@@ -16,6 +16,9 @@ test-exhort:
 test-exhort-integration: stop-chronicler start-chronicler start-level-cache
 	node tests/integration/exhort-tweet-test.js
 
+test-chronicler-stress: stop-chronicler start-chronicler start-level-cache
+	node tests/integration/chronicler-stress-test.js
+
 debug-test:
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/tributedemander-tests.js
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/topicpool-tests.js
