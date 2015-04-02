@@ -34,6 +34,9 @@ start-exhortation-server:
 	$(PM2) start exhortationserver.js --name godtributes-exhortations || \
 	echo "godtributes-exhortations has already been started."
 
+restart-exhortation-server:
+	$(PM2) restart godtributes-exhortations
+
 stop-exhortation-server:
 	$(PM2) stop godtributes-exhortations || echo "Didn't need to stop process."
 
