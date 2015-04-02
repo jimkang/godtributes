@@ -40,7 +40,7 @@
     "rollbar": "^0.3.13",
     "sinon": "^1.12.2",
     "standard-error": "^1.1.0",
-    "twit": "^1.1.19",
+    "twit": "^1.1.20",
     "twitterjerkdetector": "^1.1.1",
     "wordnok": "^2.2.1"
   },
