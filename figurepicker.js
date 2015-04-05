@@ -25,7 +25,10 @@ var alternateFigureTable = probable.createRangeTableFromDict({
   mistress: 1,
   nation: 1,
   dome: 2,
-  dragon: 1
+  dragon: 1,
+  'director-general': 1,
+  potentate: 2,
+  monolith: 1
 });
 
 function getSecondaryTributeFigure() {
