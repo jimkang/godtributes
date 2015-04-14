@@ -293,7 +293,7 @@ function createExhorter(opts) {
 
     // TODO: Use seedrandom for probable to make tests work more consistently 
     // than 19/20 times.
-    if (tweetLocale === 'en' && probable.roll(20) === 0) {
+    if (tweetLocale === 'en' && probable.roll(100) === 0) {
       tweetLocale = translator.pickRandomTranslationLocale({
         excludeLocale: 'en'
       });
