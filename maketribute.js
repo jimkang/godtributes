@@ -14,6 +14,7 @@ var callBackOnNextTick = require('conform-async').callBackOnNextTick;
 var _ = require('lodash');
 var canonicalizer = require('canonicalizer');
 var createNounfinder = require('nounfinder');
+var translator = require('./translator');
 
 var bot = new Bot(config.twitter);
 
@@ -97,7 +98,23 @@ function makeDemands(relatedWordsError, relatedWords) {
     if (secondaryDemand) {
       tweetText += ('! ' + secondaryDemand);
     }
-    callBackOnNextTick(tweetAndRecord, tweetText);
+
+    if (probable.roll(10) === 0) {
+      translator.translateToRandomLocale(tweetText, 'en', tweetTranslation);
+    }
+    else {
+      callBackOnNextTick(tweetAndRecord, tweetText);
+    }
+
+    function tweetTranslation(error, translation) {
+      if (error) {
+        console.log(error);
+        tweetAndRecord(tweetText);
+      }
+      else {
+        tweetAndRecord(translation);
+      }
+    }
   }
 }
 
