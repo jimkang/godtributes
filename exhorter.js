@@ -260,7 +260,6 @@ function createExhorter(opts) {
 
     if (languages && languages.length > 0 && languages[0][1] > 0.5) {
       var language = languages[0][0];
-      console.log('Language:', language);
       if (language in localesForDetectorLanguages) {
         tweetLocale = localesForDetectorLanguages[language];
       }
