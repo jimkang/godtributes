@@ -369,4 +369,35 @@ describe('getExhortationForTweet', function exhortSuite() {
     }
   );
 
+  it('replies to a tweet in that language', 
+    function testManualRetweet(testDone) {
+      var mockTweet = utils.getDefaultMockTweet();
+      // This test is a little deceptive. The mock tweet is in Spanish to 
+      // trigger the translation of the exhortation, but the content of the 
+      // exhortation will come from the mock nounfinder, which will say 
+      // the nouns are squash and burger.
+      mockTweet.text = '!El tren es grande!';
+      mockTweet.user = {
+        screen_name: 'smidgeo',
+        id: 1234
+      };
+
+      var exhorter = createExhorter(utils.getDefaultExhorterOpts());
+
+      exhorter.getExhortationForTweet(
+        mockTweet,
+        function checkResult(error, tweet, exhortation) {
+          if (error) {
+            console.log(error.message);
+          }
+          assert.ok(!error);
+          assert.equal(
+            exhortation,
+            '@smidgeo HAMBURGUESAS PARA EL DIOS DE LA HAMBURGUESA! CALABAZAS PARA EL TRONO DE SQUASH'
+          );
+          testDone();
+        }
+      );
+    }
+  );
 });

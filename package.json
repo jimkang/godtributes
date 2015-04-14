@@ -29,6 +29,7 @@
     "is-emoji": "^0.1.1",
     "iscool": "^1.0.13",
     "jsonfile": "^2.0.0",
+    "languagedetect": "^1.1.1",
     "lodash": "~2.4.1",
     "mstranslator": "^1.1.0",
     "multilevel": "^6.0.1",

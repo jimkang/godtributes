@@ -4,6 +4,12 @@ var queue = require('queue-async');
 var conformAsync = require('conform-async');
 var _ = require('lodash');
 var betterKnow = require('better-know-a-tweet');
+var LanguageDetect = require('languagedetect');
+var localesForDetectorLanguages = require('./locales-for-detector-languages');
+var translator = require('./translator');
+var probable = require('probable');
+
+var languageDetector = new LanguageDetect();
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -248,6 +254,18 @@ function createExhorter(opts) {
 
   // Assumes nouns has at least one element.
   function makeExhortationFromNouns(tweet, nouns, done) {
+    var tweetLocale = 'en';
+
+    var languages = languageDetector.detect(tweet.text);
+
+    if (languages && languages.length > 0 && languages[0][1] > 0.5) {
+      var language = languages[0][0];
+      console.log('Language:', language);
+      if (language in localesForDetectorLanguages) {
+        tweetLocale = localesForDetectorLanguages[language];
+      }
+    }
+
     var selectedNouns = _.sample(nouns, 2);
 
     var primaryTribute =
@@ -268,13 +286,38 @@ function createExhorter(opts) {
         }));
     }
 
-    var exhortation = '@' + tweet.user.screen_name + ' ' + primaryTribute;
+    var addressClause = '@' + tweet.user.screen_name + ' ';
+    var exhortation = primaryTribute;
     if (secondaryTribute) {
       exhortation += ('! ' + secondaryTribute);
     }
-    conformAsync.callBackOnNextTick(
-      done, null, tweet, exhortation, selectedNouns
-    );
+
+    // TODO: Use seedrandom for probable to make tests work more consistently 
+    // than 19/20 times.
+    if (tweetLocale === 'en' && probable.roll(20) === 0) {
+      tweetLocale = translator.pickRandomTranslationLocale({
+        excludeLocale: 'en'
+      });
+    }
+
+    if (tweetLocale !== 'en') {
+      translator.translate(exhortation, 'en', tweetLocale, returnTranslation);
+    }
+    else {
+      conformAsync.callBackOnNextTick(
+        done, null, tweet, addressClause + exhortation, selectedNouns
+      );
+    }
+
+    function returnTranslation(error, translation) {
+      if (error) {
+        console.log(error);
+        done(error, tweet, addressClause + exhortation, selectedNouns);
+      }
+      else {
+        done(error, tweet, addressClause + translation, selectedNouns);
+      }
+    }
   }
 
   function createErrorForTweet(tweet, overrides) {

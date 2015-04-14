@@ -5,13 +5,13 @@ var probable = require('probable');
 var _ = require('lodash');
 
 function translate(text, fromLocale, toLocale, done) {
-  var translator = new MSTranslator(config.MSTranslator, true);
+  var theTranslator = new MSTranslator(config.MSTranslator, true);
   var translateOpts = {
     text: text,
     from: fromLocale,
     to: toLocale
   };
-  translator.translate(translateOpts, done);
+  theTranslator.translate(translateOpts, done);
 }
 
 // For now, a western bias for a mostly-western audience.
@@ -40,7 +40,26 @@ var localeChances = {
   'de': 40, // German
   'ja': 20, // Japanese
   'ht': 1, // Haitian Creole
-  'en': 1
+  'en': 1,
+  'bg': 1, // Bulgarian
+  'hr': 10, // Croatian
+  'cs': 1, // Czech,
+  'da': 2, // Danish
+  'et': 1, // Estonian
+  'hu': 1, // Hungarian
+  'it': 15, // Italian
+  'lv': 1, // Latvian
+  'lt': 1, // Lithuanian
+  'mt': 1, // Maltese
+  'no': 1, // Norwegian
+  'pt': 4, // Portuguese
+  'sr-Cyrl': 1, // Serbian (Cyrillic),
+  'sk': 1, // Slovak
+  'sl': 1, // Slovenian
+  'uk': 1, // Ukranian
+  'vi': 4, // Vietnamese
+  'cy': 12, // Welsh
+  'yua': 1, // Yucatec Maya
 };
 
 function pickRandomTranslationLocale(opts) {
