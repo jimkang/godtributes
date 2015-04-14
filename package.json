@@ -37,7 +37,7 @@
     "pm2": "^0.12.3",
     "probable": "^0.1.0",
     "queue-async": "~1.0.7",
-    "quidprofollow": "^1.0.1",
+    "quidprofollow": "^1.1.0",
     "request": "^2.36.0",
     "rollbar": "^0.3.13",
     "sinon": "^1.12.2",
