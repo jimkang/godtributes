@@ -75,6 +75,7 @@ function translateToRandomLocale(text, fromLocale, done) {
   var toLocale = pickRandomTranslationLocale({
     excludeLocale: fromLocale
   });
+  console.log('Translating', text, 'from', fromLocale, 'to', toLocale);
   translate(text, fromLocale, toLocale, done);
 }
 

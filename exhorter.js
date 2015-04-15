@@ -300,6 +300,7 @@ function createExhorter(opts) {
     }
 
     if (tweetLocale !== 'en') {
+      console.log('Translating', exhortation, 'from en to', tweetLocale);
       translator.translate(exhortation, 'en', tweetLocale, returnTranslation);
     }
     else {
