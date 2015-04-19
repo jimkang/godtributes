@@ -4,12 +4,8 @@ var queue = require('queue-async');
 var conformAsync = require('conform-async');
 var _ = require('lodash');
 var betterKnow = require('better-know-a-tweet');
-var LanguageDetect = require('languagedetect');
-var localesForDetectorLanguages = require('./locales-for-detector-languages');
 var translator = require('./translator');
 var defaultProbable = require('probable');
-
-var languageDetector = new LanguageDetect();
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -81,7 +77,7 @@ function createExhorter(opts) {
 
     function finalDone(error, tweet, exhortation, topics) {
       if (error) {
-        logger.log(error);
+        // logger.log(error);
         exhortationDone(error);
       }
       else {
@@ -232,7 +228,7 @@ function createExhorter(opts) {
           unusedNouns.push(nouns[i/2]);
         }
       }
-      logger.log('unusedNouns', unusedNouns);
+      // logger.log('unusedNouns', unusedNouns);
 
       var error = null;
       if (lookupError || !unusedNouns || unusedNouns.length < 1) {
@@ -260,17 +256,10 @@ function createExhorter(opts) {
   // Assumes nouns has at least one element.
   function makeExhortationFromNouns(tweet, nouns, done) {
     var tweetLocale = 'en';
-    var languages = languageDetector.detect(tweet.text);
-
-    if (languages && languages.length > 0) {
-      var language = languages[0][0];
-      var confidence = languages[0][1];
-
-      if (confidence > 0.3 && language in localesForDetectorLanguages) {
-        tweetLocale = localesForDetectorLanguages[language];
-      }
+    if (tweet.lang) {
+      tweetLocale = tweet.lang;
     }
-
+   
     var selectedNouns = probable.shuffle(nouns).slice(0, 2);
 
     var primaryTribute =

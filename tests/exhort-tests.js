@@ -396,6 +396,7 @@ describe('getExhortationForTweet', function exhortSuite() {
       // exhortation will come from the mock nounfinder, which will say 
       // the nouns are squash and burger.
       mockTweet.text = '!El tren es grande!';
+      mockTweet.lang = 'es';
       mockTweet.user = {
         screen_name: 'smidgeo',
         id: 1234
@@ -428,6 +429,7 @@ describe('getExhortationForTweet', function exhortSuite() {
       // exhortation will come from the mock nounfinder, which will say 
       // the nouns are squash and burger.
       mockTweet.text = 'Si la falta de tiempo te ha orillado a buscar una pareja en el mundo virtual, hoy hay quien lo hace por ti. #6Grados http://voxit.me/L7do';
+      mockTweet.lang = 'es';
       mockTweet.user = {
         screen_name: 'smidgeo',
         id: 1234
@@ -467,6 +469,7 @@ describe('getExhortationForTweet', function exhortSuite() {
       // exhortation will come from the mock nounfinder, which will say 
       // the nouns are squash and burger.
       mockTweet.text = 'Homme #Scorpion + Femme #Verseau = elle est assez tentée par une aventure avec lui, mais sa jalousie risque de l\'effrayer. Entente : 2/5.';
+      mockTweet.lang = 'fr';
       mockTweet.user = {
         screen_name: 'smidgeo',
         id: 1234
@@ -490,7 +493,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo AVENTURES DU DIEU DE L\'AVENTURE ! STORES POUR LE TRÔNE DE LA JALOUSIE'
+            '@smidgeo STORES POUR LA JALOUSIE DE DIEU ! AVENTURES POUR LE TRÔNE DE L\'AVENTURE'
           );
           testDone();
         }
@@ -498,7 +501,7 @@ describe('getExhortationForTweet', function exhortSuite() {
     }
   );
 
-  it('does not misidentify a tweet language',
+  it('does not misidentify a short tweet\'s language',
     function testFalsePositive(testDone) {
       var mockTweet = utils.getDefaultMockTweet();
       // This test is a little deceptive. The mock tweet is in Spanish to 
@@ -506,6 +509,7 @@ describe('getExhortationForTweet', function exhortSuite() {
       // exhortation will come from the mock nounfinder, which will say 
       // the nouns are squash and burger.
       mockTweet.text = 'FUS RO DAH';
+      mockTweet.lang = 'en';
       mockTweet.user = {
         screen_name: 'smidgeo',
         id: 1234
@@ -530,6 +534,41 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.equal(
             exhortation,
             '@smidgeo DAHS FOR THE DAH GOD! FUSES FOR THE FUS THRONE'
+          );
+          testDone();
+        }
+      );
+    }
+  );
+
+ it('does not misidentify a blatantly English tweet',
+    function testFalsePositive2(testDone) {
+      var mockTweet = utils.getDefaultMockTweet();
+      mockTweet.text = 'Buzzfeed internal review finds 3 posts deleted due to advertiser pressure: http://mobile.nytimes.com/2015/04/20/business/media/buzzfeed-says-posts-were-deleted-because-of-advertising-pressure.html?referrer= … via @babiejenks';
+      mockTweet.lang = 'en';      
+      mockTweet.user = {
+        screen_name: 'smidgeo',
+        id: 1234
+      };
+
+      var opts = utils.getDefaultExhorterOpts();
+      opts.nounfinder = utils.createMockNounfinder({
+        nounsToBeFound: ['advertiser', 'pressure'],
+        interestingNounsToBeFound: ['advertiser', 'pressure']
+      });
+
+      var exhorter = createExhorter(opts);
+
+      exhorter.getExhortationForTweet(
+        mockTweet,
+        function checkResult(error, tweet, exhortation) {
+          if (error) {
+            console.log(error.message);
+          }
+          assert.ok(!error);
+          assert.equal(
+            exhortation,
+            '@smidgeo PRESSURES FOR THE PRESSURE GOD! ADVERTISERS FOR THE ADVERTISER THRONE'
           );
           testDone();
         }
