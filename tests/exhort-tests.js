@@ -400,4 +400,95 @@ describe('getExhortationForTweet', function exhortSuite() {
       );
     }
   );
+
+  it('replies to a tweet in Spanish',
+    function testSpanish(testDone) {
+      var mockTweet = utils.getDefaultMockTweet();
+      // This test is a little deceptive. The mock tweet is in Spanish to 
+      // trigger the translation of the exhortation, but the content of the 
+      // exhortation will come from the mock nounfinder, which will say 
+      // the nouns are squash and burger.
+      mockTweet.text = 'Si la falta de tiempo te ha orillado a buscar una pareja en el mundo virtual, hoy hay quien lo hace por ti. #6Grados http://voxit.me/L7do';
+      mockTweet.user = {
+        screen_name: 'smidgeo',
+        id: 1234
+      };
+
+      var opts = utils.getDefaultExhorterOpts();
+
+      opts.nounfinder = {
+        getNounsFromText: function mockNounsFromText(text, done) {
+          conformAsync.callBackOnNextTick(
+            done, null, ['hoy', 'quien']
+          );
+        },
+        filterNounsForInterestingness: function mockFilter(n, m, done) {
+          conformAsync.callBackOnNextTick(done, null, ['hoy', 'quien']);
+        }
+      };
+
+      var exhorter = createExhorter(opts);
+
+      exhorter.getExhortationForTweet(
+        mockTweet,
+        function checkResult(error, tweet, exhortation) {
+          if (error) {
+            console.log(error.message);
+          }
+          assert.ok(!error);
+          assert.equal(
+            exhortation,
+            '@smidgeo HOYS PARA EL DIOS HOY! QUIENS POR EL TRONO DE QUIEN'
+          );
+          testDone();
+        }
+      );
+    }
+  );
+
+  it('replies to a tweet in French',
+    function testFrench(testDone) {
+      var mockTweet = utils.getDefaultMockTweet();
+      // This test is a little deceptive. The mock tweet is in Spanish to 
+      // trigger the translation of the exhortation, but the content of the 
+      // exhortation will come from the mock nounfinder, which will say 
+      // the nouns are squash and burger.
+      mockTweet.text = 'Homme #Scorpion + Femme #Verseau = elle est assez tentée par une aventure avec lui, mais sa jalousie risque de l\'effrayer. Entente : 2/5.';
+      mockTweet.user = {
+        screen_name: 'smidgeo',
+        id: 1234
+      };
+
+      var opts = utils.getDefaultExhorterOpts();
+
+      opts.nounfinder = {
+        getNounsFromText: function mockNounsFromText(text, done) {
+          conformAsync.callBackOnNextTick(
+            done, null, ['jalousie', 'aventure']
+          );
+        },
+        filterNounsForInterestingness: function mockFilter(n, m, done) {
+          conformAsync.callBackOnNextTick(done, null, ['jalousie', 'aventure']);
+        }
+      };
+
+      var exhorter = createExhorter(opts);
+
+      exhorter.getExhortationForTweet(
+        mockTweet,
+        function checkResult(error, tweet, exhortation) {
+          if (error) {
+            console.log(error.message);
+          }
+          assert.ok(!error);
+          assert.equal(
+            exhortation,
+            '@smidgeo STORES POUR LA JALOUSIE DE DIEU ! AVENTURES POUR LE TRÔNE DE L\'AVENTURE'
+          );
+          testDone();
+        }
+      );
+    }
+  );
+
 });

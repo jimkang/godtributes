@@ -255,10 +255,9 @@ function createExhorter(opts) {
   // Assumes nouns has at least one element.
   function makeExhortationFromNouns(tweet, nouns, done) {
     var tweetLocale = 'en';
-
     var languages = languageDetector.detect(tweet.text);
 
-    if (languages && languages.length > 0 && languages[0][1] > 0.5) {
+    if (languages && languages.length > 0) {
       var language = languages[0][0];
       if (language in localesForDetectorLanguages) {
         tweetLocale = localesForDetectorLanguages[language];
@@ -300,7 +299,6 @@ function createExhorter(opts) {
     }
 
     if (tweetLocale !== 'en') {
-      console.log('Translating', exhortation, 'from en to', tweetLocale);
       translator.translate(exhortation, 'en', tweetLocale, returnTranslation);
     }
     else {
