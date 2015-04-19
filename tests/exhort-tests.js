@@ -5,6 +5,12 @@ var conformAsync = require('conform-async');
 var _ = require('lodash');
 var tributeDemander = require('../tributedemander');
 var sinon = require('sinon');
+var createProbable = require('probable').createProbable;
+var seedrandom = require('seedrandom');
+
+var predictableProbable = createProbable({
+  random: seedrandom('test')
+});
 
 var utils = {
   mockLastRepliedToLongAgo: function mockLastRepliedToLongAgo(id, cb) {
@@ -13,6 +19,7 @@ var utils = {
   },
   getDefaultExhorterOpts: function getDefaultExhorterOpts() {
     return {
+      probable: predictableProbable,
       chronicler: {
         whenWasUserLastRepliedTo: utils.mockLastRepliedToLongAgo,
         topicWasUsedInReplyToUser:
@@ -444,7 +451,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo HOYS PARA EL DIOS HOY! QUIENS POR EL TRONO DE QUIEN'
+            '@smidgeo QUIENS PARA EL DIOS QUIEN! HOYS POR EL TRONO DE HOY'
           );
           testDone();
         }
@@ -483,7 +490,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo STORES POUR LA JALOUSIE DE DIEU ! AVENTURES POUR LE TRÔNE DE L\'AVENTURE'
+            '@smidgeo AVENTURES DU DIEU DE L\'AVENTURE ! STORES POUR LE TRÔNE DE LA JALOUSIE'
           );
           testDone();
         }
@@ -491,4 +498,42 @@ describe('getExhortationForTweet', function exhortSuite() {
     }
   );
 
+  it('does not misidentify a tweet language',
+    function testFalsePositive(testDone) {
+      var mockTweet = utils.getDefaultMockTweet();
+      // This test is a little deceptive. The mock tweet is in Spanish to 
+      // trigger the translation of the exhortation, but the content of the 
+      // exhortation will come from the mock nounfinder, which will say 
+      // the nouns are squash and burger.
+      mockTweet.text = 'FUS RO DAH';
+      mockTweet.user = {
+        screen_name: 'smidgeo',
+        id: 1234
+      };
+
+      var opts = utils.getDefaultExhorterOpts();
+
+      opts.nounfinder = utils.createMockNounfinder({
+        nounsToBeFound: ['fus', 'dah'],
+        interestingNounsToBeFound: ['fus', 'dah']
+      });
+
+      var exhorter = createExhorter(opts);
+
+      exhorter.getExhortationForTweet(
+        mockTweet,
+        function checkResult(error, tweet, exhortation) {
+          if (error) {
+            console.log(error.message);
+          }
+          assert.ok(!error);
+          assert.equal(
+            exhortation,
+            '@smidgeo DAHS FOR THE DAH GOD! FUSES FOR THE FUS THRONE'
+          );
+          testDone();
+        }
+      );
+    }
+  );
 });

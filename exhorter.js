@@ -7,7 +7,7 @@ var betterKnow = require('better-know-a-tweet');
 var LanguageDetect = require('languagedetect');
 var localesForDetectorLanguages = require('./locales-for-detector-languages');
 var translator = require('./translator');
-var probable = require('probable');
+var defaultProbable = require('probable');
 
 var languageDetector = new LanguageDetect();
 
@@ -23,6 +23,11 @@ function createExhorter(opts) {
   var prepPhrasePicker = opts.prepPhrasePicker;
   var figurePicker = opts.figurePicker;
   var decorateWithEmojiOpts = opts.decorateWithEmojiOpts;
+  var probable = opts.probable;
+
+  if (!probable) {
+    probable = defaultProbable;
+  }
 
   function getExhortationForTweet(tweet, exhortationDone) {
 
@@ -259,12 +264,14 @@ function createExhorter(opts) {
 
     if (languages && languages.length > 0) {
       var language = languages[0][0];
-      if (language in localesForDetectorLanguages) {
+      var confidence = languages[0][1];
+
+      if (confidence > 0.3 && language in localesForDetectorLanguages) {
         tweetLocale = localesForDetectorLanguages[language];
       }
     }
 
-    var selectedNouns = _.sample(nouns, 2);
+    var selectedNouns = probable.shuffle(nouns).slice(0, 2);
 
     var primaryTribute =
       tributeDemander.makeDemandForTopic(decorateWithEmojiOpts({
