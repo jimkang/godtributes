@@ -11,7 +11,7 @@ test: test-exhort
 	$(MOCHACMD) tests/tweetanalyzer-tests.js
 
 test-exhort:
-	$(MOCHA) --R spec tests/exhort-tests.js
+	$(MOCHA) --R spec tests/exhort-tests.js -t 6000
 
 test-exhort-integration: stop-chronicler start-chronicler start-level-cache
 	node tests/integration/exhort-tweet-test.js

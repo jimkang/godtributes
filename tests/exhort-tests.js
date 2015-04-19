@@ -79,6 +79,18 @@ var utils = {
       },
       text: 'I turned down for many reasons.'
     };
+  },
+  createMockNounfinder: function createMockNounfinder(opts) {
+    return {
+      getNounsFromText: function mockNounsFromText(text, done) {
+        conformAsync.callBackOnNextTick(done, null, opts.nounsToBeFound);
+      },
+      filterNounsForInterestingness: function mockFilter(n, m, done) {
+        conformAsync.callBackOnNextTick(
+          done, null, opts.interestingNounsToBeFound
+        );
+      }
+    };
   }
 };
 
@@ -416,16 +428,10 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       var opts = utils.getDefaultExhorterOpts();
 
-      opts.nounfinder = {
-        getNounsFromText: function mockNounsFromText(text, done) {
-          conformAsync.callBackOnNextTick(
-            done, null, ['hoy', 'quien']
-          );
-        },
-        filterNounsForInterestingness: function mockFilter(n, m, done) {
-          conformAsync.callBackOnNextTick(done, null, ['hoy', 'quien']);
-        }
-      };
+      opts.nounfinder = utils.createMockNounfinder({
+        nounsToBeFound: ['hoy', 'quien'],
+        interestingNounsToBeFound: ['hoy', 'quien']
+      });
 
       var exhorter = createExhorter(opts);
 
@@ -461,16 +467,10 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       var opts = utils.getDefaultExhorterOpts();
 
-      opts.nounfinder = {
-        getNounsFromText: function mockNounsFromText(text, done) {
-          conformAsync.callBackOnNextTick(
-            done, null, ['jalousie', 'aventure']
-          );
-        },
-        filterNounsForInterestingness: function mockFilter(n, m, done) {
-          conformAsync.callBackOnNextTick(done, null, ['jalousie', 'aventure']);
-        }
-      };
+      opts.nounfinder = utils.createMockNounfinder({
+        nounsToBeFound: ['jalousie', 'aventure'],
+        interestingNounsToBeFound: ['jalousie', 'aventure']
+      });
 
       var exhorter = createExhorter(opts);
 
