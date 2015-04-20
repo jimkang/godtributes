@@ -575,4 +575,39 @@ describe('getExhortationForTweet', function exhortSuite() {
       );
     }
   );
+
+ it('handles unknown language error',
+    function testTranslationError(testDone) {
+      var mockTweet = utils.getDefaultMockTweet();
+      mockTweet.text = '👆🏽';
+      mockTweet.lang = 'esdf';      
+      mockTweet.user = {
+        screen_name: 'smidgeo',
+        id: 1234
+      };
+
+      var opts = utils.getDefaultExhorterOpts();
+      opts.nounfinder = utils.createMockNounfinder({
+        nounsToBeFound: ['👆', '🏽'],
+        interestingNounsToBeFound: ['👆', '🏽']
+      });
+
+      var exhorter = createExhorter(opts);
+
+      exhorter.getExhortationForTweet(
+        mockTweet,
+        function checkResult(error, tweet, exhortation) {
+          if (error) {
+            console.log(error.message);
+          }
+          assert.ok(!error);
+          assert.equal(
+            exhortation,
+            '@smidgeo 🏽S FOR THE 🏽 GOD! 👆S FOR THE 👆 THRONE'
+          );
+          testDone();
+        }
+      );
+    }
+  );
 });

@@ -6,6 +6,7 @@ var _ = require('lodash');
 var betterKnow = require('better-know-a-tweet');
 var translator = require('./translator');
 var defaultProbable = require('probable');
+var knownLanguages = require('./data/known-translator-languages');
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -294,7 +295,7 @@ function createExhorter(opts) {
       });
     }
 
-    if (tweetLocale !== 'en') {
+    if (tweetLocale !== 'en' && knownLanguages.indexOf(tweetLocale) !== -1) {
       translator.translate(exhortation, 'en', tweetLocale, returnTranslation);
     }
     else {
