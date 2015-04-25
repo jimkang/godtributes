@@ -66,3 +66,10 @@ start-level-cache:
 
 tribute:
 	node maketribute.js
+
+update-iscool:
+	git pull origin master && \
+		npm update --save iscool && \
+		git commit -a -m"Updated iscool." && \
+		git push origin master && \
+		git push server master
