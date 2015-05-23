@@ -73,3 +73,6 @@ update-iscool:
 		git commit -a -m"Updated iscool." && \
 		git push origin master && \
 		git push server master
+
+pushall:
+	git push origin master && git push server master
