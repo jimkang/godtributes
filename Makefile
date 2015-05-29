@@ -24,24 +24,24 @@ debug-test:
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/topicpool-tests.js
 
 start-chronicler:
-	$(PM2) start start-chronicler.js --name godtributes-chronicler || \
-	echo "godtributes-chronicler has already been started."
+	psy start -n godtributes-chronicler -l $(HOMEDIR)/logs/chronicler.log \
+		-- node start-chronicler.js
 
 stop-chronicler:
-	$(PM2) stop godtributes-chronicler || echo "Didn't need to stop process."
+	psy stop godtributes-chronicler
 
 start-exhortation-server:
-	$(PM2) start exhortationserver.js --name godtributes-exhortations || \
-	echo "godtributes-exhortations has already been started."
+	psy start -n exhortations -l $(HOMEDIR)/logs/exhortations.log \
+		-- node exhortationserver.js
 
 restart-exhortation-server:
-	$(PM2) restart godtributes-exhortations
+	psy restart exhortations
 
 stop-exhortation-server:
-	$(PM2) stop godtributes-exhortations || echo "Didn't need to stop process."
+	psy stop exhortations
 
 check-exhortation-server:
-	$(PM2) info godtributes-exhortations
+	psy log exhortations
 
 npm-install:
 	cd $(HOMEDIR)
@@ -71,8 +71,7 @@ update-iscool:
 	git pull origin master && \
 		npm update --save iscool && \
 		git commit -a -m"Updated iscool." && \
-		git push origin master && \
-		git push server master
+		make pushall
 
 pushall:
 	git push origin master && git push server master
