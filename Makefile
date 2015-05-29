@@ -28,7 +28,7 @@ start-chronicler:
 		-- node start-chronicler.js
 
 stop-chronicler:
-	psy stop godtributes-chronicler
+	psy stop godtributes-chronicler || "Non-zero return code is OK."
 
 start-exhortation-server:
 	psy start -n exhortations -l $(HOMEDIR)/logs/exhortations.log \
@@ -38,7 +38,7 @@ restart-exhortation-server:
 	psy restart exhortations
 
 stop-exhortation-server:
-	psy stop exhortations
+	psy stop exhortations || "Non-zero return code is OK."
 
 check-exhortation-server:
 	psy log exhortations
