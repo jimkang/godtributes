@@ -8,8 +8,15 @@ function createClientDb() {
 	var manifest = jsonfile.readFileSync(__dirname + '/manifest.json');
 	var db = multilevel.client(manifest);
 	var connection = net.connect(3030);
-	connection.pipe(db.createRpcStream()).pipe(connection);
+	var rpcStream = db.createRpcStream();
+	connection.pipe(rpcStream).pipe(connection);
+
+	rpcStream.on('error', handleRPCStreamError);
 	return db;
+}
+
+function handleRPCStreamError(error) {
+	console.log('Chronicler RPC stream error!', error.stack || error);
 }
 
 function getDb() {
