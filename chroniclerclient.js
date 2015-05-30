@@ -8,6 +8,7 @@ function createClientDb() {
 	var manifest = jsonfile.readFileSync(__dirname + '/manifest.json');
 	var db = multilevel.client(manifest);
 	var connection = net.connect(3030);
+	connection.on('end', handleConnectionEnd);
 	var rpcStream = db.createRpcStream();
 	connection.pipe(rpcStream).pipe(connection);
 
@@ -17,6 +18,10 @@ function createClientDb() {
 
 function handleRPCStreamError(error) {
 	console.log('Chronicler RPC stream error!', error.stack || error);
+}
+
+function handleConnectionEnd() {
+  console.log('Disconnected from chronicler server!');
 }
 
 function getDb() {
