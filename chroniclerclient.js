@@ -1,28 +1,49 @@
 var jsonfile = require('jsonfile');
 var multilevel = require('multilevel');
 var net = require('net');
+var callNextTick = require('call-next-tick');
+var _ = require('lodash');
 
 var dbSingleton;
 
 function createClientDb() {
 	var manifest = jsonfile.readFileSync(__dirname + '/manifest.json');
 	var db = multilevel.client(manifest);
-	var connection = net.connect(3030);
-	connection.on('end', handleConnectionEnd);
-	var rpcStream = db.createRpcStream();
-	connection.pipe(rpcStream).pipe(connection);
+	createRPCConnections(db);
 
-	rpcStream.on('error', handleRPCStreamError);
 	return db;
+}
+
+function createRPCConnections(db) {
+	var client = connectToPort(3030);
+	connectClientToDb(client, db);
+
+	function connectToPort(port) {
+		var client = net.connect(port);
+		client.on('end', handleConnectionEnd);
+		return client;
+	}
+
+	function connectClientToDb(client, db) {
+		var rpcStream = db.createRpcStream();
+		client.pipe(rpcStream).pipe(client);
+
+		rpcStream.on('error', handleRPCStreamError);
+		return rpcStream;
+	}
+
+	function handleConnectionEnd() {
+	  console.log('Disconnected from chronicler server! Reconnecting.');
+	  client.unpipe();
+	  rpcStream.unpipe();
+	  callNextTick(createRPCConnections, db);
+	}
 }
 
 function handleRPCStreamError(error) {
 	console.log('Chronicler RPC stream error!', error.stack || error);
 }
 
-function handleConnectionEnd() {
-  console.log('Disconnected from chronicler server!');
-}
 
 function getDb() {
 	if (!dbSingleton) {
