@@ -1,7 +1,7 @@
 var StandardError = require('standard-error');
 var async = require('async');
 var queue = require('queue-async');
-var conformAsync = require('conform-async');
+var callNextTick = require('call-next-tick');
 var _ = require('lodash');
 var betterKnow = require('better-know-a-tweet');
 var translator = require('./translator');
@@ -73,7 +73,7 @@ function createExhorter(opts) {
     );
 
     function waterfallKickoff(done) {
-      conformAsync.callBackOnNextTick(done, null, tweet);
+      callNextTick(done, null, tweet);
     }
 
     function finalDone(error, tweet, exhortation, topics) {
@@ -151,7 +151,7 @@ function createExhorter(opts) {
     }
 
     // Passes on the tweet. Error indicates if the tweet was a RT.
-    conformAsync.callBackOnNextTick(done, error, tweet);
+    callNextTick(done, error, tweet);
   }
 
   function isNotTweetOfSelf(tweet, done) {
@@ -164,7 +164,7 @@ function createExhorter(opts) {
     }
 
     // Passes on the tweet. Error indicates if the tweet was a self-tweet.
-    conformAsync.callBackOnNextTick(done, error, tweet);
+    callNextTick(done, error, tweet);
   }
 
   function statusContainsTextThatIsOKToReplyTo(tweet, done) {
@@ -176,7 +176,7 @@ function createExhorter(opts) {
       });
     }
 
-    conformAsync.callBackOnNextTick(done, error, tweet);
+    callNextTick(done, error, tweet);
   }
 
   function getNounsFromTweet(tweet, done) {
@@ -251,7 +251,7 @@ function createExhorter(opts) {
         message: 'There aren\'t enough usable nouns to work with.'
       });
     }
-    conformAsync.callBackOnNextTick(done, error, tweet, nouns);
+    callNextTick(done, error, tweet, nouns);
   }
 
   // Assumes nouns has at least one element.
@@ -299,7 +299,7 @@ function createExhorter(opts) {
       translator.translate(exhortation, 'en', tweetLocale, returnTranslation);
     }
     else {
-      conformAsync.callBackOnNextTick(
+      callNextTick(
         done, null, tweet, addressClause + exhortation, selectedNouns
       );
     }

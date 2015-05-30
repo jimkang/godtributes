@@ -1,7 +1,7 @@
 var assert = require('assert');
 var createExhorter = require('../exhorter');
 var jsonfile = require('jsonfile');
-var conformAsync = require('conform-async');
+var callNextTick = require('call-next-tick');
 var _ = require('lodash');
 var tributeDemander = require('../tributedemander');
 var sinon = require('sinon');
@@ -15,7 +15,7 @@ var predictableProbable = createProbable({
 var utils = {
   mockLastRepliedToLongAgo: function mockLastRepliedToLongAgo(id, cb) {
     // Say user was just replied to long ago.
-    conformAsync.callBackOnNextTick(cb, null, new Date('2000-01-01'));
+    callNextTick(cb, null, new Date('2000-01-01'));
   },
   getDefaultExhorterOpts: function getDefaultExhorterOpts() {
     return {
@@ -24,13 +24,13 @@ var utils = {
         whenWasUserLastRepliedTo: utils.mockLastRepliedToLongAgo,
         topicWasUsedInReplyToUser:
           function mockTopicWasUsedInReplyToUser(noun, userId, done) {
-            conformAsync.callBackOnNextTick(done, null, false);
+            callNextTick(done, null, false);
           },
         topicWasUsedInTribute: function mockTributeUseCheck(noun, done) {
-          conformAsync.callBackOnNextTick(done, null, false);
+          callNextTick(done, null, false);
         },
         tweetWasRepliedTo: function mockTweetWasRepliedTo(tweetId, done) {
-          conformAsync.callBackOnNextTick(
+          callNextTick(
             done,
             new Error('Key not found in database'),
             false
@@ -48,13 +48,13 @@ var utils = {
       },
       nounfinder: {
         getNounsFromText: function mockNounsFromText(text, done) {
-          conformAsync.callBackOnNextTick(
+          callNextTick(
             done, null, ['squash', 'pie', 'burger']
           );
         },
         filterNounsForInterestingness: 
           function mockFilter(nouns, maxCommonness, done) {
-            conformAsync.callBackOnNextTick(done, null, ['squash', 'burger']);
+            callNextTick(done, null, ['squash', 'burger']);
           }
       },
       tributeDemander: tributeDemander,
@@ -90,10 +90,10 @@ var utils = {
   createMockNounfinder: function createMockNounfinder(opts) {
     return {
       getNounsFromText: function mockNounsFromText(text, done) {
-        conformAsync.callBackOnNextTick(done, null, opts.nounsToBeFound);
+        callNextTick(done, null, opts.nounsToBeFound);
       },
       filterNounsForInterestingness: function mockFilter(n, m, done) {
-        conformAsync.callBackOnNextTick(
+        callNextTick(
           done, null, opts.interestingNounsToBeFound
         );
       }
@@ -110,7 +110,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           opts.chronicler.whenWasUserLastRepliedTo = 
           function mockLast(id, cb) {
             // Say user was just replied to.
-            conformAsync.callBackOnNextTick(cb, null, new Date());
+            callNextTick(cb, null, new Date());
           };
 
           var exhorter = createExhorter(opts);
@@ -236,7 +236,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           opts.nounfinder = {
             getNounsFromText: function mockNounsFromText(text, done) {
               // Simulating no nouns found.
-              conformAsync.callBackOnNextTick(done, null, []);
+              callNextTick(done, null, []);
             }
           };
           var exhorter = createExhorter(opts);
@@ -262,7 +262,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           var opts = utils.getDefaultExhorterOpts();
           opts.nounfinder.filterNounsForInterestingness = 
           function mockFilterAllBoring(nouns, maxCommonness, done) {
-            conformAsync.callBackOnNextTick(done, null, []);
+            callNextTick(done, null, []);
           };          
           var exhorter = createExhorter(opts);
 
@@ -288,11 +288,11 @@ describe('getExhortationForTweet', function exhortSuite() {
           opts.chronicler.topicWasUsedInReplyToUser = 
           function mockTopicWasUsedInReplyToUser(noun, userId, done) {
             // Always say that it was used for this test.
-            conformAsync.callBackOnNextTick(done, null, true);
+            callNextTick(done, null, true);
           };
           opts.chronicler.topicWasUsedInTribute = 
             function mockTributeUseCheck(noun, done) {
-              conformAsync.callBackOnNextTick(done, null, true);
+              callNextTick(done, null, true);
             };
 
           var exhorter = createExhorter(opts);
@@ -320,7 +320,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           opts.chronicler.tweetWasRepliedTo = 
           function mockTweetWasRepliedTo(tweetId, done) {
             // Always say that it was replied to for this test.
-            conformAsync.callBackOnNextTick(done, null, true);
+            callNextTick(done, null, true);
           };
 
           var exhorter = createExhorter(opts);

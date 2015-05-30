@@ -2,7 +2,7 @@ var quidprofollow = require('quidprofollow');
 var config = require('./config');
 var twitterjerkdetector = require('twitterjerkdetector');
 var Twit = require('twit');
-var conformAsync = require('conform-async');
+var callNextTick = require('call-next-tick');
 
 console.log('mutualize-follower-list is running.');
 
@@ -33,5 +33,5 @@ function idIsInSpecialUsers(id) {
 
 function keepSpecialUsers(userIds, done) {
   var retainUsers = userIds.filter(idIsInSpecialUsers);
-  conformAsync.callBackOnNextTick(done, null, retainUsers);
+  callNextTick(done, null, retainUsers);
 }

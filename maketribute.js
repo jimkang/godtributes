@@ -10,7 +10,7 @@ var chroniclerclient = require('./chroniclerclient');
 var emojiSource = require('emojisource');
 var behavior = require('./behaviorsettings');
 var probable = require('probable');
-var callBackOnNextTick = require('conform-async').callBackOnNextTick;
+var callNextTick = require('call-next-tick');
 var _ = require('lodash');
 var canonicalizer = require('canonicalizer');
 var createNounfinder = require('nounfinder');
@@ -66,7 +66,7 @@ function postOnTopic(error, topic) {
   primaryDemand = getPrimaryDemand(primaryTopic, isEmojiTopic);
 
   if (isEmojiTopic) {
-    callBackOnNextTick(makeDemands);
+    callNextTick(makeDemands);
     return;
   }
 
@@ -103,7 +103,7 @@ function makeDemands(relatedWordsError, relatedWords) {
       translator.translateToRandomLocale(tweetText, 'en', tweetTranslation);
     }
     else {
-      callBackOnNextTick(tweetAndRecord, tweetText);
+      callNextTick(tweetAndRecord, tweetText);
     }
 
     function tweetTranslation(error, translation) {
@@ -182,7 +182,7 @@ function getSecondaryDemand(relatedWords, done) {
   }
 
   // Fell through? Call back with nothing.
-  callBackOnNextTick(done);
+  callNextTick(done);
 
   function filterForInterestingness(error, nouns) {
     if (error) {
