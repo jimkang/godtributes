@@ -32,9 +32,11 @@ var alternateFigureTable = probable.createRangeTableFromDict({
   union: 4,
   shoggoth: 2,
   worm: 2,
-  dracula: 1,
+  dracula: 2,
   voivode: 1,
-  'home planet': 1
+  'home planet': 1,
+  chronicles: 1,
+  dimension: 1
 });
 
 function getSecondaryTributeFigure() {
