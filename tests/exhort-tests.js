@@ -82,7 +82,8 @@ var utils = {
     return {
       id_str: '546402627261833217',     
       user: {
-        id: 546402627261833200
+        id: 546402627261833200,
+        screen_name: 'not_lil_jon'
       },
       text: 'I turned down for many reasons.'
     };
@@ -121,7 +122,7 @@ describe('getExhortationForTweet', function exhortSuite() {
             function checkResult(error, tweet, exhortation) {
               assert.ok(error);
               assert.equal(error.message, 'Replied too recently.');
-              assert.equal(error.userId, mockTweet.user.id);
+              assert.equal(error.screen_name, mockTweet.user.screen_name);
               assert.ok(!exhortation);
               testDone();
             }
@@ -413,7 +414,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo HAMBURGUESAS PARA EL DIOS DE LA HAMBURGUESA! CALABAZAS PARA EL TRONO DE SQUASH'
+            '@smidgeo HAMBURGUESAS BURGER DIOS! CALABAZAS PARA EL TRONO DE SQUASH'
           );
           testDone();
         }
@@ -453,7 +454,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo QUIENS PARA EL DIOS QUIEN! HOYS POR EL TRONO DE HOY'
+            '@smidgeo QUIENS QUIEN DIOS! HOYS POR EL TRONO DE HOY'
           );
           testDone();
         }

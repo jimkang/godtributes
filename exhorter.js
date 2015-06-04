@@ -133,9 +133,10 @@ function createExhorter(opts) {
       done(null, tweet);
     }
     else {
+      // TODO: Consider making this a status object instead of an error.
       done(createErrorForTweet(tweet, {
         message: 'Replied too recently.',
-        userId: tweet.user.id,
+        screen_name: tweet.user.screen_name,
         hoursSinceLastReply: hoursElapsed
       }));
     }
