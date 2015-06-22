@@ -3,6 +3,10 @@ var isEmoji = require('is-emoji');
 var probable = require('probable');
 
 function makeDemandForTopic(opts) {
+  if (isSpecialTopic(opts.topic)) {
+    return makeDemandForSpecialTopic(opts);
+  }
+
   var tributeFigure = (opts && opts.tributeFigure) ? 
     opts.tributeFigure.toUpperCase() : 'GOD';
   
@@ -45,6 +49,19 @@ function decorateWithEmojiOpts(demandOpts) {
       probable.roll(3) + probable.roll(3) + 2;
   }
   return demandOpts;
+}
+
+var demandsForSpecialTopics = {
+  'confederate': 'CONFEDERATE FLAGS FOR THE CONFEDERATE FLAG FIRE',
+  'confederacy': 'CONFEDERACIES FOR THE DOG-WHISTLING WHITE SUPREMACIST HUMAN SHITPILE'
+};
+
+function isSpecialTopic(topic) {
+  return topic in demandsForSpecialTopics;
+}
+
+function makeDemandForSpecialTopic(opts) {
+  return demandsForSpecialTopics[opts.topic];
 }
 
 module.exports = {

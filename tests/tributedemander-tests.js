@@ -248,5 +248,17 @@ suite('Praise generator', function tributeDemanderSuite() {
       '  FOR THE some-emoji  GOD'
     );
   });
-});
 
+  test('Very special cases', function specialTest() {
+    topicsTest({
+      topics: [
+        'confederate',
+        'confederacy'
+      ],
+      expectedDemands: [
+        'CONFEDERATE FLAGS FOR THE CONFEDERATE FLAG FIRE',
+        'CONFEDERACIES FOR THE DOG-WHISTLING WHITE SUPREMACIST HUMAN SHITPILE'
+      ]
+    });
+  });
+});
