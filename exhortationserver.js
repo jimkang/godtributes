@@ -14,7 +14,8 @@ console.log('The exhortation server is running.');
 
 var nounfinder = createNounfinder({
   wordnikAPIKey: config.wordnikAPIKey,
-  memoizeServerPort: 4444
+  memoizeServerPort: 4444,
+  onDisconnect: respondToCacheDisconnect
 });
 
 var twit = new Twit(config.twitter);
@@ -88,4 +89,11 @@ function recordReplyDetails(targetStatus, topics) {
   topics.forEach(function recordTopic(topic) {
     db.recordThatTopicWasUsedInReplyToUser(topic, userId);
   });
+}
+
+// The safest thing to do when the cache disconnects right now is to exit and 
+// let the supervisor process restart us.
+function respondToCacheDisconnect() {
+  console.log('Cache disconnected! exhortationserver exiting.');
+  process.exit();
 }
