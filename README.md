@@ -9,6 +9,8 @@ It will also occasionally reply to followers in the same way, using words they'v
 
 It runs on Node and uses the excellent [twit](https://github.com/ttezel/twit) module to interact with Twitter.
 
+**Warning:** For now, it depends on the [`stable` branch of level-cache-server](https://github.com/jimkang/level-cache-server/tree/stable) running on the machine and will have problems with `master`.
+
 Installation
 ------------
 
