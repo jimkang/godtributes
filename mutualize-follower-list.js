@@ -1,37 +1,20 @@
-var quidprofollow = require('quidprofollow');
-var config = require('./config');
-var twitterjerkdetector = require('twitterjerkdetector');
-var Twit = require('twit');
-var callNextTick = require('call-next-tick');
+var filteredFollowback = require('filtered-followback');
+var config = require('./config.js');
 
-console.log('mutualize-follower-list is running.');
-
-quidprofollow(
+filteredFollowback(
   {
-    twitterAPIKeys: config.twitter,
-    followFilter: twitterjerkdetector.createFilter({
-      twit: new Twit(config.twitter)
-    }),
-    retainFilter: keepSpecialUsers
+    twitterCreds: config.twitter,
+    neverUnfollow: [
+      2205976656
+    ]
   },
-  function done(error, followed, unfollowed) {
-    if (error) {
-      console.log(error);
-    }
-    console.log('Followed:', followed);
-    console.log('Unfollowed:', unfollowed);
-  }
+  reportResults
 );
 
-var specialUsers = [
-  2205976656
-];
-
-function idIsInSpecialUsers(id) {
-  return specialUsers.indexOf(id) !== -1;
-}
-
-function keepSpecialUsers(userIds, done) {
-  var retainUsers = userIds.filter(idIsInSpecialUsers);
-  callNextTick(done, null, retainUsers);
+function reportResults(error, followed, unfollowed) {
+  if (error) {
+    console.log(error);
+  }
+  console.log('Followed:', followed);
+  console.log('Unfollowed:', unfollowed);
 }
