@@ -454,7 +454,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo QUIENS QUIEN DIOS! HOYS POR EL TRONO DE HOY'
+            '@smidgeo QUIENS PARA EL DIOS DE QUIEN! HOYS POR EL TRONO DE HOY'
           );
           testDone();
         }
