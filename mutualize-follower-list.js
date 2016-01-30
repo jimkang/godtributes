@@ -10,7 +10,8 @@ filteredFollowback(
   {
     twitterCreds: config.twitter,
     neverUnfollow: [
-      2205976656
+      2205976656,
+      4814406209
     ],
     blacklist: spamUsers
   },
