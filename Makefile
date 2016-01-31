@@ -24,15 +24,13 @@ debug-test:
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/topicpool-tests.js
 
 start-chronicler:
-	psy start -n godtributes-chronicler -l $(HOMEDIR)/logs/chronicler.log \
-		-- node start-chronicler.js
+	psy start -n godtributes-chronicler -- node start-chronicler.js
 
 stop-chronicler:
 	psy stop godtributes-chronicler || echo "Non-zero return code is OK."
 
 start-exhortation-server:
-	psy start -n exhortations -l $(HOMEDIR)/logs/exhortations.log \
-		-- node exhortationserver.js
+	psy start -n exhortations -- node exhortationserver.js
 
 restart-exhortation-server:
 	psy restart exhortations
