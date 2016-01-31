@@ -6,7 +6,7 @@ var sysLog = bunyan.createLogger({
   name: 'foo',
   streams: [
     {
-      level: 'warn',
+      level: 'debug',
       type: 'raw',
       stream: bsyslog.createBunyanStream({
         type: 'sys',
