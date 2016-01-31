@@ -19,9 +19,9 @@ var sysLog = bunyan.createLogger({
 });
 
 // First param is the topic, the rest get formatted console.log style.
-function formatMessage() {
-  var topic = arguments[0];
-  var theRest = Array.prototype.slice.call(arguments, 1);
+function formatMessage(params) {
+  var topic = params[0];
+  var theRest = Array.prototype.slice.call(params, 1);
   return util.format.apply(util, theRest);
 }
 
