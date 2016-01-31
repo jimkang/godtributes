@@ -317,7 +317,7 @@ function createExhorter(opts) {
     return new StandardError(_.defaults(overrides, {
       id: tweet.id_str,
       screen_name: tweet.user.screen_name,
-      time: tweet.time
+      // time: tweet.time
     }));
   }
 

@@ -31,7 +31,7 @@ function formatMessage() {
       formatted += arg;
     }
     else if (typeof arg === 'object') {
-      formatted += JSON.stringify(arg);
+      formatted += JSON.stringify(arg, null, '  ');
     }
     else {
       formatted += arg.toString();
