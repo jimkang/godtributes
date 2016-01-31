@@ -10,7 +10,6 @@ var knownLanguages = require('./data/known-translator-languages');
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
-  var logger = opts.logger;
   var behavior = opts.behavior;
   var tweetAnalyzer = opts.tweetAnalyzer;
   var nounfinder = opts.nounfinder;
@@ -78,7 +77,6 @@ function createExhorter(opts) {
 
     function finalDone(error, tweet, exhortation, topics) {
       if (error) {
-        // logger.log(error);
         exhortationDone(error);
       }
       else {
@@ -230,7 +228,6 @@ function createExhorter(opts) {
           unusedNouns.push(nouns[i/2]);
         }
       }
-      // logger.log('unusedNouns', unusedNouns);
 
       var error = null;
       if (lookupError || !unusedNouns || unusedNouns.length < 1) {
@@ -307,7 +304,7 @@ function createExhorter(opts) {
 
     function returnTranslation(error, translation) {
       if (error) {
-        console.log(error);
+        log(error);
         done(error, tweet, addressClause + exhortation, selectedNouns);
       }
       else {

@@ -1,48 +1,45 @@
-// Singleton.
-
-var rollbar = require('rollbar');
-var config = require('./config');
+var bunyan = require('bunyan');
+var bsyslog = require('bunyan-syslog');
 var util = require('util');
 
-var rollbarEnabled = false;
+var sysLog = bunyan.createLogger({
+  name: 'foo',
+  streams: [
+    {
+      level: 'debug',
+      type: 'raw',
+      stream: bsyslog.createBunyanStream({
+        type: 'sys',
+        facility: bsyslog.local0,
+        host: '192.168.0.1',
+        port: 514
+      })
+    }
+  ]
+});
 
-// First argument is the topic, the rest get formatted console.log style.
-function log() {
+// First param is the topic, the rest get formatted console.log style.
+function formatMessage() {
   var topic = arguments[0];
   var theRest = Array.prototype.slice.call(arguments, 1);
-  var payload = {
-    level: 'info',
-    custom: {
-      message: util.format.apply(util, theRest)
-    }
-  };
-  console.log(topic, '|', payload.custom.message);
-
-  if (rollbarEnabled && arguments.length > 0) {
-    rollbar.reportMessageWithPayloadData(topic, payload);
-  }
+  return util.format.apply(util, theRest);
 }
 
-function turnOffRollbar() {
-  rollbarEnabled = false;
-  rollbar.shutdown();
-  return rollbarEnabled;
+function info() {
+  sysLog.info(formatMessage(arguments));
 }
 
-function turnOnRollbar() {
-  rollbarEnabled = (typeof config.rollbarToken === 'string');
-  if (rollbarEnabled) {
-    rollbar.init(config.rollbarToken, {
-      handler: 'nextTick'
-    });
-  }
-  return rollbarEnabled;
+function warn() {
+  sysLog.warn(formatMessage(arguments));
 }
 
-turnOnRollbar();
+function error() {
+  sysLog.error(formatMessage(arguments));
+}
 
 module.exports = {
-  log: log,
-  turnOffRollbar: turnOffRollbar,
-  turnOnRollbar: turnOnRollbar
+  info: info,
+  warn: warn,
+  error: error,
+  sysLog: sysLog
 };

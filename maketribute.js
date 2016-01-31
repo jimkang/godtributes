@@ -20,7 +20,7 @@ var bot = new Bot(config.twitter);
 
 var simulationMode = (process.argv[2] === '--simulate');
 
-logger.log('Tribute maker is running.');
+logger.info('Tribute maker is running.');
 
 var wordnok = createWordnok({
   apiKey: config.wordnikAPIKey,
@@ -56,7 +56,7 @@ function postTribute() {
 
 function postOnTopic(error, topic) {
   if (error) {
-    console.log(error);
+    logger.error(error);
     process.exit();
   }
 
@@ -82,7 +82,7 @@ function makeDemands(relatedWordsError, relatedWords) {
   var tweetText = primaryDemand;
 
   if (relatedWordsError) {
-    console.log(relatedWordsError);
+    logger.error(relatedWordsError);
     process.exit();
   }
   else {
@@ -91,7 +91,7 @@ function makeDemands(relatedWordsError, relatedWords) {
 
   function appendDemandToTweet(error, secondaryDemand) {
     if (error) {
-      console.log(error);
+      logger.error(error);
       // An error is OK here. We can keep going.
     }
 
@@ -108,7 +108,7 @@ function makeDemands(relatedWordsError, relatedWords) {
 
     function tweetTranslation(error, translation) {
       if (error) {
-        console.log(error);
+        logger.error(error);
         tweetAndRecord(tweetText);
       }
       else {
@@ -120,12 +120,12 @@ function makeDemands(relatedWordsError, relatedWords) {
 
 function tweetAndRecord(tweetText) {
   if (simulationMode) {
-    logger.log('Would have tweeted', tweetText);
+    console.log('Would have tweeted', tweetText);
     cleanUp();
   }
   else {
     bot.tweet(tweetText, function reportTweetResult(error, reply) {
-      logger.log((new Date()).toString(), 'Tweet posted', reply.text);
+      logger.info((new Date()).toString(), 'Tweet posted', reply.text);
       db.recordThatTopicWasUsedInTribute(primaryTopic, cleanUp);
     });
   }

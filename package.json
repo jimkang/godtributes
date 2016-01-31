@@ -22,6 +22,8 @@
     "async": "^0.9.0",
     "basicset-chronicler": "^1.3.1",
     "better-know-a-tweet": "^1.0.1",
+    "bunyan": "^1.5.1",
+    "bunyan-syslog": "^0.3.1",
     "call-next-tick": "^1.1.2",
     "canonicalizer": "^1.0.0",
     "emojisource": "^1.0.0",

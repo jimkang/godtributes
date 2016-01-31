@@ -9,8 +9,9 @@ var createNounfinder = require('nounfinder');
 var figurePicker = require('./figurepicker');
 var prepPhrasePicker = require('./prepphrasepicker');
 var probable = require('probable');
+var log = require('./logger').info;
 
-console.log('The exhortation server is running.');
+log('The exhortation server is running.');
 
 var nounfinder = createNounfinder({
   wordnikAPIKey: config.wordnikAPIKey,
@@ -32,7 +33,6 @@ var maxCommonnessForTopic = behavior.maxCommonnessForReplyTopic[0] +
 var exhorterOpts = {
   chronicler: db,
   behavior: behavior,
-  logger: console,
   tweetAnalyzer: tweetAnalyzer,
   nounfinder: nounfinder,
   tributeDemander: tributeDemander,
@@ -45,7 +45,7 @@ var exhorterOpts = {
   nounCountThreshold: 1
 };
 
-console.log('maxCommonnessForTopic:', maxCommonnessForTopic);
+log('maxCommonnessForTopic:', maxCommonnessForTopic);
 
 var exhorter = createExhorter(exhorterOpts);
 
@@ -54,12 +54,12 @@ stream.on('tweet', function respondToTweet(tweet) {
 });
 
 function tweetExhortation(error, tweet, exhortation, topics) {
-  console.log('exhortation:', exhortation);
+  log('exhortation:', exhortation);
   if (error) {
-    console.log('Error from getExhortationForTweet:', error);
+    log('Error from getExhortationForTweet:', error);
   }
   else if (!exhortation || exhortation.length < 1) {
-    console.log(
+    log(
       'No error, but got nothing from getExhortationForTweet. Tweet:', tweet
     );
   }
@@ -73,7 +73,7 @@ function tweetExhortation(error, tweet, exhortation, topics) {
         },
         function recordTweetResult(error, reply) {
           recordReplyDetails(tweet, topics);
-          console.log('Replied to status', tweet.text, 'with :', exhortation);      
+          log('Replied to status', tweet.text, 'with :', exhortation);      
         }
       );
     },
@@ -94,6 +94,6 @@ function recordReplyDetails(targetStatus, topics) {
 // The safest thing to do when the cache disconnects right now is to exit and 
 // let the supervisor process restart us.
 function respondToCacheDisconnect() {
-  console.log('Cache disconnected! exhortationserver exiting.');
+  log('Cache disconnected! exhortationserver exiting.');
   process.exit();
 }

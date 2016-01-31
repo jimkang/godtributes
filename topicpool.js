@@ -1,3 +1,4 @@
+var logger = require('./logger').logger;
 
 // opts:
 //  sources: The sources for the topics in fallback order.
@@ -8,7 +9,7 @@ function createTopicPool(opts) {
 
     function checkTopic(error, topic) {
       if (error) {
-        console.log(error);
+        logger.error(error);
         sourceIndex += 1;
         if (sourceIndex < opts.sources.length) {
           getTopicFromSource(opts.sources[sourceIndex], done);

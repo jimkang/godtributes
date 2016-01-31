@@ -3,6 +3,7 @@ var exportMethods = require('export-methods');
 var MSTranslator = require('mstranslator');
 var probable = require('probable');
 var _ = require('lodash');
+var log = require('./logger').info;
 
 function translate(text, fromLocale, toLocale, done) {
   var theTranslator = new MSTranslator(config.MSTranslator, true);
@@ -75,7 +76,7 @@ function translateToRandomLocale(text, fromLocale, done) {
   var toLocale = pickRandomTranslationLocale({
     excludeLocale: fromLocale
   });
-  console.log('Translating', text, 'from', fromLocale, 'to', toLocale);
+  log('Translating', text, 'from', fromLocale, 'to', toLocale);
   translate(text, fromLocale, toLocale, done);
 }
 

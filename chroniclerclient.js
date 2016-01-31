@@ -3,6 +3,7 @@ var multilevel = require('multilevel');
 var net = require('net');
 var callNextTick = require('call-next-tick');
 var _ = require('lodash');
+var logger = require('./logger');
 
 var dbSingleton;
 
@@ -33,7 +34,7 @@ function createRPCConnections(db) {
 	}
 
 	function handleConnectionEnd() {
-	  console.log('Disconnected from chronicler server! Reconnecting.');
+	  logger.warn('Disconnected from chronicler server! Reconnecting.');
 	  client.unpipe();
 	  rpcStream.unpipe();
 	  callNextTick(createRPCConnections, db);
@@ -41,7 +42,7 @@ function createRPCConnections(db) {
 }
 
 function handleRPCStreamError(error) {
-	console.log('Chronicler RPC stream error!', error.stack || error);
+	logger.error('Chronicler RPC stream error!', error.stack || error);
 }
 
 

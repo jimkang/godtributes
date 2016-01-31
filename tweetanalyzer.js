@@ -7,7 +7,7 @@ function isTextOKToReplyTo(text) {
   var words = text.split(/[ ":.,;!?#]/);
   var isOK = !words.some(isWordInTragedyBlacklist);
   if (!isOK) {
-    logger.log('Is NOT OK to respond to', text);
+    logger.info('Is NOT OK to respond to', text);
   }
   return isOK;
 }
