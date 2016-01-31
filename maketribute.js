@@ -24,7 +24,9 @@ logger.info('Tribute maker is running.');
 
 var wordnok = createWordnok({
   apiKey: config.wordnikAPIKey,
-  logger: logger,
+  logger: {
+    log: logger.info
+  },
   memoizeServerPort: 4444
 });
 
