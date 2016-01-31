@@ -52,4 +52,9 @@ function error() {
   sysLog.error(formatMessage(arguments));
 }
 
-module.exports = sysLog;
+module.exports = {
+  info: info,
+  warn: warn,
+  error: error,
+  sysLog: sysLog
+};
