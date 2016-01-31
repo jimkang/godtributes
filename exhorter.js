@@ -304,7 +304,6 @@ function createExhorter(opts) {
 
     function returnTranslation(error, translation) {
       if (error) {
-        log(error);
         done(error, tweet, addressClause + exhortation, selectedNouns);
       }
       else {
