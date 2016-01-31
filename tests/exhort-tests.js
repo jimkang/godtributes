@@ -85,7 +85,8 @@ var utils = {
         id: 546402627261833200,
         screen_name: 'not_lil_jon'
       },
-      text: 'I turned down for many reasons.'
+      text: 'I turned down for many reasons.',
+      time: (new Date()).toISOString()
     };
   },
   createMockNounfinder: function createMockNounfinder(opts) {
@@ -147,7 +148,7 @@ describe('getExhortationForTweet', function exhortSuite() {
               assert.ok(error);
               assert.equal(error.message, 'This is a retweet of myself.');
               assert.equal(error.id, mockTweet.id_str);
-              assert.equal(error.text, mockTweet.text);
+              assert.ok(error.time, 'Time exists in error.');
               assert.ok(!exhortation);
               testDone();
             }
@@ -171,7 +172,6 @@ describe('getExhortationForTweet', function exhortSuite() {
               assert.ok(error);
               assert.equal(error.message, 'This is one of my tweets.');
               assert.equal(error.id, mockTweet.id_str);
-              assert.equal(error.text, mockTweet.text);
               assert.ok(!exhortation);
               testDone();
             }
@@ -192,7 +192,6 @@ describe('getExhortationForTweet', function exhortSuite() {
               assert.ok(error);
               assert.equal(error.message, 'This is a retweet of myself.');
               assert.equal(error.id, mockTweet.id_str);
-              assert.equal(error.text, mockTweet.text);
               assert.ok(!exhortation);
               testDone();
             }
@@ -248,7 +247,6 @@ describe('getExhortationForTweet', function exhortSuite() {
               assert.ok(error);
               assert.equal(error.message, 'No nouns found.');
               assert.equal(error.id, mockTweet.id_str);
-              assert.equal(error.text, mockTweet.text);
               assert.ok(!exhortation);
               testDone();
             }
@@ -273,7 +271,6 @@ describe('getExhortationForTweet', function exhortSuite() {
               assert.ok(error);
               assert.equal(error.message, 'Filtered ALL nouns from text.');
               assert.equal(error.id, mockTweet.id_str);
-              assert.equal(error.text, mockTweet.text);
               assert.ok(!exhortation);
               testDone();
             }
@@ -305,7 +302,6 @@ describe('getExhortationForTweet', function exhortSuite() {
               assert.equal(error.message, 'No new material for user.');
               assert.equal(error.userId, mockTweet.user.id);
               assert.equal(error.id, mockTweet.id_str);
-              assert.equal(error.text, mockTweet.text);
               assert.ok(!exhortation);
               testDone();
             }
@@ -332,7 +328,6 @@ describe('getExhortationForTweet', function exhortSuite() {
               assert.ok(error);
               assert.equal(error.message, 'Tweet was already replied to.');
               assert.equal(error.id, mockTweet.id_str);
-              assert.equal(error.text, mockTweet.text);
               assert.ok(!exhortation);
               testDone();
             }
@@ -356,7 +351,6 @@ describe('getExhortationForTweet', function exhortSuite() {
                 'There aren\'t enough usable nouns to work with.'
               );
               assert.equal(error.id, mockTweet.id_str);
-              assert.equal(error.text, mockTweet.text);
               assert.ok(!exhortation);
               testDone();
             }

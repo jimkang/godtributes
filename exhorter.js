@@ -134,7 +134,6 @@ function createExhorter(opts) {
       // TODO: Consider making this a status object instead of an error.
       done(createErrorForTweet(tweet, {
         message: 'Replied too recently.',
-        screen_name: tweet.user.screen_name,
         hoursSinceLastReply: hoursElapsed
       }));
     }
@@ -171,7 +170,8 @@ function createExhorter(opts) {
     var error = null;
     if (!textIsOK) {
       error = createErrorForTweet(tweet, {
-        message: 'Contents unsafe to respond to.'
+        message: 'Contents unsafe to respond to.',
+        text: tweet.text
       });
     }
 
@@ -316,7 +316,8 @@ function createExhorter(opts) {
   function createErrorForTweet(tweet, overrides) {
     return new StandardError(_.defaults(overrides, {
       id: tweet.id_str,
-      text: tweet.text
+      screen_name: tweet.user.screen_name,
+      time: tweet.time
     }));
   }
 
