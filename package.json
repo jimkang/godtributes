@@ -36,6 +36,7 @@
     "lodash": "~2.4.1",
     "mstranslator": "jimkang/mstranslator.git",
     "multilevel": "^6.0.1",
+    "node-base64-image": "^0.1.1",
     "node-emoji": "^0.1.0",
     "nounfinder": "^1.2.1",
     "probable": "^1.4.0",
