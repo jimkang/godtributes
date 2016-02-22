@@ -46,7 +46,7 @@
     "rollbar": "^0.3.13",
     "seedrandom": "^2.3.11",
     "sinon": "^1.12.2",
-    "standard-bail": "^1.0.1",
+    "standard-bail": "^2.0.0",
     "standard-error": "^1.1.0",
     "twit": "^1.1.20",
     "wordnok": "^2.2.1"
