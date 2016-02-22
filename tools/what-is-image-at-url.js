@@ -3,7 +3,7 @@ var request = require('request');
 var config = require('../config');
 
 if (process.argv.length < 3) {
-  console.log('Usage: node tools/what-is-image-aturl.js <url>');
+  console.log('Usage: node tools/what-is-image-at-url.js <url>');
   process.exit();
 }
 
