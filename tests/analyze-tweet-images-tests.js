@@ -19,8 +19,7 @@ var cases = [
     },
     imageAPIResponse: {},
     expected: {
-      imageInterestingness: 0,
-      notableConcepts: []
+      nouns: []
     }
   },
   {
@@ -33,12 +32,12 @@ var cases = [
     ),
     imageAPIResponse: imageAPIResponses.costume,
     expected: {
-      imageInterestingness: 5,
-      notableConcepts: [
-        'costume',
+      nouns: [
+        'clothing',
         'orange',
         'flower',
-        'woman'
+        'woman',
+        'costume'
       ]
     }
   },
@@ -52,13 +51,12 @@ var cases = [
     ),
     imageAPIResponse: imageAPIResponses.award,
     expected: {
-      imageInterestingness: 5,
-      notableConcepts: [
+      nouns: [
+        'flower',
+        'medal',
         'jewellery',
         'brass',
-        'gold',
-        'medal',
-        'flower'
+        'gold'
       ]
     }
   },
@@ -72,8 +70,7 @@ var cases = [
     ),
     imageAPIResponse: imageAPIResponses.band,
     expected: {
-      imageInterestingness: 5,
-      notableConcepts: [
+      nouns: [
         'musician',
         'person',
         'people',
@@ -91,8 +88,7 @@ var cases = [
     ),
     imageAPIResponse: imageAPIResponses.poster,
     expected: {
-      imageInterestingness: 5,
-      notableConcepts: [
+      nouns: [
         'album cover',
         'poster'
       ]
@@ -108,12 +104,11 @@ var cases = [
     ),
     imageAPIResponse: imageAPIResponses.wormDrawing,
     expected: {
-      imageInterestingness: 5,
-      notableConcepts: [
-        'invertebrate',
-        'emblem',
+      nouns: [
         'cartoon',
-        'play'
+        'play',
+        'invertebrate',
+        'emblem'
       ]
     }
   },
@@ -134,6 +129,7 @@ function runTest(testCase) {
     function checkAnalysis(error, report) {
       t.ok(!error, 'No error while analyzing.');
       t.deepEqual(report, testCase.expected, 'Report is correct.');
+      t.end();
     }
   });
 }

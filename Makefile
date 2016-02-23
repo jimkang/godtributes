@@ -6,7 +6,7 @@ GITDIR = /var/repos/godtributes.git
 USER = noderunner
 LEVELCACHEDIR = '../level-cache-server'
 
-test: test-exhort
+test: test-exhort test-analyze-tweet-images
 	$(MOCHACMD) tests/tributedemander-tests.js
 	$(MOCHACMD) tests/tweetanalyzer-tests.js
 
@@ -22,6 +22,9 @@ test-chronicler-stress: stop-chronicler start-chronicler start-level-cache
 debug-test:
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/tributedemander-tests.js
 	node_modules/mocha/bin/mocha debug --ui tdd -R spec tests/topicpool-tests.js
+
+test-analyze-tweet-images:
+	node tests/analyze-tweet-images-tests.js
 
 start-chronicler:
 	psy start -n godtributes-chronicler -- node start-chronicler.js
