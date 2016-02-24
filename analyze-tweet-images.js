@@ -9,7 +9,9 @@ var sb = require('standard-bail')({
 });
 
 var falsePositives = [
-  'web page'
+  'web page',
+  'screenshot',
+  'multimedia'
 ];
 
 function AnalyzeTweetImages(createOpts) {
