@@ -1,11 +1,16 @@
 var defaultGetImageAnalysis = require('./get-image-analysis');
-var pathExists = require('object-path-exists');
 var _ = require('lodash');
 var callNextTick = require('call-next-tick');
 var logger = require('./logger');
+var getTweetMediaURLs = require('./get-tweet-media-urls');
+
 var sb = require('standard-bail')({
   log: logger.error
 });
+
+var falsePositives = [
+  'web page'
+];
 
 function AnalyzeTweetImages(createOpts) {
   var getImageAnalysis;
@@ -19,14 +24,7 @@ function AnalyzeTweetImages(createOpts) {
   }
 
   function analyzeTweetImages(tweet, done) {
-    var mediaUrls;
-    if (pathExists(tweet, ['entities', 'media'])) {
-      var media = tweet.entities.media;
-      if (media.length > 0) {
-        var photos =  media.filter(isPhoto);
-        mediaUrls = _.pluck(photos, 'media_url');
-      }
-    }
+    var mediaUrls = getTweetMediaURLs(tweet);
 
     if (!mediaUrls || mediaUrls.length < 1) {
       callNextTick(done, null, {nouns: []});
@@ -42,16 +40,13 @@ function AnalyzeTweetImages(createOpts) {
   return analyzeTweetImages;
 }
 
-function isPhoto(medium) {
-  return medium.type === 'photo';
-}
-
 function getNouns(imageAnalysis, done) {
   var nouns;
 
   if (imageAnalysis.responses.length > 0) {
     nouns =_.pluck(imageAnalysis.responses[0].labelAnnotations, 'description');
   }
+  nouns = _.without.apply(_, [nouns].concat(falsePositives));
 
   done(null, {nouns: nouns});
 }

@@ -26,8 +26,13 @@ var db = chroniclerclient.getDb();
 
 var maxCommonnessForTopic = behavior.maxCommonnessForReplyTopic[0] + 
   probable.roll(
-    behavior.maxCommonnessForReplyTopic[1] - 
+    behavior.maxCommonnessForReplyTopic[1] -
     behavior.maxCommonnessForReplyTopic[0]
+  );
+var maxCommonnessForImageTopic = behavior.maxCommonnessForImageTopic[0] +
+  probable.roll(
+    behavior.maxCommonnessForImageTopic[1] -
+    behavior.maxCommonnessForImageTopic[0]
   );
 
 var exhorterOpts = {
@@ -40,12 +45,14 @@ var exhorterOpts = {
   figurePicker: figurePicker,
   decorateWithEmojiOpts: tributeDemander.decorateWithEmojiOpts,
   maxCommonnessForTopic: maxCommonnessForTopic,
+  maxCommonnessForImageTopic: maxCommonnessForImageTopic,
   // TODO: Make this a function that does a coin flip to decide if this should 
   // be 1 or 2 per instance.
   nounCountThreshold: 1
 };
 
 log('maxCommonnessForTopic:', maxCommonnessForTopic);
+log('maxCommonnessForImageTopic', maxCommonnessForImageTopic);
 
 var exhorter = createExhorter(exhorterOpts);
 
