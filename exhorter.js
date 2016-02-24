@@ -7,6 +7,9 @@ var betterKnow = require('better-know-a-tweet');
 var translator = require('./translator');
 var defaultProbable = require('probable');
 var knownLanguages = require('./data/known-translator-languages');
+var getTweetMediaURLs = require('./get-tweet-media-urls');
+var AnalyzeTweetImages = require('./analyze-tweet-images');
+var sb = require('standard-bail')();
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -14,6 +17,7 @@ function createExhorter(opts) {
   var tweetAnalyzer = opts.tweetAnalyzer;
   var nounfinder = opts.nounfinder;
   var maxCommonnessForTopic = opts.maxCommonnessForTopic;
+  var maxCommonnessForImageTopic = opts.maxCommonnessForImageTopic;
   var nounCountThreshold = opts.nounCountThreshold;
   var tributeDemander = opts.tributeDemander;
   var prepPhrasePicker = opts.prepPhrasePicker;
@@ -24,6 +28,12 @@ function createExhorter(opts) {
   if (!probable) {
     probable = defaultProbable;
   }
+
+  var analyzeTweetImagesOpts = {};
+  if (opts.getImageAnalysis) {
+    analyzeTweetImagesOpts.getImageAnalysis = opts.getImageAnalysis;
+  }
+  var analyzeTweetImages = AnalyzeTweetImages(analyzeTweetImagesOpts);
 
   function getExhortationForTweet(tweet, exhortationDone) {
 
@@ -179,25 +189,45 @@ function createExhorter(opts) {
   }
 
   function getNounsFromTweet(tweet, done) {
-    nounfinder.getNounsFromText(
-      tweet.text, 
-      function passNouns(finderError, nouns) {
-        var error = null;
-        if (!nouns || nouns.length < 1) {
-          error = createErrorForTweet(tweet, {
-            message: 'No nouns found.',
-            nounFinderError: finderError
-          });
+    var mediaURLs = getTweetMediaURLs(tweet);
+
+    if (mediaURLs && mediaURLs.length > 0) {
+      analyzeTweetImages(tweet, sb(getNounsFromReport, done));
+    }
+    else {
+      nounfinder.getNounsFromText(
+        tweet.text, 
+        function passNouns(finderError, nouns) {
+          var error = null;
+          if (!nouns || nouns.length < 1) {
+            error = createErrorForTweet(tweet, {
+              message: 'No nouns found.',
+              nounFinderError: finderError
+            });
+          }
+          done(error, tweet, nouns);
         }
-        done(error, tweet, nouns);
-      }
-    );
+      );
+    }
+
+    function getNounsFromReport(report, done) {
+      done(null, tweet, report.nouns);
+    }
   }
 
   function filterToNouns(tweet, nouns, done) {
+    var maxCommonness = maxCommonnessForTopic;
+    var mediaURLs = getTweetMediaURLs(tweet);
+
+    if (maxCommonnessForImageTopic !== undefined && mediaURLs &&
+      mediaURLs.length > 0) {
+
+      maxCommonness = maxCommonnessForImageTopic;
+    }
+
     nounfinder.filterNounsForInterestingness(
       nouns, 
-      maxCommonnessForTopic, 
+      maxCommonness,
       function filterDone(finderError, filteredNouns) {
         var error = null;
         if (!filteredNouns || filteredNouns.length < 1) {
@@ -285,8 +315,6 @@ function createExhorter(opts) {
       exhortation += ('! ' + secondaryTribute);
     }
 
-    // TODO: Use seedrandom for probable to make tests work more consistently 
-    // than 19/20 times.
     if (tweetLocale === 'en' && probable.roll(100) === 0) {
       tweetLocale = translator.pickRandomTranslationLocale({
         excludeLocale: 'en'

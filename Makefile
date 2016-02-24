@@ -12,6 +12,7 @@ test: test-exhort test-analyze-tweet-images
 
 test-exhort:
 	$(MOCHA) --R spec tests/exhort-tests.js -t 6000
+	node tests/exhort-image-tests.js
 
 test-exhort-integration: stop-chronicler start-chronicler start-level-cache
 	node tests/integration/exhort-tweet-test.js

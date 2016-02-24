@@ -509,4 +509,3 @@ describe('getExhortationForTweet', function exhortSuite() {
     }
   );
 });
-
