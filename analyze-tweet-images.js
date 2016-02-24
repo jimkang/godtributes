@@ -11,7 +11,9 @@ var sb = require('standard-bail')({
 var falsePositives = [
   'web page',
   'screenshot',
-  'multimedia'
+  'multimedia',
+  'clip art',
+  'computer'
 ];
 
 function AnalyzeTweetImages(createOpts) {
