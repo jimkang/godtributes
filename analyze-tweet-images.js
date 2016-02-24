@@ -13,7 +13,8 @@ var falsePositives = [
   'screenshot',
   'multimedia',
   'clip art',
-  'computer'
+  'computer',
+  'photography'
 ];
 
 function AnalyzeTweetImages(createOpts) {
