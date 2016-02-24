@@ -10,6 +10,7 @@ var knownLanguages = require('./data/known-translator-languages');
 var getTweetMediaURLs = require('./get-tweet-media-urls');
 var AnalyzeTweetImages = require('./analyze-tweet-images');
 var sb = require('standard-bail')();
+var log = require('./logger').info;
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -192,6 +193,7 @@ function createExhorter(opts) {
     var mediaURLs = getTweetMediaURLs(tweet);
 
     if (mediaURLs && mediaURLs.length > 0) {
+      log('Looking through image:', mediaURLs[0]);
       analyzeTweetImages(tweet, sb(getNounsFromReport, done));
     }
     else {
