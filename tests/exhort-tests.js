@@ -3,112 +3,15 @@ var createExhorter = require('../exhorter');
 var jsonfile = require('jsonfile');
 var callNextTick = require('call-next-tick');
 var _ = require('lodash');
-var tributeDemander = require('../tributedemander');
 var sinon = require('sinon');
-var createProbable = require('probable').createProbable;
-var seedrandom = require('seedrandom');
-
-var predictableProbable = createProbable({
-  random: seedrandom('test')
-});
-
-var utils = {
-  mockLastRepliedToLongAgo: function mockLastRepliedToLongAgo(id, cb) {
-    // Say user was just replied to long ago.
-    callNextTick(cb, null, new Date('2000-01-01'));
-  },
-  getDefaultExhorterOpts: function getDefaultExhorterOpts() {
-    return {
-      probable: predictableProbable,
-      chronicler: {
-        whenWasUserLastRepliedTo: utils.mockLastRepliedToLongAgo,
-        topicWasUsedInReplyToUser:
-          function mockTopicWasUsedInReplyToUser(noun, userId, done) {
-            callNextTick(done, null, false);
-          },
-        topicWasUsedInTribute: function mockTributeUseCheck(noun, done) {
-          callNextTick(done, null, false);
-        },
-        tweetWasRepliedTo: function mockTweetWasRepliedTo(tweetId, done) {
-          callNextTick(
-            done,
-            new Error('Key not found in database'),
-            false
-          );
-        }
-      },
-      behavior: {
-        hoursToWaitBetweenRepliesToSameUser: 1,
-      },
-      logger: console,
-      tweetAnalyzer: {
-        isTextOKToReplyTo: function mockIsTextOKToReplyTo(tweet) {
-          return true;
-        }
-      },
-      nounfinder: {
-        getNounsFromText: function mockNounsFromText(text, done) {
-          callNextTick(
-            done, null, ['squash', 'pie', 'burger']
-          );
-        },
-        filterNounsForInterestingness: 
-          function mockFilter(nouns, maxCommonness, done) {
-            callNextTick(done, null, ['squash', 'burger']);
-          }
-      },
-      tributeDemander: tributeDemander,
-      prepPhrasePicker: {
-        getPrepPhrase: function mockGetPrepPhrase() {
-          return 'FOR THE';
-        }
-      },
-      figurePicker: {
-        getMainTributeFigure: function mockGetMainTributeFigure() {
-          return 'GOD';
-        },
-        getSecondaryTributeFigure: function mockGetSecondaryTributeFigure() {
-          return 'THRONE';
-        }
-      },
-      decorateWithEmojiOpts: function mockDecorateWithEmojiOpts(opts) {
-        return opts;
-      },
-      maxCommonnessForTopic: 30,
-      nounCountThreshold: 2
-    };
-  },
-  getDefaultMockTweet: function getDefaultMockTweet() {
-    return {
-      id_str: '546402627261833217',     
-      user: {
-        id: 546402627261833200,
-        screen_name: 'not_lil_jon'
-      },
-      text: 'I turned down for many reasons.',
-      time: (new Date()).toISOString()
-    };
-  },
-  createMockNounfinder: function createMockNounfinder(opts) {
-    return {
-      getNounsFromText: function mockNounsFromText(text, done) {
-        callNextTick(done, null, opts.nounsToBeFound);
-      },
-      filterNounsForInterestingness: function mockFilter(n, m, done) {
-        callNextTick(
-          done, null, opts.interestingNounsToBeFound
-        );
-      }
-    };
-  }
-};
+var exhorterMocks = require('./fixtures/exhorter-mocks');
 
 describe('getExhortationForTweet', function exhortSuite() {
   describe('should not return an exhortation for a tweet that', 
     function disqualificationSuite() {
       it('has a user that has been replied to recently',
         function testRepliedRecently(testDone) {
-          var opts = utils.getDefaultExhorterOpts();
+          var opts = exhorterMocks.getDefaultExhorterOpts();
           opts.chronicler.whenWasUserLastRepliedTo = 
           function mockLast(id, cb) {
             // Say user was just replied to.
@@ -116,7 +19,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           };
 
           var exhorter = createExhorter(opts);
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
 
           exhorter.getExhortationForTweet(
             mockTweet,
@@ -133,14 +36,14 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('is a retweet of @godtributes', 
         function testRetweet(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
           mockTweet.retweeted_status = {
             user: {
               screen_name: 'godtributes'
             }
           };
 
-          var exhorter = createExhorter(utils.getDefaultExhorterOpts());
+          var exhorter = createExhorter(exhorterMocks.getDefaultExhorterOpts());
 
           exhorter.getExhortationForTweet(
             mockTweet,
@@ -158,13 +61,13 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('is a tweet of @godtributes', 
         function testSelfTweet(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
 
           mockTweet.user = {
             screen_name: 'godtributes'
           };
 
-          var exhorter = createExhorter(utils.getDefaultExhorterOpts());
+          var exhorter = createExhorter(exhorterMocks.getDefaultExhorterOpts());
 
           exhorter.getExhortationForTweet(
             mockTweet,
@@ -181,10 +84,10 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('is a manual retweet of @godtributes', 
         function testManualRetweet(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
           mockTweet.text = 'RT @godtributes: "RETWEETS FOR THE RETWEET GOD"';
 
-          var exhorter = createExhorter(utils.getDefaultExhorterOpts());
+          var exhorter = createExhorter(exhorterMocks.getDefaultExhorterOpts());
 
           exhorter.getExhortationForTweet(
             mockTweet,
@@ -201,10 +104,10 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('contains a not-ok topic', 
         function testNotOKTopicInText(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
           mockTweet.text = 'Mock inappropriate topics go here.';
 
-          var opts = utils.getDefaultExhorterOpts();
+          var opts = exhorterMocks.getDefaultExhorterOpts();
           opts.tweetAnalyzer = {
             isTextOKToReplyTo: function mockIsTextOKToReplyTo(tweet) {
               // Simulating there being something wrong with the text.
@@ -229,10 +132,10 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('has no nouns outside the blacklist', 
         function testNoNouns(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
           mockTweet.text = 'Stop drop roll.';
 
-          var opts = utils.getDefaultExhorterOpts();
+          var opts = exhorterMocks.getDefaultExhorterOpts();
           opts.nounfinder = {
             getNounsFromText: function mockNounsFromText(text, done) {
               // Simulating no nouns found.
@@ -256,9 +159,9 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('has no interesting topics',
         function testNoInterestingTopics(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
 
-          var opts = utils.getDefaultExhorterOpts();
+          var opts = exhorterMocks.getDefaultExhorterOpts();
           opts.nounfinder.filterNounsForInterestingness = 
           function mockFilterAllBoring(nouns, maxCommonness, done) {
             callNextTick(done, null, []);
@@ -280,9 +183,9 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('has no new topics for the user',
         function testNotNewToUser(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
 
-          var opts = utils.getDefaultExhorterOpts();
+          var opts = exhorterMocks.getDefaultExhorterOpts();
           opts.chronicler.topicWasUsedInReplyToUser = 
           function mockTopicWasUsedInReplyToUser(noun, userId, done) {
             // Always say that it was used for this test.
@@ -311,9 +214,9 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('has been replied to before',
         function testAlreadyReplied(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
 
-          var opts = utils.getDefaultExhorterOpts();
+          var opts = exhorterMocks.getDefaultExhorterOpts();
           opts.chronicler.tweetWasRepliedTo = 
           function mockTweetWasRepliedTo(tweetId, done) {
             // Always say that it was replied to for this test.
@@ -337,9 +240,9 @@ describe('getExhortationForTweet', function exhortSuite() {
 
       it('the noun threshold is not met after the all the filtering',
         function testNounThresholdNotMet(testDone) {
-          var mockTweet = utils.getDefaultMockTweet();
+          var mockTweet = exhorterMocks.getDefaultMockTweet();
 
-          var opts = utils.getDefaultExhorterOpts();
+          var opts = exhorterMocks.getDefaultExhorterOpts();
           opts.nounCountThreshold = 3;
           var exhorter = createExhorter(opts);
 
@@ -363,9 +266,9 @@ describe('getExhortationForTweet', function exhortSuite() {
 
   it('should return an exhortation for a worthy tweet',
     function testWorthy(testDone) {
-      var mockTweet = utils.getDefaultMockTweet();
+      var mockTweet = exhorterMocks.getDefaultMockTweet();
 
-      var opts = utils.getDefaultExhorterOpts();
+      var opts = exhorterMocks.getDefaultExhorterOpts();
       var emojiDecoratorSpy = sinon.spy(opts, 'decorateWithEmojiOpts');
       var exhorter = createExhorter(opts);
 
@@ -385,7 +288,7 @@ describe('getExhortationForTweet', function exhortSuite() {
 
   it('replies to a tweet in that language', 
     function testManualRetweet(testDone) {
-      var mockTweet = utils.getDefaultMockTweet();
+      var mockTweet = exhorterMocks.getDefaultMockTweet();
       // This test is a little deceptive. The mock tweet is in Spanish to 
       // trigger the translation of the exhortation, but the content of the 
       // exhortation will come from the mock nounfinder, which will say 
@@ -397,7 +300,7 @@ describe('getExhortationForTweet', function exhortSuite() {
         id: 1234
       };
 
-      var exhorter = createExhorter(utils.getDefaultExhorterOpts());
+      var exhorter = createExhorter(exhorterMocks.getDefaultExhorterOpts());
 
       exhorter.getExhortationForTweet(
         mockTweet,
@@ -418,7 +321,7 @@ describe('getExhortationForTweet', function exhortSuite() {
 
   it('replies to a tweet in Spanish',
     function testSpanish(testDone) {
-      var mockTweet = utils.getDefaultMockTweet();
+      var mockTweet = exhorterMocks.getDefaultMockTweet();
       // This test is a little deceptive. The mock tweet is in Spanish to 
       // trigger the translation of the exhortation, but the content of the 
       // exhortation will come from the mock nounfinder, which will say 
@@ -430,9 +333,9 @@ describe('getExhortationForTweet', function exhortSuite() {
         id: 1234
       };
 
-      var opts = utils.getDefaultExhorterOpts();
+      var opts = exhorterMocks.getDefaultExhorterOpts();
 
-      opts.nounfinder = utils.createMockNounfinder({
+      opts.nounfinder = exhorterMocks.createMockNounfinder({
         nounsToBeFound: ['hoy', 'quien'],
         interestingNounsToBeFound: ['hoy', 'quien']
       });
@@ -458,7 +361,7 @@ describe('getExhortationForTweet', function exhortSuite() {
 
   it('replies to a tweet in French',
     function testFrench(testDone) {
-      var mockTweet = utils.getDefaultMockTweet();
+      var mockTweet = exhorterMocks.getDefaultMockTweet();
       // This test is a little deceptive. The mock tweet is in Spanish to 
       // trigger the translation of the exhortation, but the content of the 
       // exhortation will come from the mock nounfinder, which will say 
@@ -470,9 +373,9 @@ describe('getExhortationForTweet', function exhortSuite() {
         id: 1234
       };
 
-      var opts = utils.getDefaultExhorterOpts();
+      var opts = exhorterMocks.getDefaultExhorterOpts();
 
-      opts.nounfinder = utils.createMockNounfinder({
+      opts.nounfinder = exhorterMocks.createMockNounfinder({
         nounsToBeFound: ['jalousie', 'aventure'],
         interestingNounsToBeFound: ['jalousie', 'aventure']
       });
@@ -498,7 +401,7 @@ describe('getExhortationForTweet', function exhortSuite() {
 
   it('does not misidentify a short tweet\'s language',
     function testFalsePositive(testDone) {
-      var mockTweet = utils.getDefaultMockTweet();
+      var mockTweet = exhorterMocks.getDefaultMockTweet();
       // This test is a little deceptive. The mock tweet is in Spanish to 
       // trigger the translation of the exhortation, but the content of the 
       // exhortation will come from the mock nounfinder, which will say 
@@ -510,9 +413,9 @@ describe('getExhortationForTweet', function exhortSuite() {
         id: 1234
       };
 
-      var opts = utils.getDefaultExhorterOpts();
+      var opts = exhorterMocks.getDefaultExhorterOpts();
 
-      opts.nounfinder = utils.createMockNounfinder({
+      opts.nounfinder = exhorterMocks.createMockNounfinder({
         nounsToBeFound: ['fus', 'dah'],
         interestingNounsToBeFound: ['fus', 'dah']
       });
@@ -538,7 +441,7 @@ describe('getExhortationForTweet', function exhortSuite() {
 
  it('does not misidentify a blatantly English tweet',
     function testFalsePositive2(testDone) {
-      var mockTweet = utils.getDefaultMockTweet();
+      var mockTweet = exhorterMocks.getDefaultMockTweet();
       mockTweet.text = 'Buzzfeed internal review finds 3 posts deleted due to advertiser pressure: http://mobile.nytimes.com/2015/04/20/business/media/buzzfeed-says-posts-were-deleted-because-of-advertising-pressure.html?referrer= … via @babiejenks';
       mockTweet.lang = 'en';      
       mockTweet.user = {
@@ -546,8 +449,8 @@ describe('getExhortationForTweet', function exhortSuite() {
         id: 1234
       };
 
-      var opts = utils.getDefaultExhorterOpts();
-      opts.nounfinder = utils.createMockNounfinder({
+      var opts = exhorterMocks.getDefaultExhorterOpts();
+      opts.nounfinder = exhorterMocks.createMockNounfinder({
         nounsToBeFound: ['advertiser', 'pressure'],
         interestingNounsToBeFound: ['advertiser', 'pressure']
       });
@@ -573,7 +476,7 @@ describe('getExhortationForTweet', function exhortSuite() {
 
  it('handles unknown language error',
     function testTranslationError(testDone) {
-      var mockTweet = utils.getDefaultMockTweet();
+      var mockTweet = exhorterMocks.getDefaultMockTweet();
       mockTweet.text = '👆🏽';
       mockTweet.lang = 'esdf';      
       mockTweet.user = {
@@ -581,8 +484,8 @@ describe('getExhortationForTweet', function exhortSuite() {
         id: 1234
       };
 
-      var opts = utils.getDefaultExhorterOpts();
-      opts.nounfinder = utils.createMockNounfinder({
+      var opts = exhorterMocks.getDefaultExhorterOpts();
+      opts.nounfinder = exhorterMocks.createMockNounfinder({
         nounsToBeFound: ['👆', '🏽'],
         interestingNounsToBeFound: ['👆', '🏽']
       });
@@ -606,3 +509,4 @@ describe('getExhortationForTweet', function exhortSuite() {
     }
   );
 });
+
