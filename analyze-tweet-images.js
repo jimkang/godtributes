@@ -8,6 +8,10 @@ var sb = require('standard-bail')({
   log: logger.error
 });
 
+var falsePositives = [
+  'web page'
+];
+
 function AnalyzeTweetImages(createOpts) {
   var getImageAnalysis;
 
@@ -42,6 +46,7 @@ function getNouns(imageAnalysis, done) {
   if (imageAnalysis.responses.length > 0) {
     nouns =_.pluck(imageAnalysis.responses[0].labelAnnotations, 'description');
   }
+  nouns = _.without.apply(_, [nouns].concat(falsePositives));
 
   done(null, {nouns: nouns});
 }
