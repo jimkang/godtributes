@@ -18,7 +18,15 @@ var falsePositives = [
   'person',
   'people',
   'product',
-  'text'
+  'text',
+  'shape',
+  'line',
+  'advertising',
+  'artwork',
+  'painting',
+  'writing',
+  'poster',
+  'illustration'
 ];
 
 function AnalyzeTweetImages(createOpts) {

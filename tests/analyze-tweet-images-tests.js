@@ -72,8 +72,6 @@ var cases = [
     expected: {
       nouns: [
         'musician',
-        'person',
-        'people',
         'team'
       ]
     }
@@ -89,8 +87,7 @@ var cases = [
     imageAPIResponse: imageAPIResponses.poster,
     expected: {
       nouns: [
-        'album cover',
-        'poster'
+        'album cover'
       ]
     }
   },
