@@ -26,7 +26,8 @@ var falsePositives = [
   'painting',
   'writing',
   'poster',
-  'illustration'
+  'illustration',
+  'interior design'
 ];
 
 function AnalyzeTweetImages(createOpts) {
