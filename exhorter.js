@@ -222,8 +222,6 @@ function createExhorter(opts) {
 
   function filterToNouns(tweet, nouns, done) {
     var maxCommonness = maxCommonnessForTopic;
-    var mediaURLs = getTweetMediaURLs(tweet);
-
     if (isUsingTweetImage) {
       maxCommonness = maxCommonnessForImageTopic;
     }
