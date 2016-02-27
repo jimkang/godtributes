@@ -36,8 +36,6 @@ function createExhorter(opts) {
   }
   var analyzeTweetImages = AnalyzeTweetImages(analyzeTweetImagesOpts);
 
-  var isUsingTweetImage = false;
-
   function getExhortationForTweet(tweet, exhortationDone) {
 
     //                           +|
@@ -195,7 +193,6 @@ function createExhorter(opts) {
     var mediaURLs = getTweetMediaURLs(tweet);
 
     if (mediaURLs && mediaURLs.length > 0 && probable.roll(2) === 1) {
-      isUsingTweetImage = true;
       log('Looking through image:', mediaURLs[0]);
       analyzeTweetImages(tweet, sb(getNounsFromReport, done));
     }
@@ -210,17 +207,17 @@ function createExhorter(opts) {
               nounFinderError: finderError
             });
           }
-          done(error, tweet, nouns);
+          done(error, tweet, nouns, false);
         }
       );
     }
 
     function getNounsFromReport(report, done) {
-      done(null, tweet, report.nouns);
+      done(null, tweet, report.nouns, true);
     }
   }
 
-  function filterToNouns(tweet, nouns, done) {
+  function filterToNouns(tweet, nouns, isUsingTweetImage, done) {
     var maxCommonness = maxCommonnessForTopic;
     if (isUsingTweetImage) {
       maxCommonness = maxCommonnessForImageTopic;
