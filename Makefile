@@ -8,7 +8,6 @@ LEVELCACHEDIR = '../level-cache-server'
 
 test: test-exhort test-analyze-tweet-images
 	$(MOCHACMD) tests/tributedemander-tests.js
-	$(MOCHACMD) tests/tweetanalyzer-tests.js
 
 test-exhort:
 	$(MOCHA) --R spec tests/exhort-tests.js -t 6000

@@ -108,11 +108,9 @@ describe('getExhortationForTweet', function exhortSuite() {
           mockTweet.text = 'Mock inappropriate topics go here.';
 
           var opts = exhorterMocks.getDefaultExhorterOpts();
-          opts.tweetAnalyzer = {
-            isTextOKToReplyTo: function mockIsTextOKToReplyTo(tweet) {
-              // Simulating there being something wrong with the text.
-              return false;
-            }
+          opts.canIChimeIn = function mockIsOKToChimeIn(text) {
+            // Simulating there being something wrong with the text.
+            return false;
           };
           var exhorter = createExhorter(opts);
 

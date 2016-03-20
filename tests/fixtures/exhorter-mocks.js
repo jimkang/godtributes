@@ -36,10 +36,8 @@ var utils = {
         hoursToWaitBetweenRepliesToSameUser: 1,
       },
       logger: console,
-      tweetAnalyzer: {
-        isTextOKToReplyTo: function mockIsTextOKToReplyTo(tweet) {
-          return true;
-        }
+      canIChimeIn: function mockCanIChimeIn(text) {
+        return true;
       },
       nounfinder: {
         getNounsFromText: function mockNounsFromText(text, done) {

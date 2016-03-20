@@ -15,7 +15,7 @@ var log = require('./logger').info;
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
   var behavior = opts.behavior;
-  var tweetAnalyzer = opts.tweetAnalyzer;
+  var canIChimeIn = opts.canIChimeIn;
   var nounfinder = opts.nounfinder;
   var maxCommonnessForTopic = opts.maxCommonnessForTopic;
   var maxCommonnessForImageTopic = opts.maxCommonnessForImageTopic;
@@ -177,7 +177,10 @@ function createExhorter(opts) {
   }
 
   function statusContainsTextThatIsOKToReplyTo(tweet, done) {
-    var textIsOK = tweetAnalyzer.isTextOKToReplyTo(tweet.text);
+    var textIsOK = canIChimeIn(tweet.text);
+    if (!textIsOK) {
+      log('Is NOT OK to respond to', tweet.text);
+    }
     var error = null;
     if (!textIsOK) {
       error = createErrorForTweet(tweet, {

@@ -4,7 +4,7 @@ var createExhorter = require('./exhorter');
 var tributeDemander = require('./tributedemander');
 var chroniclerclient = require('./chroniclerclient');
 var behavior = require('./behaviorsettings');
-var tweetAnalyzer = require('./tweetanalyzer');
+var canIChimeIn = require('can-i-chime-in')();
 var createNounfinder = require('nounfinder');
 var figurePicker = require('./figurepicker');
 var prepPhrasePicker = require('./prepphrasepicker');
@@ -38,7 +38,7 @@ var maxCommonnessForImageTopic = behavior.maxCommonnessForImageTopic[0] +
 var exhorterOpts = {
   chronicler: db,
   behavior: behavior,
-  tweetAnalyzer: tweetAnalyzer,
+  canIChimeIn: canIChimeIn,
   nounfinder: nounfinder,
   tributeDemander: tributeDemander,
   prepPhrasePicker: prepPhrasePicker,
