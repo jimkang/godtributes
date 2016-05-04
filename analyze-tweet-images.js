@@ -2,7 +2,7 @@ var defaultGetImageAnalysis = require('./get-image-analysis');
 var _ = require('lodash');
 var callNextTick = require('call-next-tick');
 var logger = require('./logger');
-var getTweetMediaURLs = require('./get-tweet-media-urls');
+var getImagesFromTweet = require('get-images-from-tweet');
 
 var sb = require('standard-bail')({
   log: logger.error
@@ -45,7 +45,7 @@ function AnalyzeTweetImages(createOpts) {
   }
 
   function analyzeTweetImages(tweet, done) {
-    var mediaUrls = getTweetMediaURLs(tweet);
+    var mediaUrls = getImagesFromTweet(tweet);
 
     if (!mediaUrls || mediaUrls.length < 1) {
       callNextTick(done, null, {nouns: []});

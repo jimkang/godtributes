@@ -7,7 +7,7 @@ var betterKnow = require('better-know-a-tweet');
 var translator = require('./translator');
 var defaultProbable = require('probable');
 var knownLanguages = require('./data/known-translator-languages');
-var getTweetMediaURLs = require('./get-tweet-media-urls');
+var getImagesFromTweet = require('get-images-from-tweet');
 var AnalyzeTweetImages = require('./analyze-tweet-images');
 var sb = require('standard-bail')();
 var log = require('./logger').info;
@@ -193,7 +193,7 @@ function createExhorter(opts) {
   }
 
   function getNounsFromTweet(tweet, done) {
-    var mediaURLs = getTweetMediaURLs(tweet);
+    var mediaURLs = getImagesFromTweet(tweet);
 
     if (mediaURLs && mediaURLs.length > 0 && probable.roll(2) === 1) {
       log('Looking through image:', mediaURLs[0]);
