@@ -25,7 +25,7 @@
     "bunyan": "^1.5.1",
     "bunyan-syslog": "^0.3.1",
     "call-next-tick": "^1.1.2",
-    "can-i-chime-in": "^1.0.0",
+    "can-i-chime-in": "^2.0.1",
     "canonicalizer": "^1.0.0",
     "emojisource": "^1.0.0",
     "export-methods": "^1.1.0",
