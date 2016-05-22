@@ -1,0 +1,13 @@
+[Unit]
+Description=godtributes
+After=network.target
+[Service]
+ExecStart=/var/www/godtributes/exhortationserver.js
+Restart=always
+User=app
+Group=app
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/var/www/godtributes
+[Install]
+WantedBy=multi-user.target

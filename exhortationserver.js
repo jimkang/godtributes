@@ -1,8 +1,10 @@
+#!/usr/bin/env node
+
 var Twit = require('twit');
 var config = require('./config');
 var createExhorter = require('./exhorter');
 var tributeDemander = require('./tributedemander');
-var chroniclerclient = require('./chroniclerclient');
+var Chronicler = require('basicset-chronicler').createChronicler;
 var behavior = require('./behaviorsettings');
 var canIChimeIn = require('can-i-chime-in')();
 var createNounfinder = require('nounfinder');
@@ -13,16 +15,16 @@ var log = require('./logger').info;
 
 log('The exhortation server is running.');
 
+var chronicler = Chronicler({
+  dbLocation: 'tributes.db'
+});
+
 var nounfinder = createNounfinder({
-  wordnikAPIKey: config.wordnikAPIKey,
-  memoizeServerPort: 4444,
-  onDisconnect: respondToCacheDisconnect
+  wordnikAPIKey: config.wordnikAPIKey
 });
 
 var twit = new Twit(config.twitter);
 var stream = twit.stream('user');
-
-var db = chroniclerclient.getDb();
 
 var maxCommonnessForTopic = behavior.maxCommonnessForReplyTopic[0] + 
   probable.roll(
@@ -36,7 +38,7 @@ var maxCommonnessForImageTopic = behavior.maxCommonnessForImageTopic[0] +
   );
 
 var exhorterOpts = {
-  chronicler: db,
+  chronicler: chronicler,
   behavior: behavior,
   canIChimeIn: canIChimeIn,
   nounfinder: nounfinder,
@@ -91,10 +93,10 @@ function tweetExhortation(error, tweet, exhortation, topics) {
 
 function recordReplyDetails(targetStatus, topics) {
   var userId = targetStatus.user.id_str;
-  db.recordThatTweetWasRepliedTo(targetStatus.id_str);
-  db.recordThatUserWasRepliedTo(userId);
+  chronicler.recordThatTweetWasRepliedTo(targetStatus.id_str);
+  chronicler.recordThatUserWasRepliedTo(userId);
   topics.forEach(function recordTopic(topic) {
-    db.recordThatTopicWasUsedInReplyToUser(topic, userId);
+    chronicler.recordThatTopicWasUsedInReplyToUser(topic, userId);
   });
 }
 

@@ -34,6 +34,7 @@ var utils = {
       },
       behavior: {
         hoursToWaitBetweenRepliesToSameUser: 1,
+        enableImageAnalysis: true
       },
       logger: console,
       canIChimeIn: function mockCanIChimeIn(text) {

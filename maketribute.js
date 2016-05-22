@@ -6,7 +6,6 @@ var figurepicker = require('./figurepicker');
 var prepphrasepicker = require('./prepphrasepicker');
 var logger = require('./logger');
 var handleTwitterError = require('./handletwittererror');
-var chroniclerclient = require('./chroniclerclient');
 var emojiSource = require('emojisource');
 var behavior = require('./behaviorsettings');
 var probable = require('probable');
@@ -26,11 +25,8 @@ var wordnok = createWordnok({
   apiKey: config.wordnikAPIKey,
   logger: {
     log: logger.info
-  },
-  memoizeServerPort: 4444
+  }
 });
-
-var db = chroniclerclient.getDb();
 
 var isEmojiTopic = false;
 
@@ -123,19 +119,12 @@ function makeDemands(relatedWordsError, relatedWords) {
 function tweetAndRecord(tweetText) {
   if (simulationMode) {
     console.log('Would have tweeted', tweetText);
-    cleanUp();
   }
   else {
     bot.tweet(tweetText, function reportTweetResult(error, reply) {
       logger.info((new Date()).toString(), 'Tweet posted', reply.text);
-      db.recordThatTopicWasUsedInTribute(primaryTopic, cleanUp);
     });
   }
-}
-
-function cleanUp() {
-  db.close();
-  process.exit();
 }
 
 function getPrimaryDemand(topic, isEmoji) {

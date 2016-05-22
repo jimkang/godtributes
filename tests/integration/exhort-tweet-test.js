@@ -2,7 +2,7 @@ var assert = require('assert');
 var createExhorter = require('../../exhorter');
 var jsonfile = require('jsonfile');
 var tributeDemander = require('../../tributedemander');
-var chroniclerclient = require('../../chroniclerclient');
+var Chronicler = require('basicset-chronicler').createChronicler;
 var behavior = require('../../behaviorsettings');
 var canIChimeIn = require('can-i-chime-in')();
 var createNounfinder = require('nounfinder');
@@ -11,12 +11,15 @@ var prepPhrasePicker = require('../../prepphrasepicker');
 var config = require('../../config');
 
 var nounfinder = createNounfinder({
-  wordnikAPIKey: config.wordnikAPIKey,
-  memoizeServerPort: 4444
+  wordnikAPIKey: config.wordnikAPIKey
+});
+
+var chronicler = Chronicler({
+  dbLocation: 'exhort-integration-test.db'
 });
 
 var exhorterOpts = {
-  chronicler: chroniclerclient.getDb(),
+  chronicler: chronicler,
   behavior: behavior,
   logger: console,
   canIChimeIn: canIChimeIn,
