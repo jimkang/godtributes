@@ -40,7 +40,7 @@ sync-worktree-to-git:
 
 post-receive: sync-worktree-to-git npm-install
 	chmod u+x exhortationserver.js
-	service godtributes restart
+	systemctl restart godtributes
 
 # The idea is for the repo's post-receive hook to simply be:
 # cd /var/www/godtributes && make post-receive
