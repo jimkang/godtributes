@@ -38,8 +38,7 @@ npm-install:
 sync-worktree-to-git:
 	git --work-tree=$(HOMEDIR) --git-dir=$(GITDIR) checkout -f
 
-post-receive: sync-worktree-to-git \
-	npm-install \
+post-receive: sync-worktree-to-git npm-install
 	chmod u+x exhortationserver.js
 	service godtributes restart
 
@@ -49,9 +48,11 @@ post-receive: sync-worktree-to-git \
 install-logrotate-conf:
 	cp $(HOMEDIR)/admin/logrotate.conf_entry /etc/logrotate.d/godtributes
 
+# Probably need sudo for this.
 install-service:
-	cp $(HOMEDIR)/godtributes.service /etc/systemd/system && \
-	systemctl daemon-reload
+	cp $(HOMEDIR)/godtributes.service /etc/systemd/system
+	systemctl enable godtributes
+	systemctl start godtributes
 
 tribute:
 	node maketribute.js
