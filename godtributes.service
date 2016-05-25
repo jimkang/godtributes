@@ -3,12 +3,12 @@ Description=godtributes
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/node /var/www/godtributes/exhortationserver.js
+ExecStart=/usr/local/bin/node /opt/godtributes/exhortationserver.js
 Restart=always
-User=noderunner
-Group=robots
+User=bot
+Group=bot
 Environment=PATH=/usr/bin:/usr/local/bin
-WorkingDirectory=/var/www/godtributes
+WorkingDirectory=/opt/godtributes
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=godtributes

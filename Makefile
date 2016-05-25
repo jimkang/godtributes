@@ -1,8 +1,14 @@
 MOCHA = node_modules/mocha/bin/mocha
 MOCHACMD = $(MOCHA) --ui tdd -R spec 
 HOMEDIR = $(shell pwd)
-GITDIR = /var/repos/godtributes.git
-USER = noderunner
+USER = bot
+PRIVUSER = root
+SERVER = smidgeo
+SSHCMD = ssh $(USER)@$(SERVER)
+PRIVSSHCMD = ssh $(PRIVUSER)@$(SERVER)
+PROJECTNAME = godtributes
+APPDIR = /opt/$(PROJECTNAME)
+
 
 test: test-exhort test-analyze-tweet-images
 	$(MOCHACMD) tests/tributedemander-tests.js
@@ -35,12 +41,14 @@ npm-install:
 	npm install
 	npm prune
 
-sync-worktree-to-git:
-	git --work-tree=$(HOMEDIR) --git-dir=$(GITDIR) checkout -f
+sync:
+	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
+	$(SSHCMD) "cd  $(APPDIR) && chmod u+x exhortationserver.js && \
+	npm prune && npm install"
+	$(PRIVSSHCMD) "systemctl restart $(PROJECTNAME)"
 
-post-receive: sync-worktree-to-git npm-install
-	chmod u+x exhortationserver.js
-	systemctl restart godtributes
+check-status:
+	systemctl status godtributes.service
 
 # The idea is for the repo's post-receive hook to simply be:
 # cd /var/www/godtributes && make post-receive
@@ -50,9 +58,10 @@ install-logrotate-conf:
 
 # Probably need sudo for this.
 install-service:
-	cp $(HOMEDIR)/godtributes.service /etc/systemd/system
-	systemctl enable godtributes
-	systemctl start godtributes
+	$(PRIVSSHCMD) "cp $(APPDIR)/$(PROJECTNAME).service /etc/systemd/system && \
+	systemctl daemon-reload"
+	# systemctl enable godtributes
+	# systemctl start godtributes
 
 tribute:
 	node maketribute.js
@@ -63,5 +72,5 @@ update-iscool:
 		git commit -a -m"Updated iscool." && \
 		make pushall
 
-pushall:
-	git push origin master && git push server master
+pushall: sync
+	git push origin master
