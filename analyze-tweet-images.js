@@ -30,7 +30,10 @@ var falsePositives = [
   'interior design',
   'area',
   'art',
-  'icon'
+  'icon',
+  'document',
+  'font',
+  'diagram'
 ];
 
 function AnalyzeTweetImages(createOpts) {

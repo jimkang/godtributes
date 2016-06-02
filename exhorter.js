@@ -196,7 +196,7 @@ function createExhorter(opts) {
     var mediaURLs = getImagesFromTweet(tweet);
 
     if (behavior.enableImageAnalysis &&
-      mediaURLs && mediaURLs.length > 0 && probable.roll(2) === 1) {
+      mediaURLs && mediaURLs.length > 0 && probable.roll(3) === 1) {
 
       log('Looking through image:', mediaURLs[0]);
       analyzeTweetImages(tweet, sb(getNounsFromReport, done));
