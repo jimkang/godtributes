@@ -48,7 +48,11 @@ sync:
 	$(PRIVSSHCMD) "systemctl restart $(PROJECTNAME)"
 
 check-status:
-	systemctl status godtributes.service
+	$(SSHCMD) "systemctl status $(PROJECTNAME)"
+
+check-log:
+	$(SSHCMD) "journalctl -r -u $(PROJECTNAME)"
+
 
 # The idea is for the repo's post-receive hook to simply be:
 # cd /var/www/godtributes && make post-receive
