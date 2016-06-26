@@ -7,5 +7,5 @@ module.exports = {
   maxCommonnessForSecondaryTopic: [50, 100],
   maxCommonnessForImageTopic: [500, 5000],
   emojiThresholdPercentage: 5,
-  enableImageAnalysis: true
+  enableImageAnalysis: false
 };
