@@ -14,13 +14,14 @@ var _ = require('lodash');
 var canonicalizer = require('canonicalizer');
 var createNounfinder = require('nounfinder');
 var translator = require('./translator');
+var pickThanksTopic = require('./pick-thanks-topic');
 var relevantRelatedWordTypes = require('./relevant-related-word-types');
 
 var bot = new Bot(config.twitter);
 
 var simulationMode = (process.argv[2] === '--simulate');
 
-logger.info('Tribute maker is running.');
+logger.info('Thanks maker is running.');
 
 var wordnok = createWordnok({
   apiKey: config.wordnikAPIKey,
@@ -37,110 +38,59 @@ var maxCommonnessForSecondary = behavior.maxCommonnessForReplyTopic[0] +
     behavior.maxCommonnessForSecondaryTopic[0]
   );
 
-var primaryTopic;
-var primaryDemand;
+((((function go() {
+  behavior.visionDonors.forEach(postThanksTribute);
+})())));
 
-// TODO: Chain these with async.waterfall. Or refactor exhorter to handle both
-// kinds of tributes.
+function postThanksTribute(visionDonor) {
+  var primaryTopic;
+  var primaryDemand;
 
-function postTribute() {
-  if (probable.roll(100) < behavior.emojiThresholdPercentage) {
-    isEmojiTopic = true;
-    postOnTopic(null, emojiSource.getRandomTopicEmoji());
-  }
-  else {
-    wordnok.getTopic(postOnTopic);
-  }
-}
+  postOnTopic(null, pickThanksTopic());
 
-function postOnTopic(error, topic) {
-  if (error) {
-    logger.error(error);
-    process.exit();
-  }
-
-  var forms = canonicalizer.getSingularAndPluralForms(topic);
-
-  primaryTopic = forms[0];
-  primaryDemand = getPrimaryDemand(primaryTopic, isEmojiTopic);
-
-  if (isEmojiTopic) {
-    callNextTick(makeDemands);
-    return;
-  }
-
-  wordnok.getRelatedWords(
-    {
-      word: primaryTopic
-    },
-    makeDemands
-  );
-}
-
-function makeDemands(relatedWordsError, relatedWords) {
-  var tweetText = primaryDemand;
-
-  if (relatedWordsError) {
-    logger.error(relatedWordsError);
-    process.exit();
-  }
-  else {
-    getSecondaryDemand(relatedWords, appendDemandToTweet);
-  }
-
-  function appendDemandToTweet(error, secondaryDemand) {
+  function postOnTopic(error, topic) {
     if (error) {
       logger.error(error);
-      // An error is OK here. We can keep going.
+      process.exit();
     }
 
-    if (secondaryDemand) {
-      tweetText += ('! ' + secondaryDemand);
-    }
+    var forms = canonicalizer.getSingularAndPluralForms(topic);
 
-    if (probable.roll(10) === 0) {
-      translator.translateToRandomLocale(tweetText, 'en', tweetTranslation);
+    primaryTopic = forms[0];
+    primaryDemand = getPrimaryDemand(primaryTopic, false);
+
+    wordnok.getRelatedWords(
+      {
+        word: primaryTopic
+      },
+      makeDemands
+    );
+  }
+
+  function makeDemands(relatedWordsError, relatedWords) {
+    var tweetText = visionDonor + ' ' + primaryDemand;
+
+    if (relatedWordsError) {
+      logger.error(relatedWordsError);
+      process.exit();
     }
     else {
-      callNextTick(tweetAndRecord, tweetText);
+      getSecondaryDemand(relatedWords, appendDemandToTweet);
     }
 
-    function tweetTranslation(error, translation) {
+    function appendDemandToTweet(error, secondaryDemand) {
       if (error) {
         logger.error(error);
-        tweetAndRecord(tweetText);
+        // An error is OK here. We can keep going.
       }
-      else {
-        tweetAndRecord(translation);
+
+      if (secondaryDemand) {
+        tweetText += ('! ' + secondaryDemand);
       }
+      
+      callNextTick(tweet, tweetText);
     }
   }
-}
-
-function tweetAndRecord(tweetText) {
-  if (simulationMode) {
-    console.log('Would have tweeted', tweetText);
-  }
-  else {
-    bot.tweet(tweetText, function reportTweetResult(error, reply) {
-      logger.info((new Date()).toString(), 'Tweet posted', reply.text);
-    });
-  }
-}
-
-function getPrimaryDemand(topic, isEmoji) {
-  var opts = {
-    topic: topic,
-    prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
-    tributeFigure: figurepicker.getMainTributeFigure(),
-    isEmoji: isEmoji
-  };
-
-  if (isEmoji) {
-    opts.repeatNTimesToPluralize = probable.roll(4) + probable.roll(4) + 2;
-  }
-
-  return tributeDemander.makeDemandForTopic(opts);
 }
 
 function getSecondaryDemand(relatedWords, done) {
@@ -155,10 +105,8 @@ function getSecondaryDemand(relatedWords, done) {
       var topics = _.flatten(relevantLists);
       nounfinder = createNounfinder({
         wordnikAPIKey: config.wordnikAPIKey,
-        memoizeServerPort: 4444
       });
 
-      // TODO: Add nounfinder method that takes an array of words.
       nounfinder.getNounsFromText(topics.join(' '), filterForInterestingness);
       return;
     }
@@ -198,4 +146,28 @@ function getSecondaryDemand(relatedWords, done) {
   }
 }
 
-postTribute();
+function getPrimaryDemand(topic, isEmoji) {
+  var opts = {
+    topic: topic,
+    prepositionalPhrase: prepphrasepicker.getPrepPhrase(),
+    tributeFigure: figurepicker.getMainTributeFigure(),
+    isEmoji: isEmoji
+  };
+
+  if (isEmoji) {
+    opts.repeatNTimesToPluralize = probable.roll(4) + probable.roll(4) + 2;
+  }
+
+  return tributeDemander.makeDemandForTopic(opts);
+}
+
+function tweet(tweetText) {
+  if (simulationMode) {
+    console.log('Would have tweeted', tweetText);
+  }
+  else {
+    bot.tweet(tweetText, function reportTweetResult(error, reply) {
+      logger.info((new Date()).toString(), 'Tweet posted', reply.text);
+    });
+  }
+}
