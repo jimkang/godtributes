@@ -12,11 +12,11 @@ var thanksTable = probable.createRangeTableFromDict({
   vision: 10,
   sight: 6,
   eyes: 4,
-  patron: 10,
-  donor: 9,
-  benefactor: 6,
-  supporter: 6,
-  friend: 4
+  // patron: 10,
+  // donor: 9,
+  // benefactor: 6,
+  // supporter: 6,
+  // friend: 4
 });
 
 module.exports = thanksTable.roll;
