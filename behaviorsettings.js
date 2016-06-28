@@ -12,13 +12,13 @@ module.exports = {
     '@sterex',
     // 'Andy Moran',
     '@gaski',
-    // 'Laurie',
+    '@im_a_radish',
     '@swizzard',
     '@MetaRantz',
     '@resiak',
     // 'Jayne Fox',
     '@trodrigues',
-    // 'Barry Aronoff'
+    '@bryrnff',
     '@kellan'
   ]
 };

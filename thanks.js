@@ -40,10 +40,23 @@ var maxCommonnessForSecondary = behavior.maxCommonnessForReplyTopic[0] +
 
 ((((function go() {
   behavior.visionDonors.forEach(postThanksTribute);
-  postThanksTribute('https://www.patreon.com/deathmtn');
+
+  postThanksTribute(
+    'https://www.patreon.com/deathmtn',
+    {
+      'same-context': [
+        'vision',
+        'aesthesis',
+        'sight',
+        'eyesight',
+        'perception',
+        'eyes'
+      ]
+    }
+  );
 })())));
 
-function postThanksTribute(prefix) {
+function postThanksTribute(prefix, secondaryTopicPool) {
   var primaryTopic;
   var primaryDemand;
 
@@ -60,12 +73,17 @@ function postThanksTribute(prefix) {
     primaryTopic = forms[0];
     primaryDemand = getPrimaryDemand(primaryTopic, false);
 
-    wordnok.getRelatedWords(
-      {
-        word: primaryTopic
-      },
-      makeDemands
-    );
+    if (secondaryTopicPool) {
+      makeDemands(null, secondaryTopicPool);
+    }
+    else {
+      wordnok.getRelatedWords(
+        {
+          word: primaryTopic
+        },
+        makeDemands
+      );
+    }
   }
 
   function makeDemands(relatedWordsError, relatedWords) {
