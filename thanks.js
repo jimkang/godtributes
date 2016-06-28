@@ -40,9 +40,10 @@ var maxCommonnessForSecondary = behavior.maxCommonnessForReplyTopic[0] +
 
 ((((function go() {
   behavior.visionDonors.forEach(postThanksTribute);
+  postThanksTribute('https://www.patreon.com/deathmtn');
 })())));
 
-function postThanksTribute(visionDonor) {
+function postThanksTribute(prefix) {
   var primaryTopic;
   var primaryDemand;
 
@@ -68,7 +69,7 @@ function postThanksTribute(visionDonor) {
   }
 
   function makeDemands(relatedWordsError, relatedWords) {
-    var tweetText = visionDonor + ' ' + primaryDemand;
+    var tweetText = prefix + ' ' + primaryDemand;
 
     if (relatedWordsError) {
       logger.error(relatedWordsError);
