@@ -186,7 +186,12 @@ function tweet(tweetText) {
   }
   else {
     bot.tweet(tweetText, function reportTweetResult(error, reply) {
-      logger.info((new Date()).toString(), 'Tweet posted', reply.text);
+      if (error) {
+        console.log(error);
+      }
+      else {
+        logger.info((new Date()).toString(), 'Tweet posted', reply);
+      }
     });
   }
 }
