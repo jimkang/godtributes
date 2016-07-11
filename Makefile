@@ -53,6 +53,11 @@ check-status:
 check-log:
 	$(SSHCMD) "journalctl -r -u $(PROJECTNAME)"
 
+stop:
+	$(PRIVSSHCMD) "service godtributes stop"
+
+start:
+	$(PRIVSSHCMD) "service godtributes start"
 
 # The idea is for the repo's post-receive hook to simply be:
 # cd /var/www/godtributes && make post-receive
