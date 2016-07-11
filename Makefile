@@ -75,10 +75,11 @@ install-service:
 tribute:
 	node maketribute.js
 
-update-iscool:
+update-iscool-and-chime-in:
 	git pull origin master && \
 		npm update --save iscool && \
-		git commit -a -m"Updated iscool." && \
+		npm update --save can-i-chime-in && \
+		git commit -a -m"Updated iscool and can-i-chime-in." && \
 		make pushall
 
 pushall: sync
