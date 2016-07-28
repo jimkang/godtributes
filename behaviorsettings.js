@@ -7,7 +7,7 @@ module.exports = {
   maxCommonnessForSecondaryTopic: [50, 100],
   maxCommonnessForImageTopic: [500, 5000],
   emojiThresholdPercentage: 5,
-  enableImageAnalysis: true,
+  enableImageAnalysis: false,
   visionDonors: [
     '@sterex',
     // 'Andy Moran',
@@ -20,6 +20,7 @@ module.exports = {
     '@trodrigues',
     '@bryrnff',
     '@kellan',
-    // A Boy Named Boom
+    // A Boy Named Boom,
+    '@jp10k'
   ]
 };
