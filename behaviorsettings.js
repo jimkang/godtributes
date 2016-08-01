@@ -5,9 +5,9 @@ module.exports = {
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 70],
   maxCommonnessForSecondaryTopic: [50, 100],
-  maxCommonnessForImageTopic: [500, 5000],
+  maxCommonnessForImageTopic: [500, 3000],
   emojiThresholdPercentage: 5,
-  enableImageAnalysis: false,
+  enableImageAnalysis: true,
   visionDonors: [
     '@sterex',
     // 'Andy Moran',
