@@ -21,6 +21,7 @@ module.exports = {
     '@bryrnff',
     '@kellan',
     // A Boy Named Boom,
-    '@jp10k'
+    '@jp10k',
+    '@inky'
   ]
 };
