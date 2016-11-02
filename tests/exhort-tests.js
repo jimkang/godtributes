@@ -309,7 +309,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo HAMBURGUESAS BURGER DIOS! CALABAZAS PARA EL TRONO DE SQUASH'
+            '@smidgeo ¡HAMBURGUESAS BURGER DIOS! CALABAZAS PARA EL TRONO DE SQUASH'
           );
           testDone();
         }
@@ -343,13 +343,9 @@ describe('getExhortationForTweet', function exhortSuite() {
       exhorter.getExhortationForTweet(
         mockTweet,
         function checkResult(error, tweet, exhortation) {
-          if (error) {
-            console.log(error.message);
-          }
-          assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo QUIENS PARA EL DIOS DE QUIEN! HOYS POR EL TRONO DE HOY'
+            '@smidgeo ¡QUIENS PARA EL DIOS DE QUIEN! HOYS POR EL TRONO DE HOY'
           );
           testDone();
         }
@@ -383,13 +379,11 @@ describe('getExhortationForTweet', function exhortSuite() {
       exhorter.getExhortationForTweet(
         mockTweet,
         function checkResult(error, tweet, exhortation) {
-          if (error) {
-            console.log(error.message);
-          }
-          assert.ok(!error);
+                    debugger;
+
           assert.equal(
             exhortation,
-            '@smidgeo STORES POUR LA JALOUSIE DE DIEU ! AVENTURES POUR LE TRÔNE DE L’AVENTURE'
+            '@smidgeo STORES POUR LA JALOUSIE DE DIEU ! AVENTURES POUR LE TRÔNE DE L’AVENTURE'
           );
           testDone();
         }
