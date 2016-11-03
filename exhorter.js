@@ -11,6 +11,8 @@ var getImagesFromTweet = require('get-images-from-tweet');
 var AnalyzeTweetImages = require('./analyze-tweet-images');
 var sb = require('standard-bail')();
 var log = require('./logger').info;
+var GetWord2VecNeighbors = require('./get-w2v-neighbors');
+var iscool = require('iscool')();
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -25,6 +27,7 @@ function createExhorter(opts) {
   var figurePicker = opts.figurePicker;
   var decorateWithEmojiOpts = opts.decorateWithEmojiOpts;
   var probable = opts.probable;
+  var w2vNeighborChance = opts.w2vNeighborChance ? opts.w2vNeighborChance : 0;
 
   if (!probable) {
     probable = defaultProbable;
@@ -35,6 +38,10 @@ function createExhorter(opts) {
     analyzeTweetImagesOpts.getImageAnalysis = opts.getImageAnalysis;
   }
   var analyzeTweetImages = AnalyzeTweetImages(analyzeTweetImagesOpts);
+
+  var getWord2VecNeighbors = GetWord2VecNeighbors({
+    nounfinder: nounfinder
+  });
 
   function getExhortationForTweet(tweet, exhortationDone) {
 
@@ -76,6 +83,7 @@ function createExhorter(opts) {
         getNounsFromTweet,
         filterToNouns,
         filterOutOldNouns,
+        maybeGetNearestNeighborNouns,
         checkThatNounThresholdIsMet,
         makeExhortationFromNouns
       ],
@@ -286,12 +294,34 @@ function createExhorter(opts) {
   }
 
   // Assumes nouns has at least one element.
+  function maybeGetNearestNeighborNouns(tweet, nouns, done) {
+    if (probable.roll(100) < w2vNeighborChance) {
+      getWord2VecNeighbors(nouns, passNouns);
+    }
+    else {
+      callNextTick(done, null, tweet, nouns);
+    }
+
+    function passNouns(error, neighbors) {
+      if (error) {
+        done(error);
+      }
+      else if (!neighbors) {
+        // Send along original nouns.
+        done(null, tweet, nouns);
+      }
+      else {
+        done(null, tweet, neighbors.filter(iscool));
+      }
+    }
+  }
+
+  // Assumes nouns has at least one element.
   function makeExhortationFromNouns(tweet, nouns, done) {
     var tweetLocale = 'en';
     if (tweet.lang) {
       tweetLocale = tweet.lang;
     }
-   
     var selectedNouns = probable.shuffle(nouns).slice(0, 2);
 
     var primaryTribute =
