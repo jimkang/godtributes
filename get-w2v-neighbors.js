@@ -5,6 +5,19 @@ var _ = require('lodash');
 
 var underscoreRegex = /_/g;
 
+var badPhraseStarts = [
+  'TO_',
+  'WHEN_',
+  'WITH_',
+  'IN_PART'
+];
+
+var badPhraseEnds = [
+  '_OF',
+  '_TO',
+  '_THE'
+];
+
 function GetWord2VecNeighbors({nounfinder}) {
   return getWord2VecNeighbors;
 
@@ -28,11 +41,11 @@ function GetWord2VecNeighbors({nounfinder}) {
     // console.log(JSON.stringify(body, null, '  '));
     // In the context of w2v results, we can throw out two-letter words.
     var words = _.pluck(body, 'word').filter(longerThanTwoChars);
-    var compoundWords = [];
+    var phrases = [];
     var normalWords = [];
 
     words.forEach(putWordInBucket);
-    compoundWords = compoundWords.map(replaceUnderscores);
+    phrases = phrases.filter(phraseIsOK).map(replaceUnderscores);
 
     // We're giving compound words a pass for now.
     nounfinder.getNounsFromWords(
@@ -44,12 +57,12 @@ function GetWord2VecNeighbors({nounfinder}) {
         normalWords.push(word);
       }
       else {
-        compoundWords.push(word);
+        phrases.push(word);
       }
     }
 
     function recombineBuckets(nouns, done) {      
-      done(null, nouns.concat(compoundWords));
+      done(null, nouns.concat(phrases));
     }
   }
 }
@@ -60,6 +73,18 @@ function longerThanTwoChars(w) {
 
 function replaceUnderscores(w) {
   return w.replace(underscoreRegex, ' ');
+}
+
+function phraseIsOK(phrase) {
+  return !badPhraseStarts.some(startsWith) && !badPhraseEnds.some(endsWith);
+
+  function startsWith(badStart) {
+    return phrase.startsWith(badStart);
+  }
+
+  function endsWith(badEnd) {
+    return phrase.endsWith(badEnd);
+  }
 }
 
 module.exports = GetWord2VecNeighbors;

@@ -35,6 +35,15 @@ var cases = [
     seed: 'missing',
     words: ['match-up'],
     expected: undefined
+  },
+  {
+    name: 'Filter dumb phrases',
+    seed: 'filter',
+    words: ['promenade', 'spittal'],
+    expected: [
+      'IS EXPECTED',
+      'WILL CONTINUE'
+    ]
   }
 ];
 
