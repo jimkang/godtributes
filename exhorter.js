@@ -11,6 +11,7 @@ var getImagesFromTweet = require('get-images-from-tweet');
 var AnalyzeTweetImages = require('./analyze-tweet-images');
 var sb = require('standard-bail')();
 var log = require('./logger').info;
+var GetWord2VecNeighbors = require('./get-w2v-neighbors');
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -35,6 +36,11 @@ function createExhorter(opts) {
     analyzeTweetImagesOpts.getImageAnalysis = opts.getImageAnalysis;
   }
   var analyzeTweetImages = AnalyzeTweetImages(analyzeTweetImagesOpts);
+
+  var getWord2VecNeighbors = GetWord2VecNeighbors({
+    probable: probable,
+    nounfinder: nounfinder
+  });
 
   function getExhortationForTweet(tweet, exhortationDone) {
 
@@ -288,13 +294,22 @@ function createExhorter(opts) {
 
   // Assumes nouns has at least one element.
   function maybeGetNearestNeighborNouns(tweet, nouns, done) {
-    // if (true || probable.roll(2) === 0) {
-    //   // WAS HERE. Make separate module for getting nearest neighbors of sum.
-    // }
-    // else {
+    if (true || probable.roll(2) === 0) {
+      getWord2VecNeighbors(nouns, passNouns);
+    }
+    else {
       console.log(tweet.text, 'nouns', nouns);
       callNextTick(done, null, tweet, nouns);
-    // }
+    }
+
+    function passNouns(error, neighbors) {
+      if (error) {
+        done(error);
+      }
+      else {
+        done(null, tweet, neighbors);
+      }
+    }
   }
 
   // Assumes nouns has at least one element.
