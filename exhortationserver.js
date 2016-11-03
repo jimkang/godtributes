@@ -74,17 +74,18 @@ function tweetExhortation(error, tweet, exhortation, topics) {
   }
   else {
     setTimeout(function doPost() {
-      twit.post(
-        'statuses/update',
-        {
-          status: exhortation,
-          in_reply_to_status_id: tweet.id_str
-        },
-        function recordTweetResult(error, reply) {
-          recordReplyDetails(tweet, topics);
-          log('Replied to status', tweet.text, 'with :', exhortation);      
-        }
-      );
+      console.log('exhortation', exhortation);
+      // twit.post(
+      //   'statuses/update',
+      //   {
+      //     status: exhortation,
+      //     in_reply_to_status_id: tweet.id_str
+      //   },
+      //   function recordTweetResult(error, reply) {
+      //     recordReplyDetails(tweet, topics);
+      //     log('Replied to status', tweet.text, 'with :', exhortation);      
+      //   }
+      // );
     },
     // Vary the delay until the response from 0 to 30 seconds.
     probable.roll(6) * 5 * 1000);

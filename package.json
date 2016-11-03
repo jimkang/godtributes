@@ -38,11 +38,11 @@
     "mstranslator": "github:jimkang/mstranslator",
     "node-base64-image": "^0.1.1",
     "node-emoji": "^0.1.0",
-    "nounfinder": "^2.0.0",
+    "nounfinder": "^2.0.1",
     "object-path-exists": "^1.0.0",
     "probable": "^1.4.0",
     "queue-async": "~1.0.7",
-    "request": "^2.36.0",
+    "request": "^2.76.0",
     "seedrandom": "^2.3.11",
     "sinon": "^1.12.2",
     "standard-bail": "^2.0.0",
@@ -51,6 +51,7 @@
     "wordnok": "^3.2"
   },
   "devDependencies": {
+    "assert-no-error": "^1.0.0",
     "idmaker": "~0.1.1",
     "longjohn": "^0.2.11",
     "mocha": "^2.4.5",

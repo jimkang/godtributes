@@ -77,6 +77,7 @@ function createExhorter(opts) {
         filterToNouns,
         filterOutOldNouns,
         checkThatNounThresholdIsMet,
+        maybeGetNearestNeighborNouns,
         makeExhortationFromNouns
       ],
       finalDone
@@ -286,12 +287,22 @@ function createExhorter(opts) {
   }
 
   // Assumes nouns has at least one element.
+  function maybeGetNearestNeighborNouns(tweet, nouns, done) {
+    // if (true || probable.roll(2) === 0) {
+    //   // WAS HERE. Make separate module for getting nearest neighbors of sum.
+    // }
+    // else {
+      console.log(tweet.text, 'nouns', nouns);
+      callNextTick(done, null, tweet, nouns);
+    // }
+  }
+
+  // Assumes nouns has at least one element.
   function makeExhortationFromNouns(tweet, nouns, done) {
     var tweetLocale = 'en';
     if (tweet.lang) {
       tweetLocale = tweet.lang;
     }
-   
     var selectedNouns = probable.shuffle(nouns).slice(0, 2);
 
     var primaryTribute =
