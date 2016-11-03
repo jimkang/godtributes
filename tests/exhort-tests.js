@@ -423,7 +423,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo DAHS FOR THE DAH GOD! FUSES FOR THE FUS THRONE'
+            '@smidgeo FUSES FOR THE FUS GOD! DAHS FOR THE DAH THRONE'
           );
           testDone();
         }
@@ -458,7 +458,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           assert.ok(!error);
           assert.equal(
             exhortation,
-            '@smidgeo PRESSURES FOR THE PRESSURE GOD! ADVERTISERS FOR THE ADVERTISER THRONE'
+            '@smidgeo ADVERTISERS FOR THE ADVERTISER GOD! PRESSURES FOR THE PRESSURE THRONE'
           );
           testDone();
         }

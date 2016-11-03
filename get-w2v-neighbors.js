@@ -5,7 +5,7 @@ var _ = require('lodash');
 
 var underscoreRegex = /_/g;
 
-function GetWord2VecNeighbors({probable, nounfinder}) {
+function GetWord2VecNeighbors({nounfinder}) {
   return getWord2VecNeighbors;
 
   function getWord2VecNeighbors(words, done) {
@@ -21,6 +21,10 @@ function GetWord2VecNeighbors({probable, nounfinder}) {
   }
 
   function pickWords(res, body, done) {
+    if (body && body.message === 'Key not found in database') {
+      done();
+      return;
+    }
     // console.log(JSON.stringify(body, null, '  '));
     // In the context of w2v results, we can throw out two-letter words.
     var words = _.pluck(body, 'word').filter(longerThanTwoChars);
@@ -32,7 +36,7 @@ function GetWord2VecNeighbors({probable, nounfinder}) {
 
     // We're giving compound words a pass for now.
     nounfinder.getNounsFromWords(
-      normalWords, sb(randomlyPickTwoFromAllBuckets, done)
+      normalWords, sb(recombineBuckets, done)
     );
 
     function putWordInBucket(word) {
@@ -44,14 +48,14 @@ function GetWord2VecNeighbors({probable, nounfinder}) {
       }
     }
 
-    function randomlyPickTwoFromAllBuckets(nouns, done) {      
-      done(null, probable.sample(nouns.concat(compoundWords), 2));
+    function recombineBuckets(nouns, done) {      
+      done(null, nouns.concat(compoundWords));
     }
   }
 }
 
 function longerThanTwoChars(w) {
-  return w.length > 2;
+  return w && w.length > 2;
 }
 
 function replaceUnderscores(w) {

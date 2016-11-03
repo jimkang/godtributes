@@ -12,6 +12,8 @@ var AnalyzeTweetImages = require('./analyze-tweet-images');
 var sb = require('standard-bail')();
 var log = require('./logger').info;
 var GetWord2VecNeighbors = require('./get-w2v-neighbors');
+var splitToWords = require('split-to-words');
+var iscool = require('iscool')();
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -26,6 +28,7 @@ function createExhorter(opts) {
   var figurePicker = opts.figurePicker;
   var decorateWithEmojiOpts = opts.decorateWithEmojiOpts;
   var probable = opts.probable;
+  var w2vNeighborChance = opts.w2vNeighborChance ? opts.w2vNeighborChance : 0;
 
   if (!probable) {
     probable = defaultProbable;
@@ -38,7 +41,6 @@ function createExhorter(opts) {
   var analyzeTweetImages = AnalyzeTweetImages(analyzeTweetImagesOpts);
 
   var getWord2VecNeighbors = GetWord2VecNeighbors({
-    probable: probable,
     nounfinder: nounfinder
   });
 
@@ -82,8 +84,8 @@ function createExhorter(opts) {
         getNounsFromTweet,
         filterToNouns,
         filterOutOldNouns,
-        checkThatNounThresholdIsMet,
         maybeGetNearestNeighborNouns,
+        checkThatNounThresholdIsMet,
         makeExhortationFromNouns
       ],
       finalDone
@@ -294,11 +296,10 @@ function createExhorter(opts) {
 
   // Assumes nouns has at least one element.
   function maybeGetNearestNeighborNouns(tweet, nouns, done) {
-    if (true || probable.roll(2) === 0) {
+    if (probable.roll(100) < w2vNeighborChance) {
       getWord2VecNeighbors(nouns, passNouns);
     }
     else {
-      console.log(tweet.text, 'nouns', nouns);
       callNextTick(done, null, tweet, nouns);
     }
 
@@ -306,8 +307,12 @@ function createExhorter(opts) {
       if (error) {
         done(error);
       }
+      else if (!neighbors) {
+        // Send along original nouns.
+        done(null, tweet, nouns);
+      }
       else {
-        done(null, tweet, neighbors);
+        done(null, tweet, neighbors.filter(iscool));
       }
     }
   }

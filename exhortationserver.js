@@ -50,7 +50,8 @@ var exhorterOpts = {
   maxCommonnessForImageTopic: maxCommonnessForImageTopic,
   // TODO: Make this a function that does a coin flip to decide if this should 
   // be 1 or 2 per instance.
-  nounCountThreshold: 1
+  nounCountThreshold: 1,
+  w2vNeighborChance: behavior.w2vNeighborChance
 };
 
 log('maxCommonnessForTopic:', maxCommonnessForTopic);
@@ -74,18 +75,21 @@ function tweetExhortation(error, tweet, exhortation, topics) {
   }
   else {
     setTimeout(function doPost() {
-      console.log('exhortation', exhortation);
-      // twit.post(
-      //   'statuses/update',
-      //   {
-      //     status: exhortation,
-      //     in_reply_to_status_id: tweet.id_str
-      //   },
-      //   function recordTweetResult(error, reply) {
-      //     recordReplyDetails(tweet, topics);
-      //     log('Replied to status', tweet.text, 'with :', exhortation);      
-      //   }
-      // );
+      // console.log('\n');
+      // console.log('TWEET', tweet.text);
+      // console.log('RESPONSE', exhortation);
+      // console.log('\n');
+      twit.post(
+        'statuses/update',
+        {
+          status: exhortation,
+          in_reply_to_status_id: tweet.id_str
+        },
+        function recordTweetResult(error, reply) {
+          recordReplyDetails(tweet, topics);
+          log('Replied to status', tweet.text, 'with :', exhortation);
+        }
+      );
     },
     // Vary the delay until the response from 0 to 30 seconds.
     probable.roll(6) * 5 * 1000);
