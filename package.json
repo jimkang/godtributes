@@ -45,7 +45,6 @@
     "request": "^2.76.0",
     "seedrandom": "^2.3.11",
     "sinon": "^1.12.2",
-    "split-to-words": "^1.0.0",
     "standard-bail": "^2.0.0",
     "standard-error": "^1.1.0",
     "twit": "^1.1.20",

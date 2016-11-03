@@ -12,7 +12,6 @@ var AnalyzeTweetImages = require('./analyze-tweet-images');
 var sb = require('standard-bail')();
 var log = require('./logger').info;
 var GetWord2VecNeighbors = require('./get-w2v-neighbors');
-var splitToWords = require('split-to-words');
 var iscool = require('iscool')();
 
 function createExhorter(opts) {
