@@ -2,6 +2,8 @@ var request = require('request');
 var config = require('./config');
 var sb = require('standard-bail')();
 var _ = require('lodash');
+var queue = require('d3-queue').queue;
+var IsVerb = require('./is-verb');
 
 var underscoreRegex = /_/g;
 
@@ -9,7 +11,10 @@ var badPhraseStarts = [
   'TO_',
   'WHEN_',
   'WITH_',
-  'IN_PART'
+  'IN_PART',
+  'WILL_',
+  'SIEG_HEIL',
+  'CHING_CHING'
 ];
 
 var badPhraseEnds = [
@@ -18,16 +23,24 @@ var badPhraseEnds = [
   '_THE'
 ];
 
-function GetWord2VecNeighbors({nounfinder}) {
+function GetWord2VecNeighbors({nounfinder, probable, wordnok}) {
+  var isVerb = IsVerb({
+    wordnok: wordnok
+  });
+
   return getWord2VecNeighbors;
 
   function getWord2VecNeighbors(words, done) {
+    var wordsToGetNeighborsOf = probable.sample(
+      words, probable.rollDie(words.length)
+    );
+
     var opts = {
       method: 'GET',
       json: true,
       url: config.gnewsWord2VecURL,
       qs: {
-        words: words.join(',')
+        words: wordsToGetNeighborsOf.join(',')
       }
     };
     request(opts, sb(pickWords, done));
@@ -45,12 +58,14 @@ function GetWord2VecNeighbors({nounfinder}) {
     var normalWords = [];
 
     words.forEach(putWordInBucket);
-    phrases = phrases.filter(phraseIsOK).map(replaceUnderscores);
+    phrases = phrases.filter(phraseIsOK);
 
-    // We're giving compound words a pass for now.
-    nounfinder.getNounsFromWords(
-      normalWords, sb(recombineBuckets, done)
-    );
+    var nounFindingQueue = queue(2);
+
+    nounFindingQueue.defer(nounfinder.getNounsFromWords, normalWords);
+    nounFindingQueue.defer(getPhrasesEndingInNouns, phrases);
+
+    nounFindingQueue.await(recombineBuckets);
 
     function putWordInBucket(word) {
       if (word.indexOf('_') === -1) {
@@ -61,8 +76,49 @@ function GetWord2VecNeighbors({nounfinder}) {
       }
     }
 
-    function recombineBuckets(nouns, done) {      
-      done(null, nouns.concat(phrases));
+    function recombineBuckets(error, wordNouns, phrasesWithNouns) {
+      // console.log('normalWords', normalWords, 'phrases', phrases);
+      // console.log('wordNouns', wordNouns, 'phrasesWithNouns', phrasesWithNouns);
+      if (error) {
+        done(error);
+      }
+      else {
+        done(
+          null, wordNouns.concat(_.compact(phrasesWithNouns).map(replaceUnderscores))
+        );
+      }
+    }
+
+    function getPhrasesEndingInNouns(phrases, done) {
+      var q = queue();
+      phrases.forEach(queueCheck);
+      q.awaitAll(done);
+
+      function queueCheck(phrase) {
+        q.defer(findOutIfPhraseIsSuitable, phrase);
+      }
+
+      function findOutIfPhraseIsSuitable(phrase, findDone) {
+        var phraseWords = phrase.split('_');
+        if (phraseWords.length < 1) {
+          callNextTick(findDone);
+        }
+        else {
+          var q = queue();
+          q.defer(nounfinder.getNounsFromWords, phraseWords.slice(-1));
+          q.defer(isVerb, phraseWords[0]);
+          q.await(passPhrase);
+        }
+
+        function passPhrase(error, phraseNouns, isVerb) {
+          if (error) {
+            findDone(error);
+          }
+          else {
+            findDone(null, phraseNouns.length > 0 && !isVerb ? phrase : null);
+          }
+        }        
+      }
     }
   }
 }

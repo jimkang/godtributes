@@ -13,6 +13,13 @@ var sb = require('standard-bail')();
 var log = require('./logger').info;
 var GetWord2VecNeighbors = require('./get-w2v-neighbors');
 var iscool = require('iscool')();
+var config = require('./config');
+
+var createWordnok = require('wordnok').createWordnok;
+
+var wordnok =  createWordnok({
+  apiKey: config.wordnikAPIKey
+});
 
 function createExhorter(opts) {
   var chronicler = opts.chronicler;
@@ -40,7 +47,9 @@ function createExhorter(opts) {
   var analyzeTweetImages = AnalyzeTweetImages(analyzeTweetImagesOpts);
 
   var getWord2VecNeighbors = GetWord2VecNeighbors({
-    nounfinder: nounfinder
+    nounfinder: nounfinder,
+    probable: probable,
+    wordnok: wordnok
   });
 
   function getExhortationForTweet(tweet, exhortationDone) {
@@ -311,7 +320,7 @@ function createExhorter(opts) {
         done(null, tweet, nouns);
       }
       else {
-        done(null, tweet, neighbors.filter(iscool));
+        done(null, tweet, nouns.concat(neighbors.filter(iscool)));
       }
     }
   }
