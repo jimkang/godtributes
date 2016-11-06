@@ -14,7 +14,7 @@ var cases = [
     name: 'Words from vision',
     seed: 'vision',
     words: ['logo', 'brand'],
-    expected: [ 'Adidas Puma', 'Onitsuka Tiger', 'Greedy Genius', 'trademark infringement' ]
+    expected: ['trademark infringement']
   },
   {
     name: 'empathy, trump',
@@ -26,13 +26,13 @@ var cases = [
     name: 'Weird short words',
     seed: 'weird',
     words: ['comp', 'ar'],
-    expected: [ 'crit', 'uni', 'Bloke Bingo' ]
+    expected: [ 'crit', 'uni']
   },
   {
     name: 'Vermin',
     seed: 'vermin',
     words: ['mice', 'spider', 'insect'],
-    expected:[ 'critter', 'snake', 'grasshopper', 'squirrel', 'critter', 'bee', 'gopher', 'insect eater', 'creepy critters', 'Madagascar hissing cockroaches', 'woolly bears' ]
+    expected:[ 'critter', 'snake', 'grasshopper', 'squirrel', 'critter', 'bee', 'gopher', 'insect eater', 'creepy critters', 'woolly bears' ]
   },
   {
     name: 'Not in word2vec model',

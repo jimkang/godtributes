@@ -6,6 +6,7 @@ var queue = require('d3-queue').queue;
 var IsVerb = require('./is-verb');
 
 var underscoreRegex = /_/g;
+var uppercaseRegex = /[A-Z]/g;
 
 var badPhraseStarts = [
   'TO_',
@@ -132,7 +133,9 @@ function replaceUnderscores(w) {
 }
 
 function phraseIsOK(phrase) {
-  return !badPhraseStarts.some(startsWith) && !badPhraseEnds.some(endsWith);
+  return phrase.length > 0 && !phrase.match(uppercaseRegex) &&
+    !badPhraseStarts.some(startsWith) &&
+    !badPhraseEnds.some(endsWith);
 
   function startsWith(badStart) {
     return phrase.startsWith(badStart);
