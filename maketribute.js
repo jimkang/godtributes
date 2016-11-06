@@ -15,6 +15,8 @@ var canonicalizer = require('canonicalizer');
 var createNounfinder = require('nounfinder');
 var translator = require('./translator');
 var relevantRelatedWordTypes = require('./relevant-related-word-types');
+var GetWord2VecNeighbors = require('./get-w2v-neighbors');
+// require('longjohn');
 
 var bot = new Bot(config.twitter);
 
@@ -28,6 +30,11 @@ var wordnok = createWordnok({
     log: logger.info
   }
 });
+
+var nounfinder = createNounfinder({
+  wordnikAPIKey: config.wordnikAPIKey
+});
+
 
 var isEmojiTopic = false;
 
@@ -69,12 +76,21 @@ function postOnTopic(error, topic) {
     return;
   }
 
-  wordnok.getRelatedWords(
-    {
-      word: primaryTopic
-    },
-    makeDemands
-  );
+  getPotentialSecondaryTopics(primaryTopic, makeDemands);
+}
+
+function getPotentialSecondaryTopics(primaryTopic, done) {
+  if (probable.roll(2) === 0) {
+    wordnok.getRelatedWords({word: primaryTopic}, done);
+  }
+  else {
+    var getWord2VecNeighbors = GetWord2VecNeighbors({
+      nounfinder: nounfinder,
+      probable: probable,
+      wordnok: wordnok
+    });
+    getWord2VecNeighbors([primaryTopic], done);
+  }
 }
 
 function makeDemands(relatedWordsError, relatedWords) {
@@ -144,28 +160,28 @@ function getPrimaryDemand(topic, isEmoji) {
 }
 
 function getSecondaryDemand(relatedWords, done) {
-  var nounfinder;
-
   if (relatedWords) {
-    var relevantLists = _.values(_.pick(
-      relatedWords, relevantRelatedWordTypes
-    ));
+    if (typeof relatedWords === 'object' && !Array.isArray(relatedWords)) {
+      var relevantLists = _.values(_.pick(
+        relatedWords, relevantRelatedWordTypes
+      ));
 
-    if (relevantLists.length > 0) {
-      var topics = _.flatten(relevantLists);
-      nounfinder = createNounfinder({
-        wordnikAPIKey: config.wordnikAPIKey,
-        memoizeServerPort: 4444
-      });
-
-      // TODO: Add nounfinder method that takes an array of words.
-      nounfinder.getNounsFromText(topics.join(' '), filterForInterestingness);
-      return;
+      if (relevantLists.length > 0) {
+        var topics = _.flatten(relevantLists);
+        nounfinder.getNounsFromWords(topics, filterForInterestingness);
+      }
+      else {
+        callNextTick(done);
+      }
+    }
+    else {
+      assembleSecondaryDemand(null, relatedWords.filter(notPrimaryTopic));
     }
   }
-
-  // Fell through? Call back with nothing.
-  callNextTick(done);
+  else {
+    // Fell through? Call back with nothing.
+    callNextTick(done);
+  }
 
   function filterForInterestingness(error, nouns) {
     if (error) {
@@ -196,6 +212,10 @@ function getSecondaryDemand(relatedWords, done) {
       done(error, demand);
     }
   }
+}
+
+function notPrimaryTopic(word) {
+  return word !== primaryTopic;
 }
 
 postTribute();
