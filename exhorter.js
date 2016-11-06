@@ -292,14 +292,14 @@ function createExhorter(opts) {
     });
   }
 
-  function checkThatNounThresholdIsMet(tweet, nouns, done) {
+  function checkThatNounThresholdIsMet(tweet, nouns, neighbors, done) {
     var error = null;
-    if (nouns.length < nounCountThreshold) {
+    if (nouns.length + neighbors.length < nounCountThreshold) {
       error = createErrorForTweet(tweet, {
         message: 'There aren\'t enough usable nouns to work with.'
       });
     }
-    callNextTick(done, error, tweet, nouns);
+    callNextTick(done, error, tweet, nouns, neighbors);
   }
 
   // Assumes nouns has at least one element.
@@ -317,21 +317,32 @@ function createExhorter(opts) {
       }
       else if (!neighbors) {
         // Send along original nouns.
-        done(null, tweet, nouns);
+        done(null, tweet, nouns, []);
       }
       else {
-        done(null, tweet, nouns.concat(neighbors.filter(iscool)));
+        done(null, tweet, nouns, neighbors.filter(iscool));
       }
     }
   }
 
   // Assumes nouns has at least one element.
-  function makeExhortationFromNouns(tweet, nouns, done) {
+  function makeExhortationFromNouns(tweet, nouns, neighbors, done) {
     var tweetLocale = 'en';
     if (tweet.lang) {
       tweetLocale = tweet.lang;
     }
-    var selectedNouns = probable.shuffle(nouns).slice(0, 2);
+
+    var selectedNouns;
+    
+    if (neighbors.length > 0) {
+      selectedNouns = [
+        probable.pickFromArray(nouns),
+        probable.pickFromArray(neighbors)
+      ];
+    }
+    else {
+     selectedNouns = probable.shuffle(nouns).slice(0, 2);
+   }
 
     var primaryTribute =
       tributeDemander.makeDemandForTopic(decorateWithEmojiOpts({
