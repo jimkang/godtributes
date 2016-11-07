@@ -13,6 +13,12 @@ var prepPhrasePicker = require('./prepphrasepicker');
 var probable = require('probable');
 var log = require('./logger').info;
 
+var dryRun = (process.argv[2] === '--dry');
+
+if (dryRun) {
+  require('longjohn');
+}
+
 log('The exhortation server is running.');
 
 var chronicler = Chronicler({
@@ -75,21 +81,25 @@ function tweetExhortation(error, tweet, exhortation, topics) {
   }
   else {
     setTimeout(function doPost() {
-      // console.log('\n');
-      // console.log('TWEET', tweet.text);
-      // console.log('RESPONSE', exhortation);
-      // console.log('\n');
-      twit.post(
-        'statuses/update',
-        {
-          status: exhortation,
-          in_reply_to_status_id: tweet.id_str
-        },
-        function recordTweetResult(error, reply) {
-          recordReplyDetails(tweet, topics);
-          log('Replied to status', tweet.text, 'with :', exhortation);
-        }
-      );
+      if (dryRun) {
+        console.log('\n');
+        console.log('TWEET', tweet.text);
+        console.log('RESPONSE', exhortation);
+        console.log('\n');
+      }
+      else {
+        twit.post(
+          'statuses/update',
+          {
+            status: exhortation,
+            in_reply_to_status_id: tweet.id_str
+          },
+          function recordTweetResult(error, reply) {
+            recordReplyDetails(tweet, topics);
+            log('Replied to status', tweet.text, 'with :', exhortation);
+          }
+        );
+      }
     },
     // Vary the delay until the response from 0 to 30 seconds.
     probable.roll(6) * 5 * 1000);

@@ -15,7 +15,8 @@ var badPhraseStarts = [
   'IN_PART',
   'WILL_',
   'SIEG_HEIL',
-  'CHING_CHING'
+  'CHING_CHING',
+  'FATTER_WALLET'
 ];
 
 var badPhraseEnds = [

@@ -257,12 +257,12 @@ function createExhorter(opts) {
           });
         }
 
-        done(error, tweet, filteredNouns);
+        done(error, tweet, filteredNouns, isUsingTweetImage);
       }
     );
   }
 
-  function filterOutOldNouns(tweet, nouns, done) {
+  function filterOutOldNouns(tweet, nouns, isUsingTweetImage, done) {
     var q = queue();
     nouns.forEach(function queueNounRecordCheck(noun) {
       q.defer(chronicler.topicWasUsedInReplyToUser, noun, tweet.user.id_str);
@@ -288,7 +288,7 @@ function createExhorter(opts) {
         });
       }
 
-      done(error, tweet, unusedNouns);
+      done(error, tweet, unusedNouns, isUsingTweetImage);
     });
   }
 
@@ -303,12 +303,12 @@ function createExhorter(opts) {
   }
 
   // Assumes nouns has at least one element.
-  function maybeGetNearestNeighborNouns(tweet, nouns, done) {
-    if (probable.roll(100) < w2vNeighborChance) {
+  function maybeGetNearestNeighborNouns(tweet, nouns, isUsingTweetImage, done) {
+    if (!isUsingTweetImage && probable.roll(100) < w2vNeighborChance) {
       getWord2VecNeighbors(nouns, passNouns);
     }
     else {
-      callNextTick(done, null, tweet, nouns);
+      callNextTick(done, null, tweet, nouns, []);
     }
 
     function passNouns(error, neighbors) {
