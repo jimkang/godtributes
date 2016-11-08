@@ -11,7 +11,8 @@ var getImagesFromTweet = require('get-images-from-tweet');
 var AnalyzeTweetImages = require('./analyze-tweet-images');
 var sb = require('standard-bail')();
 var log = require('./logger').info;
-var GetWord2VecNeighbors = require('./get-w2v-neighbors');
+var GetWord2VecNeighbors = require('get-w2v-google-news-neighbors');
+
 var iscool = require('iscool')();
 var config = require('./config');
 
@@ -47,9 +48,12 @@ function createExhorter(opts) {
   var analyzeTweetImages = AnalyzeTweetImages(analyzeTweetImagesOpts);
 
   var getWord2VecNeighbors = GetWord2VecNeighbors({
+    gnewsWord2VecURL: config.gnewsWord2VecURL,
     nounfinder: nounfinder,
     probable: probable,
-    wordnok: wordnok
+    wordnok: wordnok,
+    nounLikePhrasesOnly: true,
+    nounWordsOnly: true
   });
 
   function getExhortationForTweet(tweet, exhortationDone) {

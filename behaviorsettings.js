@@ -24,5 +24,5 @@ module.exports = {
     '@jp10k',
     '@inky'
   ],
-  w2vNeighborChance: 20
+  w2vNeighborChance: 30
 };
