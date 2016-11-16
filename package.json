@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "assert-no-error": "^1.0.0",
+    "eslint": "^3.10.2",
     "idmaker": "~0.1.1",
     "longjohn": "^0.2.11",
     "mocha": "^2.4.5",

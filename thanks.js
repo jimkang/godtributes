@@ -1,3 +1,5 @@
+/* global process */
+
 var Bot = require('./node_modules/twit/examples/bot');
 var config = require('./config');
 var createWordnok = require('wordnok').createWordnok;
@@ -5,15 +7,12 @@ var tributeDemander = require('./tributedemander');
 var figurepicker = require('./figurepicker');
 var prepphrasepicker = require('./prepphrasepicker');
 var logger = require('./logger');
-var handleTwitterError = require('./handletwittererror');
-var emojiSource = require('emojisource');
 var behavior = require('./behaviorsettings');
 var probable = require('probable');
 var callNextTick = require('call-next-tick');
 var _ = require('lodash');
 var canonicalizer = require('canonicalizer');
 var createNounfinder = require('nounfinder');
-var translator = require('./translator');
 var pickThanksTopic = require('./pick-thanks-topic');
 var relevantRelatedWordTypes = require('./relevant-related-word-types');
 
@@ -29,8 +28,6 @@ var wordnok = createWordnok({
     log: logger.info
   }
 });
-
-var isEmojiTopic = false;
 
 var maxCommonnessForSecondary = behavior.maxCommonnessForReplyTopic[0] +
   probable.roll(

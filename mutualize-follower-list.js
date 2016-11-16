@@ -1,3 +1,5 @@
+/* global __dirname */
+
 var filteredFollowback = require('filtered-followback');
 var config = require('./config.js');
 var jsonfile = require('jsonfile');

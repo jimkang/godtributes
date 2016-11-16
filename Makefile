@@ -84,3 +84,6 @@ update-iscool-and-chime-in:
 
 pushall: sync
 	git push origin master
+
+lint:
+	./node_modules/.bin/eslint .

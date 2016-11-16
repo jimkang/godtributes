@@ -1,3 +1,5 @@
+/* global process */
+
 var levelup = require('level');
 var through2 = require('through2');
 
@@ -11,7 +13,8 @@ var rs = db.createReadStream({
 
 var extraUserIdRegEx = /!\d+-/;
 
-var convertStream = through2({
+var convertStream = through2(
+  {
     objectMode: true
   },
   function convert(data, enc, callback) {
@@ -26,11 +29,11 @@ var convertStream = through2({
 var ws = db.createWriteStream();
 
 ws.on('error', function (err) {
-  console.log('Oh my!', err)
-})
+  console.log('Oh my!', err);
+});
 ws.on('close', function () {
-  console.log('Stream closed')
-})
+  console.log('Stream closed');
+});
 
 
 rs.pipe(convertStream);

@@ -32,7 +32,7 @@ function createTopicPool(opts) {
 
   return {
     getTopic: getTopic
-  }
+  };
 }
 
 

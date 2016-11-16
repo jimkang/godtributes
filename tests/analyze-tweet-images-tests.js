@@ -23,11 +23,11 @@ var cases = [
     }
   },
   {
-    name: "costume",
+    name: 'costume',
     tweet: _.defaults(
       _.cloneDeep(exampleImageTweetBase),
       {
-        text: "Here is a costume!"
+        text: 'Here is a costume!'
       }
     ),
     imageAPIResponse: imageAPIResponses.costume,
@@ -42,11 +42,11 @@ var cases = [
     }
   },
   {
-    name: "award",
+    name: 'award',
     tweet: _.defaults(
       _.cloneDeep(exampleImageTweetBase),
       {
-        text: "Here is an award!"
+        text: 'Here is an award!'
       }
     ),
     imageAPIResponse: imageAPIResponses.award,
@@ -61,11 +61,11 @@ var cases = [
     }
   },
   {
-    name: "band",
+    name: 'band',
     tweet: _.defaults(
       _.cloneDeep(exampleImageTweetBase),
       {
-        text: "Here is a band!"
+        text: 'Here is a band!'
       }
     ),
     imageAPIResponse: imageAPIResponses.band,
@@ -77,11 +77,11 @@ var cases = [
     }
   },
   {
-    name: "poster",
+    name: 'poster',
     tweet: _.defaults(
       _.cloneDeep(exampleImageTweetBase),
       {
-        text: "Here is a poster!"
+        text: 'Here is a poster!'
       }
     ),
     imageAPIResponse: imageAPIResponses.poster,
@@ -92,11 +92,11 @@ var cases = [
     }
   },
   {
-    name: "wormDrawing",
+    name: 'wormDrawing',
     tweet: _.defaults(
       _.cloneDeep(exampleImageTweetBase),
       {
-        text: "Here is a wormDrawing!"
+        text: 'Here is a wormDrawing!'
       }
     ),
     imageAPIResponse: imageAPIResponses.wormDrawing,

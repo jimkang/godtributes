@@ -1,6 +1,7 @@
+/* global process */
+
 var assert = require('assert');
 var createExhorter = require('../../exhorter');
-var jsonfile = require('jsonfile');
 var tributeDemander = require('../../tributedemander');
 var Chronicler = require('basicset-chronicler').createChronicler;
 var behavior = require('../../behaviorsettings');

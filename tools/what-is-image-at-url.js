@@ -1,3 +1,5 @@
+/* global process */
+
 var getImageAnalysis = require('../get-image-analysis');
 var sb = require('standard-bail')({
   log: console.log

@@ -40,15 +40,15 @@ function passBody(response, body, done) {
 
 function createPostBody(base64encodedImage) {
   return {
-    "requests": [
+    'requests': [
       {
-        "image": {
+        'image': {
           content: base64encodedImage
         },
-        "features": [
+        'features': [
           {
-            "type": "LABEL_DETECTION",
-            "maxResults": 5
+            'type': 'LABEL_DETECTION',
+            'maxResults': 5
           }
         ]
       }

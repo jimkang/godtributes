@@ -1,8 +1,8 @@
+/* global it describe */
+
 var assert = require('assert');
 var createExhorter = require('../exhorter');
-var jsonfile = require('jsonfile');
 var callNextTick = require('call-next-tick');
-var _ = require('lodash');
 var sinon = require('sinon');
 var exhorterMocks = require('./fixtures/exhorter-mocks');
 
@@ -108,7 +108,7 @@ describe('getExhortationForTweet', function exhortSuite() {
           mockTweet.text = 'Mock inappropriate topics go here.';
 
           var opts = exhorterMocks.getDefaultExhorterOpts();
-          opts.canIChimeIn = function mockIsOKToChimeIn(text) {
+          opts.canIChimeIn = function mockIsOKToChimeIn() {
             // Simulating there being something wrong with the text.
             return false;
           };
@@ -379,8 +379,6 @@ describe('getExhortationForTweet', function exhortSuite() {
       exhorter.getExhortationForTweet(
         mockTweet,
         function checkResult(error, tweet, exhortation) {
-                    debugger;
-
           assert.equal(
             exhortation,
             '@smidgeo STORES POUR LA JALOUSIE DE DIEU ! AVENTURES POUR LE TRÔNE DE L’AVENTURE'
@@ -431,7 +429,7 @@ describe('getExhortationForTweet', function exhortSuite() {
     }
   );
 
- it('does not misidentify a blatantly English tweet',
+  it('does not misidentify a blatantly English tweet',
     function testFalsePositive2(testDone) {
       var mockTweet = exhorterMocks.getDefaultMockTweet();
       mockTweet.text = 'Buzzfeed internal review finds 3 posts deleted due to advertiser pressure: http://mobile.nytimes.com/2015/04/20/business/media/buzzfeed-says-posts-were-deleted-because-of-advertising-pressure.html?referrer= … via @babiejenks';
@@ -466,7 +464,7 @@ describe('getExhortationForTweet', function exhortSuite() {
     }
   );
 
- it('handles unknown language error',
+  it('handles unknown language error',
     function testTranslationError(testDone) {
       var mockTweet = exhorterMocks.getDefaultMockTweet();
       mockTweet.text = '👆🏽';

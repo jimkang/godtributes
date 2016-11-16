@@ -134,20 +134,20 @@ function createExhorter(opts) {
   function checkThatTweetWasNotRepliedTo(tweet, done) {
     chronicler.tweetWasRepliedTo(
       tweet.user.id.toString(), function stopIfReplied(error, wasRepliedTo) {
-        var error;
+        var realError;
 
         if (wasRepliedTo) {
-          error = createErrorForTweet(tweet, {
+          realError = createErrorForTweet(tweet, {
             message: 'Tweet was already replied to.',
           });
         }
         else {
           // If chronicler can't find the key, it will return an error for that.
           // To us, that's not an error.
-          error = null;
+          realError = null;
         }
 
-        done(error, tweet);
+        done(realError, tweet);
       }
     );
   }
@@ -345,8 +345,8 @@ function createExhorter(opts) {
       ];
     }
     else {
-     selectedNouns = probable.shuffle(nouns).slice(0, 2);
-   }
+      selectedNouns = probable.shuffle(nouns).slice(0, 2);
+    }
 
     var primaryTribute =
       tributeDemander.makeDemandForTopic(decorateWithEmojiOpts({
@@ -408,6 +408,6 @@ function createExhorter(opts) {
   return {
     getExhortationForTweet: getExhortationForTweet
   };
-};
+}
 
 module.exports = createExhorter;

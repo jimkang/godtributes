@@ -1,6 +1,7 @@
+/* global process */
+
 var assert = require('assert');
 var createExhorter = require('../../exhorter');
-var jsonfile = require('jsonfile');
 var tributeDemander = require('../../tributedemander');
 var Chronicler = require('basicset-chronicler').createChronicler;
 var behavior = require('../../behaviorsettings');
@@ -50,7 +51,7 @@ function runGet() {
   exhorter.getExhortationForTweet(targetTweet, runNextIter);
 }
 
-function runNextIter(error, tweet, exhortation, topics) {
+function runNextIter(error, tweet, exhortation) {
   assert.ok(!error);
   assert.ok(exhortation);
   count += 1;

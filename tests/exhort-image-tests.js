@@ -1,7 +1,6 @@
 var test = require('tape');
 var _ = require('lodash');
 var callNextTick = require('call-next-tick');
-var AnalyzeTweetImages = require('../analyze-tweet-images');
 var createExhorter = require('../exhorter');
 var exampleImageTweetBase = require('./fixtures/example-image-tweet.js');
 var imageAPIResponses = require('./fixtures/google-image-api-responses.js');
@@ -12,7 +11,7 @@ test('Exhortation from image', function imageExhortationTest(t) {
 
   var opts = exhorterMocks.getDefaultExhorterOpts();
   opts.maxCommonnessForImageTopic = 501;
-  opts.nounfinder.getNounsFromText = function mockNounsFromText(text, done) {
+  opts.nounfinder.getNounsFromText = function mockNounsFromText() {
     t.fail('getNounsFromText is not called.');
   };
 
@@ -58,5 +57,5 @@ test('Exhortation from image', function imageExhortationTest(t) {
       'Exhortation is correct.'
     );
     t.end();
-  };
+  }
 });

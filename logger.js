@@ -1,5 +1,6 @@
+/* global process */
+
 var bunyan = require('bunyan');
-var util = require('util');
 
 var sysLog = bunyan.createLogger({
   name: 'foo',
@@ -13,7 +14,6 @@ var sysLog = bunyan.createLogger({
 
 // Console.log style formatting.
 function formatMessage() {
-  var params = Array.prototype.slice.call(arguments);
   var formatted = '';
   for (var i = 0; i < arguments.length; ++i) {
     if (formatted.length > 0) {

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* global process */
+
 var Twit = require('twit');
 var config = require('./config');
 var createExhorter = require('./exhorter');
@@ -99,9 +101,14 @@ function tweetExhortation(error, tweet, exhortation, topics) {
             status: exhortation,
             in_reply_to_status_id: tweet.id_str
           },
-          function recordTweetResult(error, reply) {
-            recordReplyDetails(tweet, topics);
-            log('Replied to status', tweet.text, 'with :', exhortation);
+          function recordTweetResult(error) {
+            if (error) {
+              log(error);
+            }
+            else {
+              recordReplyDetails(tweet, topics);
+              log('Replied to status', tweet.text, 'with :', exhortation);
+            }
           }
         );
       }
@@ -120,9 +127,3 @@ function recordReplyDetails(targetStatus, topics) {
   });
 }
 
-// The safest thing to do when the cache disconnects right now is to exit and 
-// let the supervisor process restart us.
-function respondToCacheDisconnect() {
-  log('Cache disconnected! exhortationserver exiting.');
-  process.exit();
-}
