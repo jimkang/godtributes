@@ -86,4 +86,4 @@ pushall: sync
 	git push origin master
 
 lint:
-	./node_modules/.bin/eslint .
+	eslint .
