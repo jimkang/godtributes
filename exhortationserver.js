@@ -6,7 +6,12 @@ var createExhorter = require('./exhorter');
 var tributeDemander = require('./tributedemander');
 var Chronicler = require('basicset-chronicler').createChronicler;
 var behavior = require('./behaviorsettings');
-var canIChimeIn = require('can-i-chime-in')();
+var canIChimeIn = require('can-i-chime-in')({
+  extraWordsToAvoid: [
+    'fascist',
+    'fascism'
+  ]
+});
 var createNounfinder = require('nounfinder');
 var figurePicker = require('./figurepicker');
 var prepPhrasePicker = require('./prepphrasepicker');
