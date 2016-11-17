@@ -11,7 +11,9 @@ var behavior = require('./behaviorsettings');
 var canIChimeIn = require('can-i-chime-in')({
   extraWordsToAvoid: [
     'fascist',
-    'fascism'
+    'fascism',
+    'internment',
+    'supremacy'
   ]
 });
 var createNounfinder = require('nounfinder');
