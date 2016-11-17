@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-/* global process */
+/* global process __dirname */
 
 var Twit = require('twit');
 var config = require('./config');
@@ -29,7 +29,7 @@ if (dryRun) {
 log('The exhortation server is running.');
 
 var chronicler = Chronicler({
-  dbLocation: 'tributes.db'
+  dbLocation: __dirname + '/data/tributes.db'
 });
 
 var nounfinder = createNounfinder({
