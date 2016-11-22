@@ -13,7 +13,9 @@ var canIChimeIn = require('can-i-chime-in')({
     'fascist',
     'fascism',
     'internment',
-    'supremacy'
+    'supremacy',
+    'nazi',
+    'nazis'
   ]
 });
 var createNounfinder = require('nounfinder');
