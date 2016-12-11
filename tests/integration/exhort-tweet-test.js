@@ -36,9 +36,9 @@ var exhorterOpts = {
 var exhorter = createExhorter(exhorterOpts);
 
 var targetTweet = {
-  id_str: '546402627261833217',     
   user: {
-    id: 546402627261833200,
+    id: 546402627261833217,
+    id_str: '546402627261833217',
     screen_name: 'deathmtn'
   },
   text: 'Trader Joe\'s has cheap persimmons again! https://flic.kr/p/qcTcz2'
