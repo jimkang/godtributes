@@ -1,6 +1,6 @@
 module.exports = {
   exhortTestSubjectUserId: 129586119,
-  hoursToWaitBetweenRepliesToSameUser: 52,
+  hoursToWaitBetweenRepliesToSameUser: 36,
   maxAttemptsToReplyPerUserPerRun: 1,
   tragedyHappenedRecently: true,
   maxCommonnessForReplyTopic: [20, 70],

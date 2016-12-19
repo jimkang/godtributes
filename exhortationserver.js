@@ -15,7 +15,9 @@ var canIChimeIn = require('can-i-chime-in')({
     'internment',
     'supremacy',
     'nazi',
-    'nazis'
+    'nazis',
+    'autistic',
+    'palsy'
   ]
 });
 var createNounfinder = require('nounfinder');
