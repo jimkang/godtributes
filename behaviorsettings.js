@@ -22,7 +22,8 @@ module.exports = {
     '@kellan',
     // A Boy Named Boom,
     '@jp10k',
-    '@inky'
+    '@inky',
+    '@sonyaellenmann'
   ],
   w2vNeighborChance: 30
 };
