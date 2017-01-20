@@ -20,8 +20,20 @@ var GetWord2VecNeighbors = require('./get-w2v-neighbors');
 // require('longjohn');
 
 var bot = new Bot(config.twitter);
+var simulationMode = false;
+var switches = process.argv.slice(2);
+var overridePrimaryTopic;
 
-var simulationMode = (process.argv[2] === '--simulate');
+switches.forEach(parseNextSwitch);
+
+function parseNextSwitch(switchToken) {
+  if (switchToken === '--simulate') {
+    simulationMode = true;
+  }
+  else {
+    overridePrimaryTopic = switchToken;
+  }
+}
 
 logger.info('Tribute maker is running.');
 
@@ -52,7 +64,10 @@ var primaryDemand;
 // kinds of tributes.
 
 function postTribute() {
-  if (probable.roll(100) < behavior.emojiThresholdPercentage) {
+  if (overridePrimaryTopic) {
+    postOnTopic(null, overridePrimaryTopic);
+  }
+  else if (probable.roll(100) < behavior.emojiThresholdPercentage) {
     isEmojiTopic = true;
     postOnTopic(null, emojiSource.getRandomTopicEmoji());
   }
