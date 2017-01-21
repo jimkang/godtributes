@@ -22,7 +22,7 @@ var GetWord2VecNeighbors = require('./get-w2v-neighbors');
 var bot = new Bot(config.twitter);
 var simulationMode = false;
 var switches = process.argv.slice(2);
-var overridePrimaryTopic;
+var overridePrimaryTopics;
 
 switches.forEach(parseNextSwitch);
 
@@ -31,7 +31,12 @@ function parseNextSwitch(switchToken) {
     simulationMode = true;
   }
   else {
-    overridePrimaryTopic = switchToken;
+    if (switchToken.indexOf('|') !== -1) {
+      overridePrimaryTopics = switchToken.split('|');
+    }
+    else {
+      overridePrimaryTopics = [switchToken];
+    }
   }
 }
 
@@ -64,8 +69,9 @@ var primaryDemand;
 // kinds of tributes.
 
 function postTribute() {
-  if (overridePrimaryTopic) {
-    postOnTopic(null, overridePrimaryTopic);
+  if (overridePrimaryTopics) {
+    console.log('Picking from overrides:', overridePrimaryTopics);
+    postOnTopic(null, probable.pickFromArray(overridePrimaryTopics));
   }
   else if (probable.roll(100) < behavior.emojiThresholdPercentage) {
     isEmojiTopic = true;
