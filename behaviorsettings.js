@@ -15,7 +15,7 @@ module.exports = {
     '@im_a_radish',
     '@swizzard',
     '@MetaRantz',
-    '@resiak',
+    '@wjjjjt',
     // 'Jayne Fox',
     '@trodrigues',
     '@bryrnff',
