@@ -27,7 +27,8 @@ module.exports = {
     '@Merc_Rustad',
     '@ashesinyourhair',
     '@beaugunderson',
-    '@mykola'
+    '@mykola',
+    '@hatstand4510'
   ],
   w2vNeighborChance: 30
 };
