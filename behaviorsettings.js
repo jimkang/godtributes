@@ -7,7 +7,7 @@ module.exports = {
   maxCommonnessForSecondaryTopic: [50, 100],
   maxCommonnessForImageTopic: [500, 3000],
   emojiThresholdPercentage: 5,
-  enableImageAnalysis: false,
+  enableImageAnalysis: true,
   visionDonors: [
     '@sterex',
     // 'Andy Moran',
