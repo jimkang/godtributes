@@ -51,7 +51,7 @@ check-status:
 	$(SSHCMD) "systemctl status $(PROJECTNAME)"
 
 check-log:
-	$(SSHCMD) "journalctl -r -u $(PROJECTNAME)"
+	$(SSHCMD) "journalctl -r -u $(PROJECTNAME)" | more
 
 stop:
 	$(PRIVSSHCMD) "service godtributes stop"
