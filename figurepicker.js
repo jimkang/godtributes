@@ -4,10 +4,10 @@ var alternateFigureTable = probable.createRangeTableFromDict({
   throne: 160,
   goddess: 40,
   queen: 40,
-  lord: 40,
+  lord: 30,
   friend: 4,
   cat: 4,
-  president: 20,
+  president: 16,
   blob: 20,
   tree: 4,
   monster: 20,
@@ -32,11 +32,13 @@ var alternateFigureTable = probable.createRangeTableFromDict({
   union: 4,
   shoggoth: 2,
   worm: 2,
-  dracula: 2,
-  voivode: 1,
-  'home planet': 1,
+  dracula: 3,
+  voivode: 2,
+  'home planet': 3,
   chronicles: 1,
-  dimension: 1
+  dimension: 2,
+  hole: 2,
+  pie: 4
 });
 
 function getSecondaryTributeFigure() {
