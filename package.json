@@ -24,7 +24,7 @@
     "better-know-a-tweet": "^1.0.1",
     "bunyan": "^1.5.1",
     "call-next-tick": "^1.1.2",
-    "can-i-chime-in": "^2.0.10",
+    "can-i-chime-in": "^2.0.11",
     "canonicalizer": "^1.0.0",
     "d3-queue": "^3.0.3",
     "emojisource": "^1.0.0",
