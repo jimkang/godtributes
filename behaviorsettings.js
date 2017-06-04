@@ -33,7 +33,8 @@ module.exports = {
     '@twiddlekins',
     '@outlawpoet',
     '@argumatronic',
-    '@kizletwiggle'
+    '@kizletwiggle',
+    '@serpentgrr'
   ],
   w2vNeighborChance: 30
 };
