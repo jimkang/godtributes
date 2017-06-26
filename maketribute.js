@@ -23,12 +23,20 @@ var bot = new Bot(config.twitter);
 var simulationMode = false;
 var switches = process.argv.slice(2);
 var overridePrimaryTopics;
+var postfix;
+var disallowSecondary = false;
 
 switches.forEach(parseNextSwitch);
 
 function parseNextSwitch(switchToken) {
   if (switchToken === '--simulate') {
     simulationMode = true;
+  }
+  else if (switchToken === '--disallow-secondary') {
+    disallowSecondary = true;
+  }
+  else if (switchToken.startsWith('postfix:')) {
+    postfix = switchToken.replace('postfix:', '');
   }
   else {
     if (switchToken.indexOf('|') !== -1) {
@@ -93,7 +101,7 @@ function postOnTopic(error, topic) {
   primaryTopic = forms[0];
   primaryDemand = getPrimaryDemand(primaryTopic, isEmojiTopic);
 
-  if (isEmojiTopic) {
+  if (isEmojiTopic || disallowSecondary) {
     callNextTick(makeDemands);
     return;
   }
@@ -156,6 +164,9 @@ function makeDemands(relatedWordsError, relatedWords) {
 }
 
 function tweetAndRecord(tweetText) {
+  if (postfix) {
+    tweetText += ' ' + postfix;
+  }
   if (simulationMode) {
     console.log('Would have tweeted', tweetText);
   }
