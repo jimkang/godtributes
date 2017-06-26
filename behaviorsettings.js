@@ -34,7 +34,8 @@ module.exports = {
     '@outlawpoet',
     '@argumatronic',
     '@kizletwiggle',
-    '@serpentgrr'
+    '@serpentgrr',
+    '@jgrafton'
   ],
   w2vNeighborChance: 30
 };
