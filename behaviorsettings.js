@@ -35,7 +35,8 @@ module.exports = {
     '@argumatronic',
     '@kizletwiggle',
     '@serpentgrr',
-    '@jgrafton'
+    '@jgrafton',
+    '@puroaf'
   ],
   w2vNeighborChance: 20
 };
