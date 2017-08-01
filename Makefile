@@ -39,12 +39,12 @@ stop-exhortation-server:
 npm-install:
 	cd $(HOMEDIR)
 	npm install
-	npm prune
+	# npm prune
 
 sync:
 	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
 	$(SSHCMD) "cd  $(APPDIR) && chmod u+x exhortationserver.js && \
-	npm prune && npm install"
+	npm install"
 	$(PRIVSSHCMD) "systemctl restart $(PROJECTNAME)"
 
 check-status:
