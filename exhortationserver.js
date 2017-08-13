@@ -13,8 +13,6 @@ var canIChimeIn = require('can-i-chime-in')({
     'fascist',
     'fascism',
     'internment',
-    'supremacy',
-    'supremacist',
     'nazi',
     'nazis',
     'autistic',
