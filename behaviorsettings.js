@@ -36,7 +36,9 @@ module.exports = {
     '@kizletwiggle',
     '@serpentgrr',
     '@jgrafton',
-    '@puroaf'
+    '@puroaf',
+    '@NuclearAnthro',
+    '@paparatti'
   ],
   w2vNeighborChance: 20
 };
