@@ -7,7 +7,7 @@ module.exports = {
   maxCommonnessForSecondaryTopic: [50, 100],
   maxCommonnessForImageTopic: [500, 3000],
   emojiThresholdPercentage: 5,
-  enableImageAnalysis: false,
+  enableImageAnalysis: true,
   visionDonors: [
     '@sterex',
     // 'Andy Moran',
@@ -38,7 +38,10 @@ module.exports = {
     '@jgrafton',
     '@puroaf',
     '@NuclearAnthro',
-    '@paparatti'
+    '@paparatti',
+    '@laurabrarian',
+    '@alexandraerin',
+    '@sargoth'
   ],
   w2vNeighborChance: 20
 };
