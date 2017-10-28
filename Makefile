@@ -82,8 +82,9 @@ update-iscool-and-chime-in:
 		git commit -a -m"Updated iscool and can-i-chime-in." && \
 		make pushall
 
-pushall: sync
-	git push origin master
+pushall: stop sync
+	git push origin master && \
+	make start
 
 lint:
 	eslint .
