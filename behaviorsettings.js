@@ -41,7 +41,8 @@ module.exports = {
     '@paparatti',
     '@laurabrarian',
     '@alexandraerin',
-    '@sargoth'
+    '@sargoth',
+    '@SpeciationLab'
   ],
   w2vNeighborChance: 20
 };
