@@ -42,7 +42,9 @@ module.exports = {
     '@laurabrarian',
     '@alexandraerin',
     '@sargoth',
-    '@SpeciationLab'
+    '@SpeciationLab',
+    '@matthucke',
+    '@ceejbot'
   ],
-  w2vNeighborChance: 20
+  w2vNeighborChance: 5
 };
