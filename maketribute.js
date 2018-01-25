@@ -31,18 +31,14 @@ switches.forEach(parseNextSwitch);
 function parseNextSwitch(switchToken) {
   if (switchToken === '--simulate') {
     simulationMode = true;
-  }
-  else if (switchToken === '--disallow-secondary') {
+  } else if (switchToken === '--disallow-secondary') {
     disallowSecondary = true;
-  }
-  else if (switchToken.startsWith('postfix:')) {
+  } else if (switchToken.startsWith('postfix:')) {
     postfix = switchToken.replace('postfix:', '');
-  }
-  else {
+  } else {
     if (switchToken.indexOf('|') !== -1) {
       overridePrimaryTopics = switchToken.split('|');
-    }
-    else {
+    } else {
       overridePrimaryTopics = [switchToken];
     }
   }
@@ -61,13 +57,13 @@ var nounfinder = createNounfinder({
   wordnikAPIKey: config.wordnikAPIKey
 });
 
-
 var isEmojiTopic = false;
 
-var maxCommonnessForSecondary = behavior.maxCommonnessForReplyTopic[0] +
+var maxCommonnessForSecondary =
+  behavior.maxCommonnessForReplyTopic[0] +
   probable.roll(
     behavior.maxCommonnessForSecondaryTopic[1] -
-    behavior.maxCommonnessForSecondaryTopic[0]
+      behavior.maxCommonnessForSecondaryTopic[0]
   );
 
 var primaryTopic;
@@ -80,12 +76,10 @@ function postTribute() {
   if (overridePrimaryTopics) {
     console.log('Picking from overrides:', overridePrimaryTopics);
     postOnTopic(null, probable.pickFromArray(overridePrimaryTopics));
-  }
-  else if (probable.roll(100) < behavior.emojiThresholdPercentage) {
+  } else if (probable.roll(100) < behavior.emojiThresholdPercentage) {
     isEmojiTopic = true;
     postOnTopic(null, emojiSource.getRandomTopicEmoji());
-  }
-  else {
+  } else {
     wordnok.getTopic(postOnTopic);
   }
 }
@@ -111,9 +105,8 @@ function postOnTopic(error, topic) {
 
 function getPotentialSecondaryTopics(primaryTopic, done) {
   if (probable.roll(2) === 0) {
-    wordnok.getRelatedWords({word: primaryTopic}, done);
-  }
-  else {
+    wordnok.getRelatedWords({ word: primaryTopic }, done);
+  } else {
     var getWord2VecNeighbors = GetWord2VecNeighbors({
       nounfinder: nounfinder,
       probable: probable,
@@ -129,8 +122,7 @@ function makeDemands(relatedWordsError, relatedWords) {
   if (relatedWordsError) {
     logger.error(relatedWordsError);
     process.exit();
-  }
-  else {
+  } else {
     getSecondaryDemand(relatedWords, appendDemandToTweet);
   }
 
@@ -141,13 +133,12 @@ function makeDemands(relatedWordsError, relatedWords) {
     }
 
     if (secondaryDemand) {
-      tweetText += ('! ' + secondaryDemand);
+      tweetText += '! ' + secondaryDemand;
     }
 
     if (probable.roll(10) === 0) {
       translator.translateToRandomLocale(tweetText, 'en', tweetTranslation);
-    }
-    else {
+    } else {
       callNextTick(tweetAndRecord, tweetText);
     }
 
@@ -155,8 +146,7 @@ function makeDemands(relatedWordsError, relatedWords) {
       if (error) {
         logger.error(error);
         tweetAndRecord(tweetText);
-      }
-      else {
+      } else {
         tweetAndRecord(translation);
       }
     }
@@ -169,10 +159,9 @@ function tweetAndRecord(tweetText) {
   }
   if (simulationMode) {
     console.log('Would have tweeted', tweetText);
-  }
-  else {
+  } else {
     bot.tweet(tweetText, function reportTweetResult(error, reply) {
-      logger.info((new Date()).toString(), 'Tweet posted', reply.text);
+      logger.info(new Date().toString(), 'Tweet posted', reply.text);
     });
   }
 }
@@ -195,23 +184,20 @@ function getPrimaryDemand(topic, isEmoji) {
 function getSecondaryDemand(relatedWords, done) {
   if (relatedWords) {
     if (typeof relatedWords === 'object' && !Array.isArray(relatedWords)) {
-      var relevantLists = _.values(_.pick(
-        relatedWords, relevantRelatedWordTypes
-      ));
+      var relevantLists = _.values(
+        _.pick(relatedWords, relevantRelatedWordTypes)
+      );
 
       if (relevantLists.length > 0) {
         var topics = _.flatten(relevantLists);
         nounfinder.getNounsFromWords(topics, filterForInterestingness);
-      }
-      else {
+      } else {
         callNextTick(done);
       }
-    }
-    else {
+    } else {
       assembleSecondaryDemand(null, relatedWords.filter(notPrimaryTopic));
     }
-  }
-  else {
+  } else {
     // Fell through? Call back with nothing.
     callNextTick(done);
   }
@@ -219,8 +205,7 @@ function getSecondaryDemand(relatedWords, done) {
   function filterForInterestingness(error, nouns) {
     if (error) {
       done(error);
-    }
-    else {
+    } else {
       nounfinder.filterNounsForInterestingness(
         nouns,
         maxCommonnessForSecondary,
@@ -232,8 +217,7 @@ function getSecondaryDemand(relatedWords, done) {
   function assembleSecondaryDemand(error, nouns) {
     if (error) {
       done(error);
-    }
-    else {
+    } else {
       var demand;
       if (nouns.length > 0) {
         demand = tributeDemander.makeDemandForTopic({

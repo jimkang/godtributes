@@ -3,7 +3,8 @@ var request = require('request');
 var config = require('./config');
 var sb = require('standard-bail')();
 
-var apiURL = 'https://vision.googleapis.com/v1/images:annotate?key=' +
+var apiURL =
+  'https://vision.googleapis.com/v1/images:annotate?key=' +
   config.googleVisionAPIKey;
 
 var encooderOpts = {
@@ -20,7 +21,7 @@ function getImageAnalysis(opts, done) {
   if (opts) {
     imageURL = opts.imageURL;
   }
- 
+
   base64.base64encoder(imageURL, encooderOpts, sb(analyzeImage, done));
 }
 
@@ -40,20 +41,20 @@ function passBody(response, body, done) {
 
 function createPostBody(base64encodedImage) {
   return {
-    'requests': [
+    requests: [
       {
-        'image': {
+        image: {
           content: base64encodedImage
         },
-        'features': [
+        features: [
           {
-            'type': 'LABEL_DETECTION',
-            'maxResults': 5
+            type: 'LABEL_DETECTION',
+            maxResults: 5
           }
         ]
       }
     ]
   };
-}  
+}
 
 module.exports = getImageAnalysis;

@@ -41,19 +41,21 @@ var targetTweet = {
     id_str: '546402627261833217',
     screen_name: 'deathmtn'
   },
-  text: 'Trader Joe\'s has cheap persimmons again! https://flic.kr/p/qcTcz2'
+  text: "Trader Joe's has cheap persimmons again! https://flic.kr/p/qcTcz2"
 };
 
 // Make sure the chronicler server is running before you run this.
 
-exhorter.getExhortationForTweet(
-  targetTweet,
-  function checkResult(error, tweet, exhortation, topics) {
-    console.log('error:', error);
-    assert.ok(!error);
-    assert.ok(exhortation);
-    assert.ok(Array.isArray(topics));
-    console.log(exhortation);
-    process.exit();   
-  }
-);
+exhorter.getExhortationForTweet(targetTweet, function checkResult(
+  error,
+  tweet,
+  exhortation,
+  topics
+) {
+  console.log('error:', error);
+  assert.ok(!error);
+  assert.ok(exhortation);
+  assert.ok(Array.isArray(topics));
+  console.log(exhortation);
+  process.exit();
+});

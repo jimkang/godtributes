@@ -17,19 +17,18 @@ var utils = {
       probable: predictableProbable,
       chronicler: {
         whenWasUserLastRepliedTo: utils.mockLastRepliedToLongAgo,
-        topicWasUsedInReplyToUser:
-          function mockTopicWasUsedInReplyToUser(noun, userId, done) {
-            callNextTick(done, null, false);
-          },
+        topicWasUsedInReplyToUser: function mockTopicWasUsedInReplyToUser(
+          noun,
+          userId,
+          done
+        ) {
+          callNextTick(done, null, false);
+        },
         topicWasUsedInTribute: function mockTributeUseCheck(noun, done) {
           callNextTick(done, null, false);
         },
         tweetWasRepliedTo: function mockTweetWasRepliedTo(tweetId, done) {
-          callNextTick(
-            done,
-            new Error('Key not found in database'),
-            false
-          );
+          callNextTick(done, new Error('Key not found in database'), false);
         }
       },
       behavior: {
@@ -42,14 +41,15 @@ var utils = {
       },
       nounfinder: {
         getNounsFromText: function mockNounsFromText(text, done) {
-          callNextTick(
-            done, null, ['squash', 'pie', 'burger']
-          );
+          callNextTick(done, null, ['squash', 'pie', 'burger']);
         },
-        filterNounsForInterestingness: 
-          function mockFilter(nouns, maxCommonness, done) {
-            callNextTick(done, null, ['squash', 'burger']);
-          }
+        filterNounsForInterestingness: function mockFilter(
+          nouns,
+          maxCommonness,
+          done
+        ) {
+          callNextTick(done, null, ['squash', 'burger']);
+        }
       },
       tributeDemander: tributeDemander,
       prepPhrasePicker: {
@@ -74,13 +74,13 @@ var utils = {
   },
   getDefaultMockTweet: function getDefaultMockTweet() {
     return {
-      id_str: '546402627261833217',     
+      id_str: '546402627261833217',
       user: {
         id: 546402627261833200,
         screen_name: 'not_lil_jon'
       },
       text: 'I turned down for many reasons.',
-      time: (new Date()).toISOString()
+      time: new Date().toISOString()
     };
   },
   createMockNounfinder: function createMockNounfinder(opts) {
@@ -89,9 +89,7 @@ var utils = {
         callNextTick(done, null, opts.nounsToBeFound);
       },
       filterNounsForInterestingness: function mockFilter(n, m, done) {
-        callNextTick(
-          done, null, opts.interestingNounsToBeFound
-        );
+        callNextTick(done, null, opts.interestingNounsToBeFound);
       }
     };
   }

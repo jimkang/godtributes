@@ -10,7 +10,7 @@ var cases = [
   {
     name: 'No image',
     tweet: {
-      id_str: '0', 
+      id_str: '0',
       user: {
         id: 0,
         screen_name: 'deathmtn'
@@ -24,91 +24,54 @@ var cases = [
   },
   {
     name: 'costume',
-    tweet: _.defaults(
-      _.cloneDeep(exampleImageTweetBase),
-      {
-        text: 'Here is a costume!'
-      }
-    ),
+    tweet: _.defaults(_.cloneDeep(exampleImageTweetBase), {
+      text: 'Here is a costume!'
+    }),
     imageAPIResponse: imageAPIResponses.costume,
     expected: {
-      nouns: [
-        'clothing',
-        'orange',
-        'flower',
-        'woman',
-        'costume'
-      ]
+      nouns: ['clothing', 'orange', 'flower', 'woman', 'costume']
     }
   },
   {
     name: 'award',
-    tweet: _.defaults(
-      _.cloneDeep(exampleImageTweetBase),
-      {
-        text: 'Here is an award!'
-      }
-    ),
+    tweet: _.defaults(_.cloneDeep(exampleImageTweetBase), {
+      text: 'Here is an award!'
+    }),
     imageAPIResponse: imageAPIResponses.award,
     expected: {
-      nouns: [
-        'flower',
-        'medal',
-        'jewellery',
-        'brass',
-        'gold'
-      ]
+      nouns: ['flower', 'medal', 'jewellery', 'brass', 'gold']
     }
   },
   {
     name: 'band',
-    tweet: _.defaults(
-      _.cloneDeep(exampleImageTweetBase),
-      {
-        text: 'Here is a band!'
-      }
-    ),
+    tweet: _.defaults(_.cloneDeep(exampleImageTweetBase), {
+      text: 'Here is a band!'
+    }),
     imageAPIResponse: imageAPIResponses.band,
     expected: {
-      nouns: [
-        'musician',
-        'team'
-      ]
+      nouns: ['musician', 'team']
     }
   },
   {
     name: 'poster',
-    tweet: _.defaults(
-      _.cloneDeep(exampleImageTweetBase),
-      {
-        text: 'Here is a poster!'
-      }
-    ),
+    tweet: _.defaults(_.cloneDeep(exampleImageTweetBase), {
+      text: 'Here is a poster!'
+    }),
     imageAPIResponse: imageAPIResponses.poster,
     expected: {
-      nouns: [
-        'album cover'
-      ]
+      nouns: ['album cover']
     }
   },
   {
     name: 'wormDrawing',
-    tweet: _.defaults(
-      _.cloneDeep(exampleImageTweetBase),
-      {
-        text: 'Here is a wormDrawing!'
-      }
-    ),
+    tweet: _.defaults(_.cloneDeep(exampleImageTweetBase), {
+      text: 'Here is a wormDrawing!'
+    }),
     imageAPIResponse: imageAPIResponses.wormDrawing,
     expected: {
-      nouns: [
-        'cartoon',
-        'play',
-        'invertebrate',
-        'emblem'
-      ]
+      nouns: ['cartoon', 'play', 'invertebrate', 'emblem']
     }
-  },
+  }
 ];
 
 cases.forEach(runTest);

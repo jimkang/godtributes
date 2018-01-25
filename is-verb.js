@@ -1,4 +1,4 @@
-function IsVerb({wordnok}) {
+function IsVerb({ wordnok }) {
   return isVerb;
 
   function isVerb(word, done) {
@@ -7,10 +7,9 @@ function IsVerb({wordnok}) {
     function checkPOS(error, partsOfSpeech) {
       if (error) {
         done(error);
-      }
-      else {
-        var result = partsOfSpeech.length > 0 &&
-          partsOfSpeech.every(isSomeKindOfVerb);
+      } else {
+        var result =
+          partsOfSpeech.length > 0 && partsOfSpeech.every(isSomeKindOfVerb);
         done(null, result);
       }
     }
@@ -18,9 +17,11 @@ function IsVerb({wordnok}) {
 }
 
 function isSomeKindOfVerb(partOfSpeech) {
-  return partOfSpeech === 'verb' ||
+  return (
+    partOfSpeech === 'verb' ||
     partOfSpeech === 'verb-transitive' ||
-    partOfSpeech === 'verb-intransitive';
+    partOfSpeech === 'verb-intransitive'
+  );
 }
 
 module.exports = IsVerb;

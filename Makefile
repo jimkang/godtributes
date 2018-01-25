@@ -88,3 +88,6 @@ pushall: stop sync
 
 lint:
 	eslint .
+
+prettier:
+	prettier --single-quote --write "**/*.js"

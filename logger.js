@@ -22,11 +22,9 @@ function formatMessage() {
     var arg = arguments[i];
     if (typeof arg === 'string') {
       formatted += arg;
-    }
-    else if (typeof arg === 'object') {
+    } else if (typeof arg === 'object') {
       formatted += JSON.stringify(arg);
-    }
-    else {
+    } else {
       formatted += arg.toString();
     }
   }

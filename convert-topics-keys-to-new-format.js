@@ -4,7 +4,7 @@ var levelup = require('level');
 var through2 = require('through2');
 
 var dbLocation = process.argv[2];
-var db = levelup(dbLocation, {valueEncoding: 'json'});
+var db = levelup(dbLocation, { valueEncoding: 'json' });
 
 var rs = db.createReadStream({
   start: 's!topics-sent-to',
@@ -28,13 +28,12 @@ var convertStream = through2(
 
 var ws = db.createWriteStream();
 
-ws.on('error', function (err) {
+ws.on('error', function(err) {
   console.log('Oh my!', err);
 });
-ws.on('close', function () {
+ws.on('close', function() {
   console.log('Stream closed');
 });
-
 
 rs.pipe(convertStream);
 convertStream.pipe(ws);

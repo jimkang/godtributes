@@ -15,7 +15,11 @@ test('Exhortation from image', function imageExhortationTest(t) {
     t.fail('getNounsFromText is not called.');
   };
 
-  opts.nounfinder.filterNounsForInterestingness = function mockFilter(nouns, maxCommonness, done) {
+  opts.nounfinder.filterNounsForInterestingness = function mockFilter(
+    nouns,
+    maxCommonness,
+    done
+  ) {
     t.equal(
       maxCommonness,
       opts.maxCommonnessForImageTopic,
@@ -45,10 +49,7 @@ test('Exhortation from image', function imageExhortationTest(t) {
     t.ok(!error, 'No error while getting exhortation.');
     t.deepEqual(
       topics,
-      [
-        'emblem',
-        'invertebrate'
-      ],
+      ['emblem', 'invertebrate'],
       'Expected topics extracted.'
     );
     t.equal(

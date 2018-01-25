@@ -18,7 +18,7 @@ var relevantRelatedWordTypes = require('./relevant-related-word-types');
 
 var bot = new Bot(config.twitter);
 
-var simulationMode = (process.argv[2] === '--simulate');
+var simulationMode = process.argv[2] === '--simulate';
 
 logger.info('Thanks maker is running.');
 
@@ -29,29 +29,27 @@ var wordnok = createWordnok({
   }
 });
 
-var maxCommonnessForSecondary = behavior.maxCommonnessForReplyTopic[0] +
+var maxCommonnessForSecondary =
+  behavior.maxCommonnessForReplyTopic[0] +
   probable.roll(
     behavior.maxCommonnessForSecondaryTopic[1] -
-    behavior.maxCommonnessForSecondaryTopic[0]
+      behavior.maxCommonnessForSecondaryTopic[0]
   );
 
-((((function go() {
+(function go() {
   behavior.visionDonors.forEach(postThanksTribute);
 
-  postThanksTribute(
-    'https://www.patreon.com/deathmtn',
-    {
-      'same-context': [
-        'vision',
-        'aesthesis',
-        'sight',
-        'eyesight',
-        'perception',
-        'eyes'
-      ]
-    }
-  );
-})())));
+  postThanksTribute('https://www.patreon.com/deathmtn', {
+    'same-context': [
+      'vision',
+      'aesthesis',
+      'sight',
+      'eyesight',
+      'perception',
+      'eyes'
+    ]
+  });
+})();
 
 function postThanksTribute(prefix, secondaryTopicPool) {
   var primaryTopic;
@@ -72,8 +70,7 @@ function postThanksTribute(prefix, secondaryTopicPool) {
 
     if (secondaryTopicPool) {
       makeDemands(null, secondaryTopicPool);
-    }
-    else {
+    } else {
       wordnok.getRelatedWords(
         {
           word: primaryTopic
@@ -89,8 +86,7 @@ function postThanksTribute(prefix, secondaryTopicPool) {
     if (relatedWordsError) {
       logger.error(relatedWordsError);
       process.exit();
-    }
-    else {
+    } else {
       getSecondaryDemand(relatedWords, appendDemandToTweet);
     }
 
@@ -101,9 +97,9 @@ function postThanksTribute(prefix, secondaryTopicPool) {
       }
 
       if (secondaryDemand) {
-        tweetText += ('! ' + secondaryDemand);
+        tweetText += '! ' + secondaryDemand;
       }
-      
+
       callNextTick(tweet, tweetText);
     }
   }
@@ -113,14 +109,14 @@ function getSecondaryDemand(relatedWords, done) {
   var nounfinder;
 
   if (relatedWords) {
-    var relevantLists = _.values(_.pick(
-      relatedWords, relevantRelatedWordTypes
-    ));
+    var relevantLists = _.values(
+      _.pick(relatedWords, relevantRelatedWordTypes)
+    );
 
     if (relevantLists.length > 0) {
       var topics = _.flatten(relevantLists);
       nounfinder = createNounfinder({
-        wordnikAPIKey: config.wordnikAPIKey,
+        wordnikAPIKey: config.wordnikAPIKey
       });
 
       nounfinder.getNounsFromText(topics.join(' '), filterForInterestingness);
@@ -134,8 +130,7 @@ function getSecondaryDemand(relatedWords, done) {
   function filterForInterestingness(error, nouns) {
     if (error) {
       done(error);
-    }
-    else {
+    } else {
       nounfinder.filterNounsForInterestingness(
         nouns,
         maxCommonnessForSecondary,
@@ -147,8 +142,7 @@ function getSecondaryDemand(relatedWords, done) {
   function assembleSecondaryDemand(error, nouns) {
     if (error) {
       done(error);
-    }
-    else {
+    } else {
       var demand;
       if (nouns.length > 0) {
         demand = tributeDemander.makeDemandForTopic({
@@ -180,14 +174,12 @@ function getPrimaryDemand(topic, isEmoji) {
 function tweet(tweetText) {
   if (simulationMode) {
     console.log('Would have tweeted', tweetText);
-  }
-  else {
+  } else {
     bot.tweet(tweetText, function reportTweetResult(error, reply) {
       if (error) {
         console.log(error);
-      }
-      else {
-        logger.info((new Date()).toString(), 'Tweet posted', reply);
+      } else {
+        logger.info(new Date().toString(), 'Tweet posted', reply);
       }
     });
   }

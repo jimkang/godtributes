@@ -6,4 +6,3 @@ module.exports = function handleTwitterError(error) {
     logger.log('Data', error.data);
   }
 };
-

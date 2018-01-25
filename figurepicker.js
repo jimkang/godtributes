@@ -43,7 +43,7 @@ var alternateFigureTable = probable.createRangeTableFromDict({
 });
 
 function getSecondaryTributeFigure() {
-  return alternateFigureTable.roll(); 
+  return alternateFigureTable.roll();
 }
 
 function getMainTributeFigure() {
@@ -58,4 +58,3 @@ module.exports = {
   getMainTributeFigure: getMainTributeFigure,
   getSecondaryTributeFigure: getSecondaryTributeFigure
 };
-

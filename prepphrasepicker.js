@@ -8,7 +8,7 @@ var prepPhraseTable = probable.createRangeTableFromDict({
 });
 
 function getPrepPhrase() {
-  return prepPhraseTable.roll(); 
+  return prepPhraseTable.roll();
 }
 
 module.exports = {

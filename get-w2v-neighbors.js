@@ -20,13 +20,9 @@ var badPhraseStarts = [
   'FATTER_WALLET'
 ];
 
-var badPhraseEnds = [
-  '_OF',
-  '_TO',
-  '_THE'
-];
+var badPhraseEnds = ['_OF', '_TO', '_THE'];
 
-function GetWord2VecNeighbors({nounfinder, probable, wordnok}) {
+function GetWord2VecNeighbors({ nounfinder, probable, wordnok }) {
   var isVerb = IsVerb({
     wordnok: wordnok
   });
@@ -35,7 +31,8 @@ function GetWord2VecNeighbors({nounfinder, probable, wordnok}) {
 
   function getWord2VecNeighbors(words, done) {
     var wordsToGetNeighborsOf = probable.sample(
-      words, probable.rollDie(words.length)
+      words,
+      probable.rollDie(words.length)
     );
 
     var opts = {
@@ -73,8 +70,7 @@ function GetWord2VecNeighbors({nounfinder, probable, wordnok}) {
     function putWordInBucket(word) {
       if (word.indexOf('_') === -1) {
         normalWords.push(word);
-      }
-      else {
+      } else {
         phrases.push(word);
       }
     }
@@ -84,10 +80,10 @@ function GetWord2VecNeighbors({nounfinder, probable, wordnok}) {
       // console.log('wordNouns', wordNouns, 'phrasesWithNouns', phrasesWithNouns);
       if (error) {
         done(error);
-      }
-      else {
+      } else {
         done(
-          null, wordNouns.concat(_.compact(phrasesWithNouns).map(replaceUnderscores))
+          null,
+          wordNouns.concat(_.compact(phrasesWithNouns).map(replaceUnderscores))
         );
       }
     }
@@ -105,8 +101,7 @@ function GetWord2VecNeighbors({nounfinder, probable, wordnok}) {
         var phraseWords = phrase.split('_');
         if (phraseWords.length < 1) {
           callNextTick(findDone);
-        }
-        else {
+        } else {
           var q = queue();
           q.defer(nounfinder.getNounsFromWords, phraseWords.slice(-1));
           q.defer(isVerb, phraseWords[0]);
@@ -116,11 +111,10 @@ function GetWord2VecNeighbors({nounfinder, probable, wordnok}) {
         function passPhrase(error, phraseNouns, isVerb) {
           if (error) {
             findDone(error);
-          }
-          else {
+          } else {
             findDone(null, phraseNouns.length > 0 && !isVerb ? phrase : null);
           }
-        }        
+        }
       }
     }
   }
@@ -135,9 +129,12 @@ function replaceUnderscores(w) {
 }
 
 function phraseIsOK(phrase) {
-  return phrase.length > 0 && !phrase.match(uppercaseRegex) &&
+  return (
+    phrase.length > 0 &&
+    !phrase.match(uppercaseRegex) &&
     !badPhraseStarts.some(startsWith) &&
-    !badPhraseEnds.some(endsWith);
+    !badPhraseEnds.some(endsWith)
+  );
 
   function startsWith(badStart) {
     return phrase.startsWith(badStart);

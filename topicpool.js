@@ -13,19 +13,17 @@ function createTopicPool(opts) {
         sourceIndex += 1;
         if (sourceIndex < opts.sources.length) {
           getTopicFromSource(opts.sources[sourceIndex], done);
-        }
-        else {
+        } else {
           done(error);
         }
-      }
-      else {
+      } else {
         done(error, topic);
       }
     }
 
     getTopicFromSource(opts.sources[sourceIndex], checkTopic);
   }
-  
+
   function getTopicFromSource(source, done) {
     source.getTopic(done);
   }
@@ -34,6 +32,5 @@ function createTopicPool(opts) {
     getTopic: getTopic
   };
 }
-
 
 module.exports = createTopicPool;

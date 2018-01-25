@@ -36,12 +36,12 @@ var exhorterOpts = {
 var exhorter = createExhorter(exhorterOpts);
 
 var targetTweet = {
-  id_str: '546402627261833217',     
+  id_str: '546402627261833217',
   user: {
     id: 546402627261833200,
     screen_name: 'deathmtn'
   },
-  text: 'Trader Joe\'s has cheap persimmons again! https://flic.kr/p/qcTcz2'
+  text: "Trader Joe's has cheap persimmons again! https://flic.kr/p/qcTcz2"
 };
 
 var totalIters = 100;
@@ -59,8 +59,7 @@ function runNextIter(error, tweet, exhortation) {
 
   if (count < totalIters) {
     process.nextTick(runGet);
-  }
-  else {
+  } else {
     exhorterOpts.chronicler.getLevelDB().close();
   }
 }

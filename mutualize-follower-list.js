@@ -12,10 +12,7 @@ var spamUsers = jsonfile.readFileSync(spamListLocation);
 filteredFollowback(
   {
     twitterCreds: config.twitter,
-    neverUnfollow: [
-      2205976656,
-      4814406209
-    ],
+    neverUnfollow: [2205976656, 4814406209],
     blacklist: spamUsers
   },
   reportResults

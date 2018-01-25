@@ -25,7 +25,7 @@ var prepPhrasePicker = require('./prepphrasepicker');
 var probable = require('probable');
 var log = require('./logger').info;
 
-var dryRun = (process.argv[2] === '--dry');
+var dryRun = process.argv[2] === '--dry';
 
 if (dryRun) {
   require('longjohn');
@@ -44,15 +44,17 @@ var nounfinder = createNounfinder({
 var twit = new Twit(config.twitter);
 var stream = twit.stream('user');
 
-var maxCommonnessForTopic = behavior.maxCommonnessForReplyTopic[0] + 
+var maxCommonnessForTopic =
+  behavior.maxCommonnessForReplyTopic[0] +
   probable.roll(
     behavior.maxCommonnessForReplyTopic[1] -
-    behavior.maxCommonnessForReplyTopic[0]
+      behavior.maxCommonnessForReplyTopic[0]
   );
-var maxCommonnessForImageTopic = behavior.maxCommonnessForImageTopic[0] +
+var maxCommonnessForImageTopic =
+  behavior.maxCommonnessForImageTopic[0] +
   probable.roll(
     behavior.maxCommonnessForImageTopic[1] -
-    behavior.maxCommonnessForImageTopic[0]
+      behavior.maxCommonnessForImageTopic[0]
   );
 
 var exhorterOpts = {
@@ -66,7 +68,7 @@ var exhorterOpts = {
   decorateWithEmojiOpts: tributeDemander.decorateWithEmojiOpts,
   maxCommonnessForTopic: maxCommonnessForTopic,
   maxCommonnessForImageTopic: maxCommonnessForImageTopic,
-  // TODO: Make this a function that does a coin flip to decide if this should 
+  // TODO: Make this a function that does a coin flip to decide if this should
   // be 1 or 2 per instance.
   nounCountThreshold: 1,
   w2vNeighborChance: behavior.w2vNeighborChance
@@ -85,41 +87,37 @@ function tweetExhortation(error, tweet, exhortation, topics) {
   log('exhortation:', exhortation);
   if (error) {
     log('Error from getExhortationForTweet:', error);
-  }
-  else if (!exhortation || exhortation.length < 1) {
-    log(
-      'No error, but got nothing from getExhortationForTweet. Tweet:', tweet
+  } else if (!exhortation || exhortation.length < 1) {
+    log('No error, but got nothing from getExhortationForTweet. Tweet:', tweet);
+  } else {
+    setTimeout(
+      function doPost() {
+        if (dryRun) {
+          console.log('\n');
+          console.log('TWEET', tweet.text);
+          console.log('RESPONSE', exhortation);
+          console.log('\n');
+        } else {
+          twit.post(
+            'statuses/update',
+            {
+              status: exhortation,
+              in_reply_to_status_id: tweet.id_str
+            },
+            function recordTweetResult(error) {
+              if (error) {
+                log(error);
+              } else {
+                recordReplyDetails(tweet, topics);
+                log('Replied to status', tweet.text, 'with :', exhortation);
+              }
+            }
+          );
+        }
+      },
+      // Vary the delay until the response from 0 to 30 seconds.
+      probable.roll(6) * 5 * 1000
     );
-  }
-  else {
-    setTimeout(function doPost() {
-      if (dryRun) {
-        console.log('\n');
-        console.log('TWEET', tweet.text);
-        console.log('RESPONSE', exhortation);
-        console.log('\n');
-      }
-      else {
-        twit.post(
-          'statuses/update',
-          {
-            status: exhortation,
-            in_reply_to_status_id: tweet.id_str
-          },
-          function recordTweetResult(error) {
-            if (error) {
-              log(error);
-            }
-            else {
-              recordReplyDetails(tweet, topics);
-              log('Replied to status', tweet.text, 'with :', exhortation);
-            }
-          }
-        );
-      }
-    },
-    // Vary the delay until the response from 0 to 30 seconds.
-    probable.roll(6) * 5 * 1000);
   }
 }
 
@@ -131,4 +129,3 @@ function recordReplyDetails(targetStatus, topics) {
     chronicler.recordThatTopicWasUsedInReplyToUser(topic, userId);
   });
 }
-

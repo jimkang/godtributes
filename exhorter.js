@@ -18,7 +18,7 @@ var config = require('./config');
 
 var createWordnok = require('wordnok').createWordnok;
 
-var wordnok =  createWordnok({
+var wordnok = createWordnok({
   apiKey: config.wordnikAPIKey
 });
 
@@ -57,7 +57,6 @@ function createExhorter(opts) {
   });
 
   function getExhortationForTweet(tweet, exhortationDone) {
-
     //                           +|
     //                  WHOA!   ++|
     //                       \ +++|
@@ -80,7 +79,7 @@ function createExhorter(opts) {
     //            oo  o  || || |
     //        ooo   o o  |o || |
 
-    // Each step in the waterfall passes the tweet (plus anything else 
+    // Each step in the waterfall passes the tweet (plus anything else
     // necessary) to the next step.
     // If any step returns an error, we bail on generating an exhortation.
 
@@ -89,7 +88,7 @@ function createExhorter(opts) {
         waterfallKickoff,
         isNotTweetOfSelf,
         isNotARetweetOfSelf,
-        checkThatTweetWasNotRepliedTo,        
+        checkThatTweetWasNotRepliedTo,
         findLastReplyDateForUser,
         replyDateWasNotTooRecent,
         statusContainsTextThatIsOKToReplyTo,
@@ -110,8 +109,7 @@ function createExhorter(opts) {
     function finalDone(error, tweet, exhortation, topics) {
       if (error) {
         exhortationDone(error);
-      }
-      else {
+      } else {
         exhortationDone(error, tweet, exhortation, topics);
       }
     }
@@ -119,7 +117,8 @@ function createExhorter(opts) {
 
   function findLastReplyDateForUser(tweet, done) {
     chronicler.whenWasUserLastRepliedTo(
-      tweet.user.id_str, function passLastReplyDate(error, date) {
+      tweet.user.id_str,
+      function passLastReplyDate(error, date) {
         // Don't pass on the error – `whenWasUserLastRepliedTo` can't find a
         // key, it returns a NotFoundError. For us, that's expected.
         if (error && error.type === 'NotFoundError') {
@@ -132,24 +131,24 @@ function createExhorter(opts) {
   }
 
   function checkThatTweetWasNotRepliedTo(tweet, done) {
-    chronicler.tweetWasRepliedTo(
-      tweet.user.id_str, function stopIfReplied(error, wasRepliedTo) {
-        var realError;
+    chronicler.tweetWasRepliedTo(tweet.user.id_str, function stopIfReplied(
+      error,
+      wasRepliedTo
+    ) {
+      var realError;
 
-        if (wasRepliedTo) {
-          realError = createErrorForTweet(tweet, {
-            message: 'Tweet was already replied to.',
-          });
-        }
-        else {
-          // If chronicler can't find the key, it will return an error for that.
-          // To us, that's not an error.
-          realError = null;
-        }
-
-        done(realError, tweet);
+      if (wasRepliedTo) {
+        realError = createErrorForTweet(tweet, {
+          message: 'Tweet was already replied to.'
+        });
+      } else {
+        // If chronicler can't find the key, it will return an error for that.
+        // To us, that's not an error.
+        realError = null;
       }
-    );
+
+      done(realError, tweet);
+    });
   }
 
   function replyDateWasNotTooRecent(tweet, date, done) {
@@ -161,13 +160,14 @@ function createExhorter(opts) {
     if (hoursElapsed > behavior.hoursToWaitBetweenRepliesToSameUser) {
       // Pass the tweet down the waterfall.
       done(null, tweet);
-    }
-    else {
+    } else {
       // TODO: Consider making this a status object instead of an error.
-      done(createErrorForTweet(tweet, {
-        message: 'Replied too recently.',
-        hoursSinceLastReply: hoursElapsed
-      }));
+      done(
+        createErrorForTweet(tweet, {
+          message: 'Replied too recently.',
+          hoursSinceLastReply: hoursElapsed
+        })
+      );
     }
   }
 
@@ -176,7 +176,7 @@ function createExhorter(opts) {
 
     if (betterKnow.isRetweetOfUser('godtributes', tweet)) {
       error = createErrorForTweet(tweet, {
-        message: 'This is a retweet of myself.',
+        message: 'This is a retweet of myself.'
       });
     }
 
@@ -189,7 +189,7 @@ function createExhorter(opts) {
 
     if (betterKnow.isTweetOfUser('godtributes', tweet)) {
       error = createErrorForTweet(tweet, {
-        message: 'This is one of my tweets.',
+        message: 'This is one of my tweets.'
       });
     }
 
@@ -216,26 +216,28 @@ function createExhorter(opts) {
   function getNounsFromTweet(tweet, done) {
     var mediaURLs = getImagesFromTweet(tweet);
 
-    if (behavior.enableImageAnalysis &&
-      mediaURLs && mediaURLs.length > 0 && probable.roll(3) === 1) {
-
+    if (
+      behavior.enableImageAnalysis &&
+      mediaURLs &&
+      mediaURLs.length > 0 &&
+      probable.roll(3) === 1
+    ) {
       log('Looking through image:', mediaURLs[0]);
       analyzeTweetImages(tweet, sb(getNounsFromReport, done));
-    }
-    else {
-      nounfinder.getNounsFromText(
-        tweet.text, 
-        function passNouns(finderError, nouns) {
-          var error = null;
-          if (!nouns || nouns.length < 1) {
-            error = createErrorForTweet(tweet, {
-              message: 'No nouns found.',
-              nounFinderError: finderError
-            });
-          }
-          done(error, tweet, nouns, false);
+    } else {
+      nounfinder.getNounsFromText(tweet.text, function passNouns(
+        finderError,
+        nouns
+      ) {
+        var error = null;
+        if (!nouns || nouns.length < 1) {
+          error = createErrorForTweet(tweet, {
+            message: 'No nouns found.',
+            nounFinderError: finderError
+          });
         }
-      );
+        done(error, tweet, nouns, false);
+      });
     }
 
     function getNounsFromReport(report, done) {
@@ -250,7 +252,7 @@ function createExhorter(opts) {
     }
 
     nounfinder.filterNounsForInterestingness(
-      nouns, 
+      nouns,
       maxCommonness,
       function filterDone(finderError, filteredNouns) {
         var error = null;
@@ -279,7 +281,7 @@ function createExhorter(opts) {
 
       for (var i = 0; i < usedFlags.length; i += 2) {
         if (!usedFlags[i] && !usedFlags[i + 1]) {
-          unusedNouns.push(nouns[i/2]);
+          unusedNouns.push(nouns[i / 2]);
         }
       }
 
@@ -300,7 +302,7 @@ function createExhorter(opts) {
     var error = null;
     if (nouns.length + neighbors.length < nounCountThreshold) {
       error = createErrorForTweet(tweet, {
-        message: 'There aren\'t enough usable nouns to work with.'
+        message: "There aren't enough usable nouns to work with."
       });
     }
     callNextTick(done, error, tweet, nouns, neighbors);
@@ -310,20 +312,17 @@ function createExhorter(opts) {
   function maybeGetNearestNeighborNouns(tweet, nouns, isUsingTweetImage, done) {
     if (!isUsingTweetImage && probable.roll(100) < w2vNeighborChance) {
       getWord2VecNeighbors(nouns, passNouns);
-    }
-    else {
+    } else {
       callNextTick(done, null, tweet, nouns, []);
     }
 
     function passNouns(error, neighbors) {
       if (error) {
         done(error);
-      }
-      else if (!neighbors) {
+      } else if (!neighbors) {
         // Send along original nouns.
         done(null, tweet, nouns, []);
-      }
-      else {
+      } else {
         done(null, tweet, nouns, neighbors.filter(iscool));
       }
     }
@@ -337,39 +336,40 @@ function createExhorter(opts) {
     }
 
     var selectedNouns;
-    
+
     if (neighbors.length > 0) {
       selectedNouns = [
         probable.pickFromArray(nouns),
         probable.pickFromArray(neighbors)
       ];
-    }
-    else {
+    } else {
       selectedNouns = probable.shuffle(nouns).slice(0, 2);
     }
 
-    var primaryTribute =
-      tributeDemander.makeDemandForTopic(decorateWithEmojiOpts({
+    var primaryTribute = tributeDemander.makeDemandForTopic(
+      decorateWithEmojiOpts({
         topic: selectedNouns[0],
         prepositionalPhrase: prepPhrasePicker.getPrepPhrase(),
         tributeFigure: figurePicker.getMainTributeFigure()
-      }));
+      })
+    );
 
     var secondaryTribute;
 
     if (selectedNouns.length > 1) {
-      secondaryTribute =
-        tributeDemander.makeDemandForTopic(decorateWithEmojiOpts({
+      secondaryTribute = tributeDemander.makeDemandForTopic(
+        decorateWithEmojiOpts({
           topic: selectedNouns[1],
           prepositionalPhrase: prepPhrasePicker.getPrepPhrase(),
           tributeFigure: figurePicker.getSecondaryTributeFigure()
-        }));
+        })
+      );
     }
 
     var addressClause = '@' + tweet.user.screen_name + ' ';
     var exhortation = primaryTribute;
     if (secondaryTribute) {
-      exhortation += ('! ' + secondaryTribute);
+      exhortation += '! ' + secondaryTribute;
     }
 
     if (tweetLocale === 'en' && probable.roll(100) === 0) {
@@ -380,29 +380,33 @@ function createExhorter(opts) {
 
     if (tweetLocale !== 'en' && knownLanguages.indexOf(tweetLocale) !== -1) {
       translator.translate(exhortation, 'en', tweetLocale, returnTranslation);
-    }
-    else {
+    } else {
       callNextTick(
-        done, null, tweet, addressClause + exhortation, selectedNouns
+        done,
+        null,
+        tweet,
+        addressClause + exhortation,
+        selectedNouns
       );
     }
 
     function returnTranslation(error, translation) {
       if (error) {
         done(error, tweet, addressClause + exhortation, selectedNouns);
-      }
-      else {
+      } else {
         done(error, tweet, addressClause + translation, selectedNouns);
       }
     }
   }
 
   function createErrorForTweet(tweet, overrides) {
-    return new StandardError(_.defaults(overrides, {
-      id: tweet.id_str,
-      screen_name: tweet.user.screen_name,
-      // time: tweet.time
-    }));
+    return new StandardError(
+      _.defaults(overrides, {
+        id: tweet.id_str,
+        screen_name: tweet.user.screen_name
+        // time: tweet.time
+      })
+    );
   }
 
   return {

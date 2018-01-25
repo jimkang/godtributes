@@ -51,9 +51,8 @@ function AnalyzeTweetImages(createOpts) {
     var mediaUrls = getImagesFromTweet(tweet);
 
     if (!mediaUrls || mediaUrls.length < 1) {
-      callNextTick(done, null, {nouns: []});
-    }
-    else {
+      callNextTick(done, null, { nouns: [] });
+    } else {
       var imageAnalysisOpts = {
         imageURL: mediaUrls[0] // Just the first one for now.
       };
@@ -68,11 +67,11 @@ function getNouns(imageAnalysis, done) {
   var nouns;
 
   if (imageAnalysis.responses.length > 0) {
-    nouns =_.pluck(imageAnalysis.responses[0].labelAnnotations, 'description');
+    nouns = _.pluck(imageAnalysis.responses[0].labelAnnotations, 'description');
   }
   nouns = _.without.apply(_, [nouns].concat(falsePositives));
 
-  done(null, {nouns: nouns});
+  done(null, { nouns: nouns });
 }
 
 module.exports = AnalyzeTweetImages;
