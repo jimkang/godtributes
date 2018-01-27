@@ -1,6 +1,6 @@
 /* global process */
 
-var Bot = require('./node_modules/twit/examples/bot');
+var Twit = require('twit');
 var config = require('./config');
 var createWordnok = require('wordnok').createWordnok;
 var tributeDemander = require('./tributedemander');
@@ -19,7 +19,26 @@ var relevantRelatedWordTypes = require('./relevant-related-word-types');
 var GetWord2VecNeighbors = require('./get-w2v-neighbors');
 // require('longjohn');
 
-var bot = new Bot(config.twitter);
+var StaticWebArchiveOnGit = require('static-web-archive-on-git');
+var queue = require('d3-queue').queue;
+var randomId = require('idmaker').randomId;
+
+var staticWebStream = StaticWebArchiveOnGit({
+  config: config.github,
+  title: config.archiveName,
+  footerScript: `<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49491163-1', 'jimkang.com');
+  ga('send', 'pageview');
+</script>`,
+  maxEntriesPerPage: 50
+});
+
+var twit = new Twit(config.twitter);
+
 var simulationMode = false;
 var switches = process.argv.slice(2);
 var overridePrimaryTopics;
@@ -139,31 +158,58 @@ function makeDemands(relatedWordsError, relatedWords) {
     if (probable.roll(10) === 0) {
       translator.translateToRandomLocale(tweetText, 'en', tweetTranslation);
     } else {
-      callNextTick(tweetAndRecord, tweetText);
+      callNextTick(postToTargets, tweetText);
     }
 
     function tweetTranslation(error, translation) {
       if (error) {
         logger.error(error);
-        tweetAndRecord(tweetText);
+        postToTargets(tweetText);
       } else {
-        tweetAndRecord(translation);
+        postToTargets(translation);
       }
     }
   }
 }
 
-function tweetAndRecord(tweetText) {
+function postToTargets(text) {
   if (postfix) {
-    tweetText += ' ' + postfix;
+    text += ' ' + postfix;
   }
   if (simulationMode) {
-    console.log('Would have tweeted', tweetText);
+    console.log('Would have tweeted:', text);
   } else {
-    bot.tweet(tweetText, function reportTweetResult(error, reply) {
-      logger.info(new Date().toString(), 'Tweet posted', reply.text);
-    });
+    console.log('Posting', text);
+    var q = queue();
+    q.defer(postTweet, text);
+    q.defer(postToArchive, text);
+    q.awaitAll(wrapUp);
   }
+}
+
+function postTweet(text, done) {
+  var body = {
+    status: text
+  };
+  twit.post('statuses/update', body, reportTweetResult);
+
+  function reportTweetResult(error, reply) {
+    if (error) {
+      logger.info(error);
+    }
+    logger.info(new Date().toString(), 'Tweet posted', reply.text);
+    done();
+  }
+}
+
+function postToArchive(text, done) {
+  var id = 'tribute-' + randomId(8);
+  staticWebStream.write({
+    id,
+    date: new Date().toISOString(),
+    caption: text
+  });
+  staticWebStream.end(done);
 }
 
 function getPrimaryDemand(topic, isEmoji) {
@@ -233,6 +279,14 @@ function getSecondaryDemand(relatedWords, done) {
 
 function notPrimaryTopic(word) {
   return word !== primaryTopic;
+}
+
+function wrapUp(error) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Posted tribute!');
+  }
 }
 
 postTribute();
