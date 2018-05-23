@@ -51,7 +51,7 @@
     "standard-error": "^1.1.0",
     "static-web-archive-on-git": "^2.0.1",
     "twit": "^1.1.20",
-    "wordnok": "^3.2"
+    "wordnok": "^3.3.4"
   },
   "devDependencies": {
     "assert-no-error": "^1.0.0",
