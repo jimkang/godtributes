@@ -6,7 +6,7 @@ module.exports = {
   maxCommonnessForReplyTopic: [20, 70],
   maxCommonnessForSecondaryTopic: [50, 100],
   maxCommonnessForImageTopic: [500, 3000],
-  emojiThresholdPercentage: 5,
+  emojiThresholdPercentage: 10,
   enableImageAnalysis: true,
   visionDonors: [
     '@sterex',
