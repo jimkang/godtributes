@@ -1,6 +1,5 @@
 /* global process */
 
-var Twit = require('twit');
 var config = require('./config');
 var createWordnok = require('wordnok').createWordnok;
 var tributeDemander = require('./tributedemander');
@@ -17,32 +16,11 @@ var createNounfinder = require('nounfinder');
 var translator = require('./translator');
 var relevantRelatedWordTypes = require('./relevant-related-word-types');
 var GetWord2VecNeighbors = require('./get-w2v-neighbors');
+var postIt = require('@jimkang/post-it');
+
 // require('longjohn');
 
-var StaticWebArchiveOnGit = require('static-web-archive-on-git');
-var queue = require('d3-queue').queue;
 var randomId = require('idmaker').randomId;
-
-var staticWebStream = StaticWebArchiveOnGit({
-  config: config.github,
-  title: config.archiveName,
-  footerHTML: `<footer>
-  Banner by <a href="https://twitter.com/metroidbaby">@metroidbaby</a>.
-  Powered by <a href="http://developer.wordnik.com/">Wordnik</a>.
-  On Twitter: <a href="https://twitter.com/godtributes">@godtributes</a>.
-</footer>
-<script type="text/javascript">
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-49491163-1', 'jimkang.com');
-  ga('send', 'pageview');
-</script>`,
-  maxEntriesPerPage: 50
-});
-
-var twit = new Twit(config.twitter);
 
 var simulationMode = false;
 var switches = process.argv.slice(2);
@@ -181,40 +159,26 @@ function postToTargets(text) {
   if (postfix) {
     text += ' ' + postfix;
   }
+  text = '<img src="https://smidgeo.com/bots/godtributes/images/icon.png" alt="GODTRIBUTES!"> ' + text;
+
   if (simulationMode) {
     console.log('Would have tweeted:', text);
   } else {
     console.log('Posting', text);
-    var q = queue();
-    q.defer(postTweet, text);
-    q.defer(postToArchive, text);
-    q.awaitAll(wrapUp);
+    postIt(
+      {
+        id: 'tribute' + randomId(8),
+        text,
+        targets: [
+          {
+            type: 'noteTaker',
+            config: config.noteTaker
+          }
+        ]
+      },
+      wrapUp
+    );
   }
-}
-
-function postTweet(text, done) {
-  var body = {
-    status: text
-  };
-  twit.post('statuses/update', body, reportTweetResult);
-
-  function reportTweetResult(error, reply) {
-    if (error) {
-      logger.info(error);
-    }
-    logger.info(new Date().toString(), 'Tweet posted', reply.text);
-    done();
-  }
-}
-
-function postToArchive(text, done) {
-  var id = 'tribute-' + randomId(8);
-  staticWebStream.write({
-    id,
-    date: new Date().toISOString(),
-    caption: text
-  });
-  staticWebStream.end(done);
 }
 
 function getPrimaryDemand(topic, isEmoji) {
