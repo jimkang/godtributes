@@ -20,8 +20,6 @@ var postIt = require('@jimkang/post-it');
 
 // require('longjohn');
 
-var randomId = require('idmaker').randomId;
-
 var simulationMode = false;
 var switches = process.argv.slice(2);
 var overridePrimaryTopics;
@@ -159,7 +157,9 @@ function postToTargets(text) {
   if (postfix) {
     text += ' ' + postfix;
   }
-  text = '<img src="https://smidgeo.com/bots/godtributes/images/icon.png" alt="GODTRIBUTES!"> ' + text;
+  text =
+    '<img src="https://smidgeo.com/bots/godtributes/images/icon.png" alt="GODTRIBUTES!"> ' +
+    text;
 
   if (simulationMode) {
     console.log('Would have tweeted:', text);
@@ -167,7 +167,6 @@ function postToTargets(text) {
     console.log('Posting', text);
     postIt(
       {
-        id: 'tribute' + randomId(8),
         text,
         targets: [
           {
