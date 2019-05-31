@@ -51,7 +51,7 @@
     "standard-bail": "^2.0.0",
     "standard-error": "^1.1.0",
     "static-web-archive": "^4.0.0",
-    "wordnok": "^3.3.5"
+    "wordnok": "^3.3.7"
   },
   "devDependencies": {
     "assert-no-error": "^1.0.0",
