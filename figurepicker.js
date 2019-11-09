@@ -39,7 +39,8 @@ var alternateFigureTable = probable.createRangeTableFromDict({
   dimension: 3,
   hole: 2,
   pie: 4,
-  abyss: 1
+  abyss: 1,
+  altar: 1
 });
 
 function getSecondaryTributeFigure() {
