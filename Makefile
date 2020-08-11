@@ -1,14 +1,12 @@
+include config.mk
+
 MOCHA = node_modules/mocha/bin/mocha
-MOCHACMD = $(MOCHA) --ui tdd -R spec 
+MOCHACMD = $(MOCHA) --ui tdd -R spec
 HOMEDIR = $(shell pwd)
-USER = bot
-PRIVUSER = root
-SERVER = smidgeo
 SSHCMD = ssh $(USER)@$(SERVER)
 PRIVSSHCMD = ssh $(PRIVUSER)@$(SERVER)
 PROJECTNAME = godtributes
 APPDIR = /opt/$(PROJECTNAME)
-
 
 test: test-exhort test-analyze-tweet-images
 	$(MOCHACMD) tests/tributedemander-tests.js
@@ -36,16 +34,11 @@ start-exhortation-server:
 stop-exhortation-server:
 	service godtributes stop
 
-npm-install:
-	cd $(HOMEDIR)
-	npm install
-	# npm prune
-
 sync:
 	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
 	$(SSHCMD) "cd  $(APPDIR) && chmod u+x exhortationserver.js && \
 	npm install"
-	$(PRIVSSHCMD) "systemctl restart $(PROJECTNAME)"
+	#$(PRIVSSHCMD) "systemctl restart $(PROJECTNAME)"
 
 check-status:
 	$(SSHCMD) "systemctl status $(PROJECTNAME)"
