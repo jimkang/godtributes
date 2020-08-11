@@ -15,7 +15,7 @@ var canonicalizer = require('canonicalizer');
 var createNounfinder = require('nounfinder');
 var translator = require('./translator');
 var relevantRelatedWordTypes = require('./relevant-related-word-types');
-var GetWord2VecNeighbors = require('./get-w2v-neighbors');
+//var GetWord2VecNeighbors = require('./get-w2v-neighbors');
 var postIt = require('@jimkang/post-it');
 
 // require('longjohn');
@@ -104,16 +104,16 @@ function postOnTopic(error, topic) {
 }
 
 function getPotentialSecondaryTopics(primaryTopic, done) {
-  if (probable.roll(2) === 0) {
-    wordnok.getRelatedWords({ word: primaryTopic }, done);
-  } else {
-    var getWord2VecNeighbors = GetWord2VecNeighbors({
-      nounfinder: nounfinder,
-      probable: probable,
-      wordnok: wordnok
-    });
-    getWord2VecNeighbors([primaryTopic], done);
-  }
+  //if (probable.roll(2) === 0) {
+  wordnok.getRelatedWords({ word: primaryTopic }, done);
+  //} else {
+  //var getWord2VecNeighbors = GetWord2VecNeighbors({
+  //nounfinder: nounfinder,
+  //probable: probable,
+  //wordnok: wordnok
+  //});
+  //getWord2VecNeighbors([primaryTopic], done);
+  //}
 }
 
 function makeDemands(relatedWordsError, relatedWords) {
