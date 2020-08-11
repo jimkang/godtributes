@@ -5,7 +5,6 @@ var createWordnok = require('wordnok').createWordnok;
 var tributeDemander = require('./tributedemander');
 var figurepicker = require('./figurepicker');
 var prepphrasepicker = require('./prepphrasepicker');
-var logger = require('./logger');
 var emojiSource = require('emojisource');
 var behavior = require('./behaviorsettings');
 var probable = require('probable');
@@ -44,13 +43,10 @@ function parseNextSwitch(switchToken) {
   }
 }
 
-logger.info('Tribute maker is running.');
+console.log('Tribute maker is running.');
 
 var wordnok = createWordnok({
-  apiKey: config.wordnikAPIKey,
-  logger: {
-    log: logger.info
-  }
+  apiKey: config.wordnikAPIKey
 });
 
 var nounfinder = createNounfinder({
@@ -86,7 +82,7 @@ function postTribute() {
 
 function postOnTopic(error, topic) {
   if (error) {
-    logger.error(error);
+    console.log(error);
     process.exit();
   }
 
@@ -117,10 +113,10 @@ function getPotentialSecondaryTopics(primaryTopic, done) {
 }
 
 function makeDemands(relatedWordsError, relatedWords) {
-  var tweetText = primaryDemand;
+  var postText = primaryDemand;
 
   if (relatedWordsError) {
-    logger.error(relatedWordsError);
+    console.log(relatedWordsError);
     process.exit();
   } else {
     getSecondaryDemand(relatedWords, appendDemandToTweet);
@@ -128,24 +124,24 @@ function makeDemands(relatedWordsError, relatedWords) {
 
   function appendDemandToTweet(error, secondaryDemand) {
     if (error) {
-      logger.error(error);
+      console.log(error);
       // An error is OK here. We can keep going.
     }
 
     if (secondaryDemand) {
-      tweetText += '! ' + secondaryDemand;
+      postText += '! ' + secondaryDemand;
     }
 
     if (probable.roll(10) === 0) {
-      translator.translateToRandomLocale(tweetText, 'en', tweetTranslation);
+      translator.translateToRandomLocale(postText, 'en', postTranslation);
     } else {
-      callNextTick(postToTargets, tweetText);
+      callNextTick(postToTargets, postText);
     }
 
-    function tweetTranslation(error, translation) {
+    function postTranslation(error, translation) {
       if (error) {
-        logger.error(error);
-        postToTargets(tweetText);
+        console.log(error);
+        postToTargets(postText);
       } else {
         postToTargets(translation);
       }
@@ -162,7 +158,7 @@ function postToTargets(text) {
     text;
 
   if (simulationMode) {
-    console.log('Would have tweeted:', text);
+    console.log('Would have posted:', text);
   } else {
     console.log('Posting', text);
     postIt(

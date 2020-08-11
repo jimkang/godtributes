@@ -41,7 +41,7 @@
     "mstranslator": "^2.1.2",
     "node-base64-image": "^0.1.1",
     "node-emoji": "^0.1.0",
-    "nounfinder": "^2.0.13",
+    "nounfinder": "^3.0.0",
     "object-path-exists": "^1.0.0",
     "probable": "^1.4.0",
     "queue-async": "~1.0.7",
