@@ -43,6 +43,7 @@
     "node-emoji": "^0.1.0",
     "nounfinder": "^3.0.0",
     "object-path-exists": "^1.0.0",
+    "oknok": "^3.0.0",
     "probable": "^1.4.0",
     "queue-async": "~1.0.7",
     "request": "^2.88.0",

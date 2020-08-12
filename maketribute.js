@@ -12,10 +12,11 @@ var callNextTick = require('call-next-tick');
 var _ = require('lodash');
 var canonicalizer = require('canonicalizer');
 var createNounfinder = require('nounfinder');
-var translator = require('./translator');
+//var translator = require('./translator');
 var relevantRelatedWordTypes = require('./relevant-related-word-types');
 //var GetWord2VecNeighbors = require('./get-w2v-neighbors');
 var postIt = require('@jimkang/post-it');
+var oknok = require('oknok');
 
 // require('longjohn');
 
@@ -76,7 +77,7 @@ function postTribute() {
     isEmojiTopic = true;
     postOnTopic(null, emojiSource.getRandomTopicEmoji());
   } else {
-    wordnok.getTopic(postOnTopic);
+    getTopic(postOnTopic);
   }
 }
 
@@ -132,20 +133,20 @@ function makeDemands(relatedWordsError, relatedWords) {
       postText += '! ' + secondaryDemand;
     }
 
-    if (probable.roll(10) === 0) {
-      translator.translateToRandomLocale(postText, 'en', postTranslation);
-    } else {
-      callNextTick(postToTargets, postText);
-    }
+    //if (probable.roll(10) === 0) {
+    //translator.translateToRandomLocale(postText, 'en', postTranslation);
+    //} else {
+    callNextTick(postToTargets, postText);
+    //}
 
-    function postTranslation(error, translation) {
-      if (error) {
-        console.log(error);
-        postToTargets(postText);
-      } else {
-        postToTargets(translation);
-      }
-    }
+    //function postTranslation(error, translation) {
+    //if (error) {
+    //console.log(error);
+    //postToTargets(postText);
+    //} else {
+    //postToTargets(translation);
+    //}
+    //}
   }
 }
 
@@ -243,6 +244,21 @@ function getSecondaryDemand(relatedWords, done) {
 
 function notPrimaryTopic(word) {
   return word !== primaryTopic;
+}
+
+function getTopic(done) {
+  wordnok.getRandomWords({}, oknok({ ok: filterToNouns, nok: done }));
+
+  function filterToNouns(words) {
+    nounfinder.getNounsFromWords(
+      words,
+      oknok({ ok: pickFromNouns, nok: done })
+    );
+  }
+
+  function pickFromNouns(nouns) {
+    done(null, probable.pickFromArray(nouns));
+  }
 }
 
 function wrapUp(error) {
