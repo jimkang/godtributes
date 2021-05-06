@@ -37,7 +37,7 @@
     "iscool": "^1.1.64",
     "jsonfile": "^2.0.0",
     "languagedetect": "^1.1.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mstranslator": "^2.1.2",
     "node-base64-image": "^0.1.1",
     "node-emoji": "^0.1.0",
